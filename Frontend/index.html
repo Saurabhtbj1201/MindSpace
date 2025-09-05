@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindSpace - Digital Mental Health Support</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+
 </head>
 
 <body>
+    <!-- Add notification container at the top of the body -->
+    <div class="notifications-container" id="notifications-container"></div>
+    
     <!-- Header Section -->
     <header>
         <div class="container">
@@ -25,12 +30,42 @@
                     <li><a href="#about">About</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#resources">Resources</a></li>
-                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#statistics">Statistics</a></li>
                 </ul>
             </nav>
-            <div class="auth-buttons">
-                <button class="btn-secondary">Login</button>
-                <button class="btn-primary">Register</button>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button class="mood-tracker-btn">
+                    <i class="fas fa-chart-line"></i> Track Your Mood
+                </button>
+                
+                <!-- Auth buttons container - will be hidden when logged in -->
+                <div class="auth-buttons-container" style="display: none;">
+                    <div class="auth-buttons">
+                        <button class="btn-secondary">Login</button>
+                        <button class="btn-primary">Register</button>
+                    </div>
+                </div>
+                
+                <!-- User profile dropdown - initially hidden, shown when logged in -->
+                <div class="user-profile-dropdown" style="display: none;">
+                    <div class="profile-trigger" id="profile-trigger">
+                        <div class="avatar-circle" id="header-avatar">U</div>
+                        <span id="header-username">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a href="#profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="#settings" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="hamburger">
                 <span></span>
@@ -203,84 +238,7 @@
         </div>
     </section>
 
-    <!-- Data Visualization Section -->
-    <section class="data-visualization">
-        <div class="container">
-            <h2 class="section-title">Student Mental Health Statistics</h2>
-            <div class="data-grid">
-                <div class="map-container slide-up">
-                    <h3>Select a State/UT</h3>
-                    <div class="india-map-wrapper">
-                        <div id="map-tooltip"></div>
-                        <object id="india-map-object" data="./images/india.svg" type="image/svg+xml"></object>
-                    </div>
-                    <div class="map-legend">
-                        <div class="legend-item">
-                            <span class="legend-color" style="background-color: #4a6fa5;"></span>
-                            <span>Selected State</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color" style="background-color: #e4e9f2;"></span>
-                            <span>Other States</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stats-container slide-up">
-                    <h3 id="stats-title">All India Statistics</h3>
-                    <div class="stats-wrapper">
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>Higher Education Students</h4>
-                                <p id="education-stat">3.85 Crore</p>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-brain"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>Facing Mental Stress</h4>
-                                <p id="stress-stat">1.16 Crore (30%)</p>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-hand-holding-heart"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>Seeking Help</h4>
-                                <p id="help-stat">23.1 Lakh (20%)</p>
-                            </div>
-                        </div>
-
-                        <div class="stat-card">
-                            <div class="stat-icon">
-                                <i class="fas fa-clinic-medical"></i>
-                            </div>
-                            <div class="stat-info">
-                                <h4>Available Counselors</h4>
-                                <p id="counselor-stat">1:5000 Ratio</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="mental-health-chart"></canvas>
-                    </div>
-                    <div class="data-note">
-                        <i class="fas fa-info-circle"></i> Data shown is based on 2025 projections from national mental health surveys.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Resources Section -->
+        <!-- Resources Section -->
     <section id="resources" class="resources">
         <div class="container">
             <h2 class="section-title">Explore Free Mental Health Resources</h2>
@@ -298,6 +256,12 @@
                 </button>
                 <button class="tab-button" data-tab="guides">
                     <i class="fas fa-book"></i> Self-Help Guides
+                </button>
+                <button class="tab-button" data-tab="books">
+                    <i class="fas fa-book-open"></i> Books
+                </button>
+                <button class="tab-button" data-tab="quotes">
+                    <i class="fas fa-quote-right"></i> Quotes
                 </button>
             </div>
             
@@ -434,8 +398,149 @@
                 </div>
             </div>
             
+            <div class="tab-content" id="books-content">
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <div class="resource-thumbnail guide-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="The Anxiety and Phobia Workbook">
+                            <div class="guide-icon"><i class="fas fa-book"></i></div>
+                        </div>
+                        <h3>The Anxiety and Phobia Workbook</h3>
+                        <p>A practical guide with proven strategies for managing anxiety, panic attacks, and phobias effectively.</p>
+                        <a href="#" class="resource-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-thumbnail guide-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mindfulness for Students">
+                            <div class="guide-icon"><i class="fas fa-book"></i></div>
+                        </div>
+                        <h3>Mindfulness for Students</h3>
+                        <p>Learn practical mindfulness techniques specifically designed for academic stress and student life.</p>
+                        <a href="#" class="resource-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-thumbnail guide-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1535905557558-afc4877a26fc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="The Self-Care Project">
+                            <div class="guide-icon"><i class="fas fa-book"></i></div>
+                        </div>
+                        <h3>The Self-Care Project</h3>
+                        <p>How to develop self-care habits that actually work and lead to a healthier, happier you.</p>
+                        <a href="#" class="resource-link">View Details <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="quotes-content">
+                <div class="resources-grid">
+                    <div class="resource-card quote-card">
+                        <div class="quote-container">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <blockquote>"Your present circumstances don't determine where you can go; they merely determine where you start."</blockquote>
+                            <p class="quote-author">— Nido Qubein</p>
+                        </div>
+                        <a href="#" class="resource-link">Share <i class="fas fa-share-alt"></i></a>
+                    </div>
+                    
+                    <div class="resource-card quote-card">
+                        <div class="quote-container">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <blockquote>"You don't have to control your thoughts. You just have to stop letting them control you."</blockquote>
+                            <p class="quote-author">— Dan Millman</p>
+                        </div>
+                        <a href="#" class="resource-link">Share <i class="fas fa-share-alt"></i></a>
+                    </div>
+                    
+                    <div class="resource-card quote-card">
+                        <div class="quote-container">
+                            <i class="fas fa-quote-left quote-icon"></i>
+                            <blockquote>"Mental health problems don't define who you are. They are something you experience, but you walk in your own shoes."</blockquote>
+                            <p class="quote-author">— Matt Haig</p>
+                        </div>
+                        <a href="#" class="resource-link">Share <i class="fas fa-share-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+            
             <div class="center-button">
                 <button class="btn-primary">Explore All Resources</button>
+            </div>
+        </div>
+    </section>
+    <!-- Data Visualization Section -->
+    <section id="statistics" class="data-visualization">
+        <div class="container">
+            <h2 class="section-title">Student Mental Health Statistics</h2>
+            <div class="data-grid">
+                <div class="map-container slide-up">
+                    <h3>Select a State/UT</h3>
+                    <div class="india-map-wrapper">
+                        <div id="map-tooltip"></div>
+                        <object id="india-map-object" data="./images/india.svg" type="image/svg+xml"></object>
+                    </div>
+                    <div class="map-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #4a6fa5;"></span>
+                            <span>Selected State</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background-color: #e4e9f2;"></span>
+                            <span>Other States</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-container slide-up">
+                    <h3 id="stats-title">All India Statistics</h3>
+                    <div class="stats-wrapper">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Higher Education Students</h4>
+                                <p id="education-stat">3.85 Crore</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Facing Mental Stress</h4>
+                                <p id="stress-stat">1.16 Crore (30%)</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Seeking Help</h4>
+                                <p id="help-stat">23.1 Lakh (20%)</p>
+                            </div>
+                        </div>
+
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clinic-medical"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Available Counselors</h4>
+                                <p id="counselor-stat">1:5000 Ratio</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mental-health-chart"></canvas>
+                    </div>
+                    <div class="data-note">
+                        <i class="fas fa-info-circle"></i> Data shown is based on 2025 projections from national mental health surveys.
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -485,11 +590,10 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by <a href="#">Team Innovators</a></p>
+                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by Team <a href="team.html">MindSpace Warriors</a></p>
                 <div class="footer-links">
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Emergency Resources</a>
+                    <a href="policy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
                 </div>
             </div>
         </div>
@@ -530,9 +634,12 @@
                         </div>
                         <div class="form-group">
                             <label for="login-password">Password</label>
-                            <div class="input-with-icon">
+                            <div class="input-with-icon password-field">
                                 <i class="fas fa-lock"></i>
                                 <input type="password" id="login-password" placeholder="Enter your password" required>
+                                <button type="button" class="password-toggle" onclick="togglePasswordVisibility('login-password', this)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="form-group">
@@ -620,24 +727,54 @@
                         </div>
                         <div class="form-group">
                             <label for="dob">Date of Birth</label>
-                            <div class="input-with-icon">
-                                <i class="fas fa-calendar-alt"></i>
-                                <input type="date" id="dob" required>
+                            <div class="dob-container">
+                                <div class="dob-input">
+                                    <input type="number" id="dob-day" placeholder="DD" min="1" max="31" required>
+                                    <label for="dob-day">Day</label>
+                                </div>
+                                <div class="dob-input">
+                                    <select id="dob-month" required>
+                                        <option value="" disabled selected>Month</option>
+                                        <option value="1">January</option>
+                                        <option value="2">February</option>
+                                        <option value="3">March</option>
+                                        <option value="4">April</option>
+                                        <option value="5">May</option>
+                                        <option value="6">June</option>
+                                        <option value="7">July</option>
+                                        <option value="8">August</option>
+                                        <option value="9">September</option>
+                                        <option value="10">October</option>
+                                        <option value="11">November</option>
+                                        <option value="12">December</option>
+                                    </select>
+                                    <label for="dob-month">Month</label>
+                                </div>
+                                <div class="dob-input">
+                                    <input type="number" id="dob-year" placeholder="YYYY" min="1950" max="2010" required>
+                                    <label for="dob-year">Year</label>
+                                </div>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group half">
                                 <label for="create-password">Create Password</label>
-                                <div class="input-with-icon">
+                                <div class="input-with-icon password-field">
                                     <i class="fas fa-lock"></i>
                                     <input type="password" id="create-password" placeholder="Create password" required>
+                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('create-password', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="form-group half">
                                 <label for="confirm-password">Confirm Password</label>
-                                <div class="input-with-icon">
+                                <div class="input-with-icon password-field">
                                     <i class="fas fa-lock"></i>
                                     <input type="password" id="confirm-password" placeholder="Confirm password" required>
+                                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm-password', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -733,5 +870,189 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to update navigation based on authentication state
+            function updateNavigation() {
+                const authToken = localStorage.getItem('authToken');
+                const navLinks = document.querySelector('.nav-links');
+                
+                // Clear existing navigation links
+                navLinks.innerHTML = '';
+                
+                if (authToken) {
+                    // User is logged in, show only Home and Dashboard links
+                    navLinks.innerHTML = `
+                        <li><a href="#home" ${window.location.hash === '#home' || window.location.hash === '' ? 'class="active"' : ''}>Home</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                    `;
+                } else {
+                    // User is not logged in, show default navigation
+                    navLinks.innerHTML = `
+                        <li><a href="#home" ${window.location.hash === '#home' || window.location.hash === '' ? 'class="active"' : ''}>Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                        <li><a href="#statistics">Statistics</a></li>
+                    `;
+                }
+            }
+
+            // Helper function to handle protected links
+            function handleProtectedLink(targetUrl) {
+                const authToken = localStorage.getItem('authToken');
+                if (authToken) {
+                    // User is logged in, redirect to target page
+                    window.location.href = targetUrl;
+                } else {
+                    // User is not logged in, show notification and open signup dialog
+                    showInfo('Please sign up or log in to access this feature');
+                    toggleDialog('login-dialog', true);
+                }
+            }
+            
+            // Add click handlers for specific buttons
+            
+            // Mood tracker button
+            const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+            if (moodTrackerBtn) {
+                moodTrackerBtn.addEventListener('click', function() {
+                    handleProtectedLink('mood.html');
+                });
+            }
+            
+            // Hero section buttons
+            const heroButtons = document.querySelector('.hero-buttons');
+            if (heroButtons) {
+                const buttons = heroButtons.querySelectorAll('button');
+                if (buttons.length >= 2) {
+                    // Get Started button
+                    buttons[0].addEventListener('click', function() {
+                        handleProtectedLink('mental-health.html');
+                    });
+                    
+                    // Learn More button
+                    buttons[1].addEventListener('click', function() {
+                        handleProtectedLink('learn-more.html');
+                    });
+                }
+            }
+            
+            // Explore All Resources button
+            const exploreResourcesBtn = document.querySelector('.center-button .btn-primary');
+            if (exploreResourcesBtn) {
+                exploreResourcesBtn.addEventListener('click', function() {
+                    handleProtectedLink('resources.html');
+                });
+            }
+            
+            // Add event delegation for services and resources sections
+            document.addEventListener('click', function(e) {
+                // Check if the click is on a link in the services section
+                if (e.target.closest('#services a') || e.target.closest('#resources a')) {
+                    const link = e.target.closest('a');
+                    if (link && link.getAttribute('href') !== '#') {
+                        e.preventDefault();
+                        handleProtectedLink(link.getAttribute('href'));
+                    }
+                }
+            });
+            
+            // Check login status
+            const authToken = localStorage.getItem('authToken');
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            // Update navigation based on authentication
+            updateNavigation();
+            
+            if (authToken) {
+                // User is logged in - show profile dropdown
+                const authButtonsContainer = document.querySelector('.auth-buttons-container');
+                const userProfileDropdown = document.querySelector('.user-profile-dropdown');
+                
+                if (authButtonsContainer) authButtonsContainer.style.display = 'none';
+                if (userProfileDropdown) userProfileDropdown.style.display = 'block';
+                
+                // Update user info in the dropdown
+                const fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
+                const initials = ((userData.firstName || '').charAt(0) + (userData.lastName || '').charAt(0)).toUpperCase();
+                
+                const headerUsername = document.getElementById('header-username');
+                const headerAvatar = document.getElementById('header-avatar');
+                
+                if (headerUsername) headerUsername.textContent = userData.firstName || 'User';
+                if (headerAvatar) headerAvatar.textContent = initials || 'U';
+                
+                // Toggle profile dropdown
+                const profileTrigger = document.getElementById('profile-trigger');
+                const profileDropdown = document.getElementById('profile-dropdown');
+                
+                if (profileTrigger && profileDropdown) {
+                    profileTrigger.addEventListener('click', function() {
+                        profileDropdown.classList.toggle('active');
+                    });
+                    
+                    // Close dropdown when clicking outside
+                    document.addEventListener('click', function(event) {
+                        if (!profileTrigger.contains(event.target) && !profileDropdown.contains(event.target)) {
+                            profileDropdown.classList.remove('active');
+                        }
+                    });
+                }
+                
+                // Handle logout
+                const logoutBtn = document.getElementById('logout-btn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        
+                        // Clear authentication data
+                        localStorage.removeItem('authToken');
+                        localStorage.removeItem('userData');
+                        
+                        // Show success notification
+                        showSuccess('Logged out successfully!');
+                        
+                        // Refresh the page after short delay
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    });
+                }
+            } else {
+                // User is not logged in - show auth buttons
+                const authButtonsContainer = document.querySelector('.auth-buttons-container');
+                const userProfileDropdown = document.querySelector('.user-profile-dropdown');
+                
+                if (authButtonsContainer) authButtonsContainer.style.display = 'flex';
+                if (userProfileDropdown) userProfileDropdown.style.display = 'none';
+            }
+        });
+    </script>
+
+    <!-- Functions to toggle dialog visibility -->
+    <script>
+        function toggleDialog(dialogId, show) {
+            const dialog = document.getElementById(dialogId);
+            if (dialog) {
+                if (show) {
+                    dialog.classList.add('active');
+                } else {
+                    dialog.classList.remove('active');
+                }
+            }
+        }
+        
+        function switchDialog(currentDialogId, newDialogId) {
+            toggleDialog(currentDialogId, false);
+            toggleDialog(newDialogId, true);
+        }
+    </script>
+
+    <!-- Add CSS for the user profile dropdown -->
+    <style>
+
+    </style>
 </body>
 </html>

@@ -17,6 +17,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const navClone = navLinks.cloneNode(true);
                 mobileMenu.appendChild(navClone);
                 
+                // Add mood tracker button to mobile menu
+                const moodTrackerBtn = document.createElement('button');
+                moodTrackerBtn.className = 'mood-tracker-btn';
+                moodTrackerBtn.innerHTML = '<i class="fas fa-chart-line"></i> Track Your Mood';
+                moodTrackerBtn.style.margin = '10px 0';
+                moodTrackerBtn.style.alignSelf = 'center';
+                mobileMenu.appendChild(moodTrackerBtn);
+                
                 // Clone auth buttons
                 const authClone = authButtons.cloneNode(true);
                 mobileMenu.appendChild(authClone);
@@ -486,7 +494,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         tooltip.style.display = 'block';
                         
                         // Get position relative to the viewport
-                        const rect = svgObject.getBoundingClientRect();
                         tooltip.style.left = `${e.clientX + 10}px`;
                         tooltip.style.top = `${e.clientY + 10}px`;
                     }
@@ -620,33 +627,218 @@ function validateCaptcha(displayId, inputId) {
     return captchaDisplay.dataset.value === captchaInput.value;
 }
 
+
+// Notification System
+const notificationTypes = {
+    SUCCESS: 'success',
+    ERROR: 'error',
+    INFO: 'info',
+    WARNING: 'warning'
+};
+
+// Store notification timers to clear them when needed
+const notificationTimers = {};
+let notificationCounter = 0;
+
+/**
+ * Show a notification
+ * @param {string} message - The notification message
+ * @param {string} type - The notification type (success, error, info, warning)
+ * @param {string} title - Optional title for the notification
+ * @param {number} duration - Duration in ms before auto-dismiss (0 for no auto-dismiss)
+ */
+function showNotification(message, type = notificationTypes.INFO, title = '', duration = 5000) {
+    const container = document.getElementById('notifications-container');
+    if (!container) return;
+    
+    // Create a unique ID for this notification
+    const id = `notification-${Date.now()}-${notificationCounter++}`;
+    
+    // Get icon based on type
+    let icon;
+    switch (type) {
+        case notificationTypes.SUCCESS:
+            icon = 'fa-circle-check';
+            title = title || 'Success';
+            break;
+        case notificationTypes.ERROR:
+            icon = 'fa-circle-xmark';
+            title = title || 'Error';
+            break;
+        case notificationTypes.WARNING:
+            icon = 'fa-triangle-exclamation';
+            title = title || 'Warning';
+            break;
+        case notificationTypes.INFO:
+        default:
+            icon = 'fa-circle-info';
+            title = title || 'Information';
+            break;
+    }
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.id = id;
+    
+    // Create notification content
+    notification.innerHTML = `
+        <div class="notification-icon">
+            <i class="fas ${icon}"></i>
+        </div>
+        <div class="notification-content">
+            <div class="notification-title">${title}</div>
+            <div class="notification-message">${message}</div>
+        </div>
+        <button class="notification-close" aria-label="Close">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="notification-progress"></div>
+    `;
+    
+    // Add the notification to the container
+    container.appendChild(notification);
+    
+    // Setup close button
+    const closeButton = notification.querySelector('.notification-close');
+    closeButton.addEventListener('click', () => dismissNotification(id));
+    
+    // Auto-dismiss after duration (if specified)
+    if (duration > 0) {
+        // Animate progress bar
+        const progressBar = notification.querySelector('.notification-progress');
+        progressBar.style.animation = `progress-shrink ${duration / 1000}s linear forwards`;
+        
+        // Set timer to remove notification
+        notificationTimers[id] = setTimeout(() => {
+            dismissNotification(id);
+        }, duration);
+    }
+    
+    // Return notification ID for potential manual dismiss
+    return id;
+}
+
+/**
+ * Dismiss a specific notification
+ * @param {string} id - The notification ID to dismiss
+ */
+function dismissNotification(id) {
+    const notification = document.getElementById(id);
+    if (!notification) return;
+    
+    // Clear any existing timer
+    if (notificationTimers[id]) {
+        clearTimeout(notificationTimers[id]);
+        delete notificationTimers[id];
+    }
+    
+    // Add hiding class for animation
+    notification.classList.add('hiding');
+    
+    // Remove notification after animation completes
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 300);
+}
+
+// Convenience functions for specific notification types
+function showSuccess(message, title = 'Success', duration = 5000) {
+    return showNotification(message, notificationTypes.SUCCESS, title, duration);
+}
+
+function showError(message, title = 'Error', duration = 5000) {
+    return showNotification(message, notificationTypes.ERROR, title, duration);
+}
+
+function showInfo(message, title = 'Information', duration = 5000) {
+    return showNotification(message, notificationTypes.INFO, title, duration);
+}
+
+function showWarning(message, title = 'Warning', duration = 5000) {
+    return showNotification(message, notificationTypes.WARNING, title, duration);
+}
+
 // Form Validation Functions
 function validateLoginForm(event) {
     event.preventDefault();
     
     // Validate captcha
     if (!validateCaptcha('login-captcha-display', 'login-captcha-input')) {
-        alert('Invalid captcha! Please try again.');
+        showError('Invalid captcha! Please try again.');
         generateCaptcha('login-captcha-display');
         document.getElementById('login-captcha-input').value = '';
         return false;
     }
     
-    // Simulate login check (to be replaced with actual backend call)
+    // Get login credentials
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     
-    // For demonstration purposes, accept any non-empty values
-    if (email && password) {
-        alert('Login successful! Redirecting to dashboard...');
-        toggleDialog('login-dialog', false);
-        // Redirect to dashboard (placeholder)
-        // window.location.href = 'dashboard.html';
-        return true;
-    } else {
-        alert('Invalid credentials! Please try again.');
+    if (!email || !password) {
+        showError('Please enter both email and password.');
         return false;
     }
+    
+    // Show loading state
+    const submitButton = document.querySelector('#login-form button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Logging in...';
+    
+    // Send login request to backend
+    fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        if (data.success) {
+            // Store token in localStorage for authenticated requests
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('userData', JSON.stringify(data.user));
+            
+            // Show success message and redirect to dashboard
+            showSuccess('Login successful! Redirecting to dashboard...');
+            
+            // Redirect after a short delay for the notification to be seen
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        } else {
+            // If not verified, but valid credentials
+            if (data.message && data.message.includes('not verified')) {
+                showWarning('Account not verified. Please check your email for OTP.');
+                
+                // Option to redirect to the OTP verification dialog
+                setTimeout(() => {
+                    // You might need to set the email in a session or form to pre-fill
+                    toggleDialog('login-dialog', false);
+                    toggleDialog('otp-dialog', true);
+                    startOTPTimer();
+                }, 1500);
+            } else {
+                // Show error message
+                showError(data.message || 'Invalid credentials. Please try again.');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Login error:', error);
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        showError('Connection error. Please try again later.');
+    });
+    
+    return false;
 }
 
 function validateRegisterForm(event) {
@@ -654,7 +846,7 @@ function validateRegisterForm(event) {
     
     // Validate captcha
     if (!validateCaptcha('register-captcha-display', 'register-captcha-input')) {
-        alert('Invalid captcha! Please try again.');
+        showError('Invalid captcha! Please try again.');
         generateCaptcha('register-captcha-display');
         document.getElementById('register-captcha-input').value = '';
         return false;
@@ -665,40 +857,397 @@ function validateRegisterForm(event) {
     const confirmPassword = document.getElementById('confirm-password').value;
     
     if (password !== confirmPassword) {
-        alert('Passwords do not match! Please try again.');
+        showError('Passwords do not match! Please try again.');
         return false;
     }
     
-    // Validate form data (more validations can be added)
+    // Validate DOB
+    const dobDay = document.getElementById('dob-day').value;
+    const dobMonth = document.getElementById('dob-month').value;
+    const dobYear = document.getElementById('dob-year').value;
+    
+    if (!dobDay || !dobMonth || !dobYear) {
+        showError('Please enter a complete date of birth.');
+        return false;
+    }
+    
+    // Basic DOB validation
+    const day = parseInt(dobDay);
+    const month = parseInt(dobMonth);
+    const year = parseInt(dobYear);
+    
+    if (day < 1 || day > 31) {
+        showError('Please enter a valid day (1-31).');
+        return false;
+    }
+    
+    if (month < 1 || month > 12) {
+        showError('Please select a valid month.');
+        return false;
+    }
+    
+    if (year < 1950 || year > 2020) {
+        showError('Please enter a valid year (1950-2020).');
+        return false;
+    }
+    
+    // Check for valid dates (e.g., no Feb 31)
+    const dob = new Date(year, month - 1, day);
+    if (dob.getDate() !== day) {
+        showError('Please enter a valid date for the selected month.');
+        return false;
+    }
+    
+    // Format the DOB as YYYY-MM-DD
+    const formattedDOB = getFormattedDOB();
+    
+    // Get form data
     const firstName = document.getElementById('first-name').value;
     const lastName = document.getElementById('last-name').value;
     const email = document.getElementById('register-email').value;
     const mobile = document.getElementById('mobile').value;
-    const dob = document.getElementById('dob').value;
     
-    if (!firstName || !lastName || !email || !mobile || !dob || !password) {
-        alert('Please fill in all required fields!');
+    if (!firstName || !lastName || !email || !mobile || !formattedDOB || !password) {
+        showError('Please fill in all required fields!');
         return false;
     }
     
-    // If all validations pass, show OTP verification dialog
-    switchDialog('register-dialog', 'otp-dialog');
-    startOTPTimer();
-    return false; // Prevent form submission as we're handling it ourselves
+    // Show loading state
+    const submitButton = document.querySelector('#register-form button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Processing...';
+    
+    // Send registration request to backend
+    fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            mobile,
+            dob: formattedDOB,
+            password
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        if (data.success) {
+            // Store email for OTP verification
+            sessionStorage.setItem('registerEmail', email);
+            
+            // For development mode, handle direct OTP
+            if (data.devMode && data.devOtp) {
+                console.log('Development OTP:', data.devOtp);
+                
+                // Store the OTP in session storage for dev testing
+                sessionStorage.setItem('dev_otp', data.devOtp);
+                
+                // Show info notification
+                showInfo('Dev mode: OTP has been logged to console for testing.');
+            } else {
+                // Show success notification
+                showSuccess('Registration successful! Please verify your account with the OTP sent to your email.');
+            }
+            
+            // Switch to OTP verification dialog
+            switchDialog('register-dialog', 'otp-dialog');
+            startOTPTimer();
+        } else {
+            // Show error message
+            showError(data.message || 'Registration failed. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Registration error:', error);
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        showError('Connection error. Please try again later.');
+    });
+    
+    return false;
+}
+
+function handleOTPVerification(event) {
+    event.preventDefault();
+    
+    // Get registered email from session storage
+    const email = sessionStorage.getItem('registerEmail');
+    if (!email) {
+        showError('Session expired. Please register again.');
+        toggleDialog('otp-dialog', false);
+        setTimeout(() => {
+            toggleDialog('register-dialog', true);
+        }, 500);
+        return false;
+    }
+    
+    // Get all OTP digits
+    const otpInputs = document.querySelectorAll('.otp-input');
+    let otp = '';
+    
+    otpInputs.forEach(input => {
+        otp += input.value;
+    });
+    
+    // Check if OTP is complete
+    if (otp.length !== 6) {
+        showError('Please enter a valid 6-digit OTP.');
+        return false;
+    }
+    
+    // Show loading state
+    const submitButton = document.querySelector('#otp-form button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Verifying...';
+    
+    // Send OTP verification request to backend
+    fetch('http://localhost:5000/api/auth/verify-otp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email,
+            otp
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        if (data.success) {
+            // Store token in localStorage
+            if (data.token) {
+                localStorage.setItem('authToken', data.token);
+            }
+            
+            // Clear session storage
+            sessionStorage.removeItem('registerEmail');
+            sessionStorage.removeItem('dev_otp');
+            
+            // Show success message
+            showSuccess('Account verified successfully! Redirecting to dashboard...');
+            
+            // Close OTP dialog
+            toggleDialog('otp-dialog', false);
+            
+            // Redirect to dashboard after short delay
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        } else {
+            // Show error message
+            showError(data.message || 'Invalid OTP. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('OTP verification error:', error);
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        showError('Connection error. Please try again later.');
+    });
+    
+    return false;
+}
+
+// Function to resend OTP
+function resendOTP() {
+    // Get email from session storage
+    const email = sessionStorage.getItem('registerEmail');
+    if (!email) {
+        showError('Session expired. Please register again.');
+        return;
+    }
+    
+    // Show loading state on the resend button
+    const resendButton = document.getElementById('resend-otp');
+    resendButton.textContent = 'Sending...';
+    resendButton.disabled = true;
+    
+    // Send request to resend OTP
+    fetch('http://localhost:5000/api/auth/resend-otp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // For development mode, handle direct OTP
+            if (data.devMode && data.devOtp) {
+                console.log('Development OTP:', data.devOtp);
+                sessionStorage.setItem('dev_otp', data.devOtp);
+                showInfo('Dev mode: New OTP has been logged to console for testing.');
+            } else {
+                showSuccess('New OTP has been sent to your email.');
+            }
+            
+            // Reset the timer
+            startOTPTimer();
+        } else {
+            showError(data.message || 'Failed to resend OTP. Please try again.');
+            resendButton.textContent = 'Resend OTP';
+            resendButton.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Resend OTP error:', error);
+        showError('Connection error. Please try again later.');
+        resendButton.textContent = 'Resend OTP';
+        resendButton.disabled = false;
+    });
 }
 
 function handleForgotPassword(event) {
     event.preventDefault();
     const email = document.getElementById('reset-email').value;
     
-    if (email) {
-        alert(`Password reset link has been sent to ${email}. Please check your email.`);
-        toggleDialog('forgot-password-dialog', false);
-    } else {
-        alert('Please enter a valid email address.');
+    if (!email) {
+        showError('Please enter a valid email address.');
+        return false;
     }
     
+    // Show loading state
+    const submitButton = document.querySelector('#forgot-password-form button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+    
+    // Send password reset request to backend
+    fetch('http://localhost:5000/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        
+        if (data.success) {
+            showSuccess(`Password reset link has been sent to ${email}. Please check your email.`);
+            toggleDialog('forgot-password-dialog', false);
+        } else {
+            showError(data.message || 'Failed to send reset link. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Password reset error:', error);
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        showError('Connection error. Please try again later.');
+    });
+    
     return false;
+}
+
+// Connect login and register buttons to dialogs
+document.addEventListener('DOMContentLoaded', function() {
+    // Set up event listeners for login and register buttons
+    const loginButtons = document.querySelectorAll('.btn-secondary');
+    const registerButtons = document.querySelectorAll('.btn-primary');
+    
+    loginButtons.forEach(button => {
+        if (button.textContent.trim() === 'Login') {
+            button.addEventListener('click', () => toggleDialog('login-dialog', true));
+        }
+    });
+    
+    registerButtons.forEach(button => {
+        if (button.textContent.trim() === 'Register') {
+            button.addEventListener('click', () => toggleDialog('register-dialog', true));
+        }
+    });
+    
+    // Set up OTP resend button
+    const resendButton = document.getElementById('resend-otp');
+    if (resendButton) {
+        resendButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Call the resendOTP function instead of trying to call itself
+            resendOTP();
+        });
+    }
+    
+    // Check if user is already logged in
+    const authToken = localStorage.getItem('authToken');
+    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+    
+    if (authToken) {
+        // Update header UI for logged-in user
+        updateHeaderForLoggedInUser(userData);
+    } else {
+        // Show auth buttons if not logged in
+        const authButtonsContainer = document.querySelector('.auth-buttons-container');
+        if (authButtonsContainer) {
+            authButtonsContainer.style.display = 'flex';
+        }
+    }
+});
+
+// New function to update header UI for logged-in users
+function updateHeaderForLoggedInUser(userData) {
+    // Hide auth buttons container
+    const authButtonsContainer = document.querySelector('.auth-buttons-container');
+    if (authButtonsContainer) {
+        authButtonsContainer.style.display = 'none';
+    }
+    
+    // Show user profile dropdown
+    const userProfileDropdown = document.querySelector('.user-profile-dropdown');
+    if (userProfileDropdown) {
+        userProfileDropdown.style.display = 'block';
+        
+        // Update user information
+        const fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
+        const initials = ((userData.firstName || '').charAt(0) + (userData.lastName || '').charAt(0)).toUpperCase();
+        
+        const headerUsername = document.getElementById('header-username');
+        const headerAvatar = document.getElementById('header-avatar');
+        
+        if (headerUsername) headerUsername.textContent = userData.firstName || 'User';
+        if (headerAvatar) headerAvatar.textContent = initials || 'U';
+    }
+}
+
+// Password visibility toggle function
+function togglePasswordVisibility(inputId, toggleButton) {
+    const passwordInput = document.getElementById(inputId);
+    const icon = toggleButton.querySelector('i');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+// Function to get combined DOB value from separate inputs
+function getFormattedDOB() {
+    const day = document.getElementById('dob-day').value.padStart(2, '0');
+    const month = document.getElementById('dob-month').value.padStart(2, '0');
+    const year = document.getElementById('dob-year').value;
+    
+    if (!day || !month || !year) return '';
+    
+    return `${year}-${month}-${day}`; // Format: YYYY-MM-DD
 }
 
 // OTP Verification Functions
@@ -730,6 +1279,8 @@ function setupOTPInputs() {
     const otpInputs = document.querySelectorAll('.otp-input');
     
     otpInputs.forEach((input, index) => {
+        input.value = ''; // Clear any existing values
+        
         input.addEventListener('keyup', (e) => {
             // If a digit is entered, move to the next input
             if (e.key >= '0' && e.key <= '9') {
@@ -747,6 +1298,22 @@ function setupOTPInputs() {
             }
         });
         
+        // Handle paste event for OTP
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const pasteData = e.clipboardData.getData('text').trim();
+            
+            // Check if pasted data is a 6-digit number
+            if (/^\d{6}$/.test(pasteData)) {
+                // Distribute digits to each input field
+                otpInputs.forEach((input, i) => {
+                    input.value = pasteData.charAt(i);
+                });
+                // Focus the last input
+                otpInputs[otpInputs.length - 1].focus();
+            }
+        });
+        
         // Clear on focus to make entry easier
         input.addEventListener('focus', () => {
             input.select();
@@ -757,54 +1324,19 @@ function setupOTPInputs() {
     otpInputs[0].focus();
 }
 
-function handleOTPVerification(event) {
-    event.preventDefault();
-    
-    // Get all OTP digits
-    const otpInputs = document.querySelectorAll('.otp-input');
-    let otp = '';
-    
-    otpInputs.forEach(input => {
-        otp += input.value;
-    });
-    
-    // Check if OTP is complete
-    if (otp.length === 6) {
-        // For demonstration, accept any 6-digit OTP
-        alert('Account created successfully! You can now login.');
-        toggleDialog('otp-dialog', false);
-    } else {
-        alert('Please enter a valid 6-digit OTP.');
-    }
-    
-    return false;
-}
-
-// Connect login and register buttons to dialogs
+// Fix the event listener for resend OTP
 document.addEventListener('DOMContentLoaded', function() {
-    // Set up event listeners for login and register buttons
-    const loginButtons = document.querySelectorAll('.btn-secondary');
-    const registerButtons = document.querySelectorAll('.btn-primary');
+    // ...existing code...
     
-    loginButtons.forEach(button => {
-        if (button.textContent.trim() === 'Login') {
-            button.addEventListener('click', () => toggleDialog('login-dialog', true));
-        }
-    });
-    
-    registerButtons.forEach(button => {
-        if (button.textContent.trim() === 'Register') {
-            button.addEventListener('click', () => toggleDialog('register-dialog', true));
-        }
-    });
-    
-    // Set up OTP resend button
-    const resendOTP = document.getElementById('resend-otp');
-    if (resendOTP) {
-        resendOTP.addEventListener('click', (e) => {
+    // Set up OTP resend button correctly
+    const resendButton = document.getElementById('resend-otp');
+    if (resendButton) {
+        resendButton.addEventListener('click', (e) => {
             e.preventDefault();
-            alert('New OTP has been sent!');
-            startOTPTimer();
+            // Call the resendOTP function instead of trying to call itself
+            resendOTP();
         });
     }
+    
+    // ...existing code...
 });

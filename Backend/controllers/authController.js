@@ -38,28 +38,96 @@ exports.register = async (req, res, next) => {
     const otp = user.generateOTP();
     await user.save();
     
-    // Send OTP via email
+    // Development mode - bypass email for testing
+    const isDev = process.env.NODE_ENV === 'development';
+    const bypassEmail = process.env.DEV_OTP_BYPASS === 'true';
+    
+    if (isDev && bypassEmail) {
+      console.log('DEVELOPMENT MODE: Bypassing email for testing');
+      console.log(`OTP for ${email}: ${otp}`);
+      
+      return res.status(201).json({
+        success: true,
+        message: 'Registration successful! [DEV MODE] Check server console for OTP.',
+        devMode: true,
+        devOtp: otp // Only send in development
+      });
+    }
+    
+    // Create HTML template for OTP email
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 5px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h1 style="color: #4073c0;">MindSpace</h1>
+        </div>
+        <div style="margin-bottom: 30px;">
+          <h2 style="color: #333;">Verify Your Account</h2>
+          <p>Thank you for registering with MindSpace. To complete your registration, please use the following OTP code:</p>
+          <div style="background-color: #f5f7fa; padding: 15px; border-radius: 5px; text-align: center; font-size: 24px; letter-spacing: 5px; margin: 20px 0; font-weight: bold; color: #4073c0;">
+            ${otp}
+          </div>
+          <p>This code is valid for 10 minutes and can only be used once.</p>
+        </div>
+        <div style="color: #666; font-size: 14px; border-top: 1px solid #e0e0e0; padding-top: 20px;">
+          <p>If you didn't request this email, please ignore it.</p>
+          <p>© ${new Date().getFullYear()} MindSpace. All rights reserved.</p>
+        </div>
+      </div>
+    `;
+    
     try {
-      await sendEmail({
+      // Send OTP via email
+      const emailResult = await sendEmail({
         to: email,
         subject: 'MindSpace Account Verification',
-        text: `Your verification OTP is: ${otp}. This OTP is valid for 10 minutes.`
+        text: `Your verification OTP is: ${otp}. This OTP is valid for 10 minutes.`,
+        html: htmlContent
       });
       
+      if (!emailResult.success) {
+        // Email failed to send
+        console.error('Failed to send verification email:', emailResult.error);
+        
+        // In development, proceed anyway but with a warning
+        if (isDev) {
+          console.warn('DEV MODE: Proceeding with registration despite email failure');
+          console.log(`OTP for ${email}: ${otp}`);
+          
+          return res.status(201).json({
+            success: true,
+            message: 'Registration successful! Email sending failed, but OTP is in server logs.',
+            devMode: true,
+            devOtp: otp
+          });
+        }
+        
+        // In production, clean up and return error
+        await User.findByIdAndDelete(user._id);
+        return res.status(500).json({
+          success: false,
+          message: 'Registration failed: Could not send verification email. Please try again later.'
+        });
+      }
+      
+      // Email sent successfully
       res.status(201).json({
         success: true,
         message: 'Registration successful! Please verify your account with the OTP sent to your email.'
       });
+      
     } catch (error) {
-      // If email fails, delete the user and return error
+      console.error('Email error:', error);
+      
+      // Clean up user on email error
       await User.findByIdAndDelete(user._id);
       
       return res.status(500).json({
         success: false,
-        message: 'Could not send verification email. Registration failed.'
+        message: 'Registration failed: Email service error. Please try again later.'
       });
     }
   } catch (error) {
+    console.error('Registration error:', error);
     next(error);
   }
 };
