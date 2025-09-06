@@ -789,7 +789,7 @@ function validateLoginForm(event) {
     submitButton.textContent = 'Logging in...';
 
     // Send login request to backend
-    fetch('http://localhost:5000/api/auth/login', {
+    fetch(`${getApiUrl()}/api/auth/login`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -919,7 +919,7 @@ function validateRegisterForm(event) {
     submitButton.textContent = 'Processing...';
 
     // Send registration request to backend
-    fetch('http://localhost:5000/api/auth/register', {
+    fetch(`${getApiUrl()}/api/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1009,7 +1009,7 @@ function handleOTPVerification(event) {
     submitButton.textContent = 'Verifying...';
 
     // Send OTP verification request to backend
-    fetch('http://localhost:5000/api/auth/verify-otp', {
+    fetch(`${getApiUrl()}/api/auth/verify-otp`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1074,7 +1074,7 @@ function resendOTP() {
     resendButton.disabled = true;
 
     // Send request to resend OTP
-    fetch('http://localhost:5000/api/auth/resend-otp', {
+    fetch(`${getApiUrl()}/api/auth/resend-otp`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1125,7 +1125,7 @@ function handleForgotPassword(event) {
     submitButton.textContent = 'Sending...';
 
     // Send password reset request to backend
-    fetch('http://localhost:5000/api/auth/forgot-password', {
+    fetch(`${getApiUrl()}/api/auth/forgot-password`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -1152,6 +1152,16 @@ function handleForgotPassword(event) {
         });
 
     return false;
+}
+
+// API URL utility function - add this near the top of your script
+function getApiUrl() {
+    // In production, use the environment variable
+    if (window.ENV_API_URL) {
+        return window.ENV_API_URL;
+    }
+    // Fallback for local development
+    return 'http://localhost:5000';
 }
 
 // Connect login and register buttons to dialogs

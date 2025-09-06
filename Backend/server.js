@@ -11,8 +11,32 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
 app.use(express.json());
+
+// Configure CORS to allow requests from multiple frontend origins
+const corsOptions = {
+  origin: function(origin, callback) {
+    // Allow requests from these origins
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://127.0.0.1:5500',
+      'https://mind-space-beryl.vercel.app'  // Your production Vercel URL
+    ];
+    
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+
+// Use the CORS middleware with options
+app.use(cors(corsOptions));
 
 // Configure MongoDB connection options
 const mongoOptions = {
