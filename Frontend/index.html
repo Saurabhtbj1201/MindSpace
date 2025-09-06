@@ -899,26 +899,7 @@
         </div>
     </div>
         <!-- Scripts -->
-    <script>
-    // Configure API URL based on environment - secure version
-    (function() {
-        // Check if running on production or development
-        const isProduction = window.location.hostname !== 'localhost' && 
-                           !window.location.hostname.includes('127.0.0.1');
-        
-        // Set API URL accordingly
-        if (isProduction) {
-            // In production: use relative URL that works on any domain
-            // This will call the API on the same domain as the frontend
-            window.ENV_API_URL = '';  // Empty string means "same domain"
-        } else {
-            // In development: use localhost
-            window.ENV_API_URL = 'http://localhost:5000';
-        }
-        
-        console.log('API URL configured for:', isProduction ? 'production' : 'development');
-    })();
-    </script>
+
     <script>
             // Add the user authentication and navigation handling code
     document.addEventListener('DOMContentLoaded', function() {
