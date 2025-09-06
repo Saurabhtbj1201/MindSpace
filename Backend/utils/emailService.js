@@ -13,7 +13,7 @@ async function sendEmail(options) {
     // Check if we're in development mode
     const isDev = process.env.NODE_ENV === 'development';
     let transporter;
-    
+
     if (isDev && process.env.USE_TEST_EMAIL === 'true') {
       // Create a test account for development
       console.log('Creating test account for email...');
@@ -28,7 +28,7 @@ async function sendEmail(options) {
           pass: testAccount.pass,
         },
       });
-      
+
       console.log('Using test email account:', testAccount.user);
     } else {
       // Configure real email service

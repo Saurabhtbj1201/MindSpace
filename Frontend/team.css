@@ -2,9 +2,9 @@
 
 /* Hero Section */
 .team-hero {
-    background: linear-gradient(135deg, #4073c0 0%, #5e60ce 100%);
-    color: white;
-    padding: 80px 0 60px;
+    background: linear-gradient(135deg, #fffdfd 0%, #f7f7ff 100%);
+    color: rgb(40, 40, 40);
+    padding: 20px 0 0;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -17,19 +17,19 @@
     right: -50px;
     width: 200px;
     height: 200px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(255, 199, 199);
     border-radius: 50%;
     z-index: 1;
 }
 
-.team-hero::after {
+.team-members::after {
     content: '';
     position: absolute;
     bottom: -80px;
     left: -80px;
     width: 300px;
     height: 300px;
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(136, 255, 237, 0.786);
     border-radius: 50%;
     z-index: 1;
 }
@@ -55,7 +55,8 @@
 
 /* Carousel Section */
 .team-carousel-section {
-    padding: 80px 0;
+    padding: 2rem 0;
+    z-index: 0;
     background-color: #f8f9fa;
 }
 
@@ -64,6 +65,7 @@
     max-width: 1000px;
     margin: 0 auto;
     overflow: hidden;
+    z-index: 2;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
@@ -209,10 +211,11 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
+    transition: 0.5s;
 }
 
 .team-member:hover {
-    transform: translateY(-10px);
+    border-radius: 5px;
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
@@ -229,7 +232,7 @@
 }
 
 .team-member:hover .member-photo img {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .member-info {
