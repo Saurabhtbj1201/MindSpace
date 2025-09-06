@@ -181,6 +181,11 @@
     background-color: white;
 }
 
+.team-members .container {
+    position: sticky;
+    z-index: 2;
+}
+
 .section-title {
     text-align: center;
     color: var(--primary-color);
