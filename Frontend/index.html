@@ -899,7 +899,41 @@
         </div>
     </div>
         <!-- Scripts -->
-
+    <script>
+    // Configure API URL based on environment - improved with better debugging
+    (function() {
+        // Check if running on production or development
+        const isProduction = window.location.hostname !== 'localhost' && 
+                           !window.location.hostname.includes('127.0.0.1');
+        
+        // Set API URL accordingly
+        if (isProduction) {
+            // For production: Use the actual Render.com URL where your backend is hosted
+            window.ENV_API_URL = 'https://mindspace-9a0l.onrender.com';
+            
+            // Log detailed information about the API configuration
+            console.log('Running in production mode');
+            console.log('Frontend URL:', window.location.origin);
+            console.log('API URL set to:', window.ENV_API_URL);
+            
+            // Test connectivity to the API
+            fetch(window.ENV_API_URL + '/health', { 
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(response => {
+                console.log('API health check successful:', response.status);
+                return response.json();
+            })
+            .then(data => console.log('API response:', data))
+            .catch(error => console.error('API connectivity test failed:', error));
+        } else {
+            // For development: Use localhost
+            window.ENV_API_URL = 'http://localhost:5000';
+            console.log('Running in development mode, API URL:', window.ENV_API_URL);
+        }
+    })();
+    </script>
     <script>
             // Add the user authentication and navigation handling code
     document.addEventListener('DOMContentLoaded', function() {
