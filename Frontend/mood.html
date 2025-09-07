@@ -32,6 +32,7 @@
     
     <title>MindSpace - Mood Tracker</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mood.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -90,7 +91,50 @@
     </header>
 
     <!-- Mood Tracker Section -->
-
+    <div class="mood-container">
+        <div class="mood-header">
+            <h1>Mood Tracker</h1>
+            <p class="subtitle">Track your emotions daily with AI-powered facial expression analysis</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="camera-section">
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <div class="countdown" id="countdown">5</div>
+                </div>
+                
+                <div class="canvas-container">
+                    <canvas id="canvas"></canvas>
+                </div>
+                
+                <button id="captureBtn" class="btn">Capture Mood</button>
+                <div class="result" id="result"></div>
+                
+                <div class="instructions">
+                    <h3>How it works:</h3>
+                    <ul>
+                        <li>Click "Capture Mood" to start 5-second countdown</li>
+                        <li>Position your face clearly in the camera view</li>
+                        <li>Stay still until the countdown completes</li>
+                        <li>Your mood will be analyzed and recorded in the chart</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="chart-section">
+                <h2>Daily Mood Chart</h2>
+                <div class="chart-container">
+                    <canvas id="moodChart"></canvas>
+                </div>
+                
+                <div class="mood-history">
+                    <div class="history-title">Today's Mood History</div>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer Section -->
     <footer id="contact">
