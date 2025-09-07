@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Primary Meta Tags -->
+    <meta name="description" content="MindSpace Mood Tracker - Track your daily emotional wellbeing and discover patterns to improve your mental health.">
+    <meta name="keywords" content="mood tracker, emotion tracking, mental health, student wellness, daily mood log">
+    <meta name="author" content="MindSpace Warriors">
+    <meta name="robots" content="noindex, nofollow"> <!-- Protected page -->
+    <meta name="theme-color" content="#6A0DAD">
+    
+    <!-- Security Meta Tags -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.mindspace.edu;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/ico.png">
+    <link rel="manifest" href="images/favicon/site.webmanifest">
+    
+    <!-- Mobile App Capability -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Authentication Required -->
+    <meta name="auth-required" content="true">
+    
+    <title>MindSpace - Mood Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+</head>
+<body>
+    <!-- Add notification container -->
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindSpace</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="#mood" class="active">Mood Tracker</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button class="mood-tracker-btn">
+                    <i class="fas fa-chart-line"></i> Track Your Mood
+                </button>
+                
+                <!-- User profile dropdown -->
+                <div class="user-profile-dropdown">
+                    <div class="profile-trigger" id="profile-trigger">
+                        <div class="avatar-circle" id="header-avatar">U</div>
+                        <span id="header-username">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a href="#profile" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="#settings" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mood Tracker Section -->
+
+
+    <!-- Footer Section -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <h2>MindSpace</h2>
+                    </div>
+                    <p>Supporting student mental health and wellbeing across higher education institutions in India.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="#mood">Mood Tracker</a></li>
+                        <li><a href="team.html">Our Team</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@mindspace.edu</li>
+                        <li><i class="fas fa-phone"></i> Helpline: 1800-123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> India</li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by Team <a href="team.html">MindSpace Warriors</a></p>
+                <div class="footer-links">
+                    <a href="policy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const authToken = localStorage.getItem('authToken');
+            if (!authToken) {
+                // Redirect to login page if not logged in
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Get user data from localStorage
+            const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+            
+            // Update user information in the UI
+            if (userData) {
+                const fullName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim();
+                const initials = ((userData.firstName || '').charAt(0) + (userData.lastName || '').charAt(0)).toUpperCase();
+                
+                // Update header profile dropdown
+                document.getElementById('header-username').textContent = userData.firstName || 'User';
+                document.getElementById('header-avatar').textContent = initials || 'U';
+            }
+            
+            // Toggle profile dropdown
+            const profileTrigger = document.getElementById('profile-trigger');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            
+            profileTrigger.addEventListener('click', function() {
+                profileDropdown.classList.toggle('active');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!profileTrigger.contains(event.target) && !profileDropdown.contains(event.target)) {
+                    profileDropdown.classList.remove('active');
+                }
+            });
+            
+            // Handle logout
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Clear authentication data
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('userData');
+                
+                // Show success notification
+                showSuccess('Logged out successfully!');
+                
+                // Redirect to home page after short delay
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            });
+
+        });
+
+    </script>
+</body>
+</html>

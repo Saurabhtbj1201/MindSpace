@@ -11,3 +11,6 @@ logs/
 # System files
 .DS_Store
 Thumbs.db
+
+Mood Track/
+*MoodModel
