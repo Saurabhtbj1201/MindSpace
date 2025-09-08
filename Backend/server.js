@@ -72,6 +72,17 @@ mongoose.connect(process.env.MONGODB_URI, mongoOptions)
 app.use('/api/auth', authRoutes);
 app.use('/api/mood', moodRoutes);
 
+// Config endpoint to serve environment URLs to frontend
+app.get('/api/config', (req, res) => {
+  res.status(200).json({
+    success: true,
+    config: {
+      backendApiUrl: process.env.BACKEND_API_URL || 'http://localhost:5001',
+      mlServiceUrl: process.env.ML_SERVICE_URL || 'http://localhost:5000/predict_emotion'
+    }
+  });
+});
+
 // Health check route
 app.get('/health', (req, res) => {
   const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';

@@ -56,6 +56,12 @@ document.addEventListener('DOMContentLoaded', function() {
         'Surprise': '😲'
     };
     
+    // API Configuration - will be loaded from server
+    let apiConfig = {
+        backendApiUrl: 'http://localhost:5001', // Default fallback
+        mlServiceUrl: 'http://localhost:5000/predict_emotion' // Default fallback
+    };
+    
     // Initialize the page
     initializePage();
     
@@ -96,6 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to initialize the page
     async function initializePage() {
+        // Load API configuration from backend
+        await loadApiConfig();
+        
         // Check if user has recently tracked their mood
         checkRecentMood();
         
@@ -104,6 +113,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Initialize chart
         initMoodChart();
+    }
+    
+    // Function to load API configuration from backend
+    async function loadApiConfig() {
+        try {
+            const configUrl = `${apiConfig.backendApiUrl}/api/config`;
+            const response = await fetch(configUrl);
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.config) {
+                    apiConfig.backendApiUrl = data.config.backendApiUrl;
+                    apiConfig.mlServiceUrl = data.config.mlServiceUrl;
+                    console.log('API configuration loaded:', apiConfig);
+                }
+            } else {
+                console.warn('Failed to load API config, using defaults');
+            }
+        } catch (error) {
+            console.warn('Error loading API config, using defaults:', error.message);
+        }
     }
     
     // Function to update profile information
@@ -153,8 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to check if user has recently tracked their mood
     async function checkRecentMood() {
         try {
-            // Use Node.js backend port 5001
-            const apiUrl = `http://localhost:5001/api/mood/recent`;
+            const apiUrl = `${apiConfig.backendApiUrl}/api/mood/recent`;
             const response = await fetch(apiUrl, {
                 method: 'GET',
                 headers
@@ -185,8 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to load mood history from the server
     async function loadMoodHistory() {
         try {
-            // Use Node.js backend port 5001
-            const apiUrl = `http://localhost:5001/api/mood?limit=30`;
+            const apiUrl = `${apiConfig.backendApiUrl}/api/mood?limit=30`;
             const response = await fetch(apiUrl, {
                 method: 'GET',
                 headers
@@ -422,8 +450,8 @@ document.addEventListener('DOMContentLoaded', function() {
             targetBtn.disabled = true;
             targetBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
             
-            // Use Node.js backend port 5001
-            const apiUrl = `http://localhost:5001/api/mood`;
+            // Use backend API URL from config
+            const apiUrl = `${apiConfig.backendApiUrl}/api/mood`;
             console.log('Sending mood data to:', apiUrl);
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -491,7 +519,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show analyzing message
             result.innerHTML = '<div class="result-content">Preparing camera...</div>';
-            result.style.backgroundColor = '#f8f9fa69';
             
             // Access webcam
             mediaStream = await navigator.mediaDevices.getUserMedia({ 
@@ -593,8 +620,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update the analyzeMoodImage function to send directly to Flask ML service
     async function analyzeMoodImage(formData) {
         try {
-            // Send directly to Flask ML service
-            const apiUrl = 'http://localhost:5000/predict_emotion';
+            // Send directly to Flask ML service using config
+            const apiUrl = apiConfig.mlServiceUrl;
             console.log('Sending image directly to Flask ML service at:', apiUrl);
             
             // Debug: Check what's in the FormData

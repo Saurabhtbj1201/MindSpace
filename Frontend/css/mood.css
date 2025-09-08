@@ -180,21 +180,6 @@
             margin: 20px 0;
         }
 
-        .mood-detection-result {
-            text-align: center;
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: #f8f9fa;
-            display: none;
-        }
-
-        .result-emoji {
-            font-size: 48px;
-            margin-bottom: 10px;
-            display: block;
-        }
-
         .camera-instructions {
             margin: 20px 0;
             padding: 15px;
@@ -327,7 +312,8 @@
         }
         
         .ai-mood-detect-right #result {
-            background: rgba(255, 255, 255, 0.763);
+            background: rgb(255, 255, 255);
+            border-radius: 10px;
             color: #222;
             margin: 0;
             min-width: 240px;
@@ -389,8 +375,9 @@
             align-items: center;
             justify-content: flex-start;
             gap: 18px;
-            padding: 5px 10px;
-            background: linear-gradient(90deg, #f8fafc 60%, #e9f0fb 100%);
+            padding: 5px 20px;
+            background: linear-gradient(90deg, #ff190054 60%, #0062ff6d 100%);
+            backdrop-filter: blur(2px);
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(64, 115, 192, 0.07);
             font-size: 1.15rem;
