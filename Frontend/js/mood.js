@@ -522,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to start the countdown
     function startCountdown() {
-        let count = 4;
+        let count = 3;
         countdown.textContent = count;
         countdown.style.display = 'flex';
         
