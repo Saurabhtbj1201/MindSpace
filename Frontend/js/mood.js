@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // API Configuration - will be loaded from server
     let apiConfig = {
-        backendApiUrl: 'http://localhost:5001', // Default fallback
-        mlServiceUrl: 'http://localhost:5000/predict_emotion' // Default fallback
+        backendApiUrl: 'https://mindspace-9a0l.onrender.com', // Default fallback
+        mlServiceUrl: 'https://mindspace-9a0l.onrender.com/predict_emotion' // Default fallback
     };
     
     // Initialize the page
