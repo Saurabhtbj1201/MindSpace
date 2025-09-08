@@ -241,7 +241,6 @@
 
         /* Additional styles for AI mood detection */
         .mood-detection-section {
-            background: url('images/ai-bg.jpg') center center/cover no-repeat, #222;
             border-radius: 15px;
             padding: 0;
             margin-bottom: 30px;
@@ -324,11 +323,11 @@
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 18px rgba(0,0,0,0.18);
-            background: #181c2c;
+            background: #3291d9;
         }
         
         .ai-mood-detect-right #result {
-            background: rgba(255,255,255,0.92);
+            background: rgba(255, 255, 255, 0.763);
             color: #222;
             margin: 0;
             min-width: 240px;
