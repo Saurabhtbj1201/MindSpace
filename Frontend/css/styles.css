@@ -201,6 +201,10 @@ header .container {
     font-size: 16px;
 }
 
+.mood-tracker-btn .mood-emoji {
+    font-size: 1rem;
+    margin-bottom: 0px;
+}
 .hamburger {
     display: none;
     flex-direction: column;

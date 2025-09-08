@@ -11,7 +11,6 @@
     <meta name="theme-color" content="#6A0DAD">
     
     <!-- Security Meta Tags -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.mindspace.edu;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -32,11 +31,12 @@
     
     <title>MindSpace - Mood Tracker</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/mood.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/mood.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+    
+    
 </head>
 <body>
     <!-- Add notification container -->
@@ -57,9 +57,11 @@
                 </ul>
             </nav>
             <div style="display: flex; gap: 15px; align-items: center;">
-                <button class="mood-tracker-btn">
-                    <i class="fas fa-chart-line"></i> Track Your Mood
-                </button>
+                <div id="mood-tracker-container">
+                    <button class="mood-tracker-btn" id="mood-tracker-btn">
+                        <i class="fas fa-chart-line"></i> Track Your Mood
+                    </button>
+                </div>
                 
                 <!-- User profile dropdown -->
                 <div class="user-profile-dropdown">
@@ -91,50 +93,123 @@
     </header>
 
     <!-- Mood Tracker Section -->
-    <div class="mood-container">
-        <div class="mood-header">
-            <h1>Mood Tracker</h1>
-            <p class="subtitle">Track your emotions daily with AI-powered facial expression analysis</p>
-        </div>
-        
-        <div class="main-content">
-            <div class="camera-section">
-                <div class="video-container">
-                    <video id="video" autoplay playsinline></video>
-                    <div class="countdown" id="countdown">5</div>
-                </div>
-                
-                <div class="canvas-container">
-                    <canvas id="canvas"></canvas>
-                </div>
-                
-                <button id="captureBtn" class="btn">Capture Mood</button>
-                <div class="result" id="result"></div>
-                
-                <div class="instructions">
-                    <h3>How it works:</h3>
-                    <ul>
-                        <li>Click "Capture Mood" to start 5-second countdown</li>
-                        <li>Position your face clearly in the camera view</li>
-                        <li>Stay still until the countdown completes</li>
-                        <li>Your mood will be analyzed and recorded in the chart</li>
-                    </ul>
+    <section id="mood" class="dashboard-container">
+        <div class="container">
+            
+            <!-- AI Mood Detection Section -->
+            <div class="mood-detection-section">
+                <div class="mood-detect-bg-overlay" style="background: rgba(20, 28, 60, 0.92); backdrop-filter: blur(2px);"></div>
+                <div class="ai-mood-detect-flex">
+                    <div class="ai-mood-detect-left">
+                        <h2>AI-POWERED <span style="color:#fff; font-weight:900;">MOOD DETECTION</span></h2>
+                        <p>Track your daily emotional wellbeing through AI-powered facial expression analysis or manual mood selection.
+                            <br>Track your mood instantly using advanced AI technology.</p>
+                        <button id="captureBtn" class="btn-primary" style="margin-top:20px;">Check Mood Now</button>
+                    </div>
+                    <div class="ai-mood-detect-right">
+                        <div class="video-container" style="position:relative;">
+                            <video id="video" autoplay playsinline></video>
+                            <canvas id="canvas"></canvas>
+                            <div class="countdown" id="countdown"></div>
+                        </div>
+                        <div id="result"></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="chart-section">
-                <h2>Daily Mood Chart</h2>
-                <div class="chart-container">
-                    <canvas id="moodChart"></canvas>
+            <!-- Recommendations Section -->
+            <div class="mood-recommendations" id="mood-recommendations">
+                <h3>Recommendations for You</h3>
+                <div id="recommendation-content">
+                    <p style="color:#888;">Resources (quotes, posters, videos, audios) will appear here based on your detected mood.</p>
+                </div>
+            </div>
+            
+            <!-- Mood History Section with Date Filter -->
+            <div class="mood-history-section">
+                <div class="mood-chart-container">
+                    <h3>Your Mood History</h3>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                        <label for="history-date-filter" style="font-weight: 500;">Show from:</label>
+                        <input type="date" id="history-date-filter" max="" style="padding: 4px 8px; border-radius: 5px; border: 1px solid #ccc;">
+                        <span style="font-size: 12px; color: #888;">(Last 7 days only)</span>
+                    </div>
+                    <p>Track how your mood has changed over the past 7 days.</p>
+                    <div class="chart-container">
+                        <canvas id="mood-history-chart"></canvas>
+                    </div>
                 </div>
                 
-                <div class="mood-history">
-                    <div class="history-title">Today's Mood History</div>
+                <div class="mood-history-list">
+                    <h3 class="history-title">Recent Mood Entries</h3>
                     <div id="historyList"></div>
                 </div>
             </div>
+            
+            <!-- Manual Mood Selection Section -->
+            <div class="mood-container">
+                <h2 style="text-align: center; margin-bottom: 20px;">Manual Mood Selection</h2>
+                
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="3" data-label="Happy">
+                        <div class="mood-emoji">😄</div>
+                        <div class="mood-label">Happy</div>
+                    </div>
+                    
+                    <div class="mood-option" data-mood="4" data-label="Neutral">
+                        <div class="mood-emoji">😐</div>
+                        <div class="mood-label">Neutral</div>
+                    </div>
+                    
+                    <div class="mood-option" data-mood="5" data-label="Sad">
+                        <div class="mood-emoji">😢</div>
+                        <div class="mood-label">Sad</div>
+                    </div>
+                    
+                    <div class="mood-option" data-mood="0" data-label="Angry">
+                        <div class="mood-emoji">😠</div>
+                        <div class="mood-label">Angry</div>
+                    </div>
+                    
+                    <div class="mood-option" data-mood="6" data-label="Surprise">
+                        <div class="mood-emoji">😲</div>
+                        <div class="mood-label">Surprise</div>
+                    </div>
+                    
+                    <div class="mood-option" data-mood="2" data-label="Fear">
+                        <div class="mood-emoji">😨</div>
+                        <div class="mood-label">Fear</div>
+                    </div>
+                    
+                    <div class="mood-option" data-mood="1" data-label="Disgust">
+                        <div class="mood-emoji">🤢</div>
+                        <div class="mood-label">Disgust</div>
+                    </div>
+                </div>
+                
+                <div class="mood-notes">
+                    <textarea placeholder="Add any notes about how you're feeling today (optional)..." id="mood-notes"></textarea>
+                </div>
+                
+                <button class="btn-primary mood-submit-btn" id="save-manual-mood-btn">Save Manual Mood</button>
+            </div>
+            
+            <!-- Instructions moved to end of page -->
+            <div class="instructions">
+                <img src="images/mood.jpg" alt="AI Mood Detection Instructions" class="instructions-img" />
+                <div class="instructions-content">
+                    <h3>How to use AI Mood Detection:</h3>
+                    <ul>
+                        <li>Position yourself in front of the camera with good lighting</li>
+                        <li>Click "Check Mood Now." to start a 5-second countdown</li>
+                        <li>Maintain a natural facial expression during the countdown</li>
+                        <li>The AI will analyze your expression and record your mood</li>
+                        <li>Your mood history will be updated on the chart below</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-    </div>
+    </section>
 
     <!-- Footer Section -->
     <footer id="contact">
@@ -190,6 +265,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/mood.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Check if user is logged in

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes');
+const moodRoutes = require('./routes/moodRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -69,6 +70,7 @@ mongoose.connect(process.env.MONGODB_URI, mongoOptions)
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/mood', moodRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {
@@ -91,7 +93,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

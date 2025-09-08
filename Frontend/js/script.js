@@ -1359,6 +1359,67 @@ function setupOTPInputs() {
     otpInputs[0].focus();
 }
 
+// Check for recent mood tracking and update the mood button
+async function checkAndUpdateMoodButton() {
+    const authToken = localStorage.getItem('authToken');
+    if (!authToken) return;
+    
+    try {
+        const apiUrl = `${window.ENV_API_URL || ''}/api/mood/recent`;
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success && data.isRecent) {
+            // User has tracked mood within the last 2 hours
+            const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+            if (moodTrackerBtn) {
+                const moodData = data.data;
+                
+                // Emoji map for moods
+                const moodEmojis = {
+                    'Angry': '😠',
+                    'Disgust': '🤢',
+                    'Fear': '😨',
+                    'Happy': '😄',
+                    'Neutral': '😐',
+                    'Sad': '😢',
+                    'Surprise': '😲'
+                };
+                
+                const emoji = moodEmojis[moodData.label] || '📊';
+                
+                moodTrackerBtn.innerHTML = `
+                    <span style="font-size: 16px;">${emoji}</span> ${moodData.label}
+                `;
+                
+                // Add a CSS class for styling
+                moodTrackerBtn.classList.add('current-mood');
+            }
+        }
+    } catch (error) {
+        console.error('Error checking recent mood:', error);
+    }
+}
+
+// Call the function when document is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // ...existing code...
+    
+    // Check if user is logged in and update mood button
+    const authToken = localStorage.getItem('authToken');
+    if (authToken) {
+        checkAndUpdateMoodButton();
+    }
+    
+    // ...existing code...
+});
+
 // Fix the event listener for resend OTP
 document.addEventListener('DOMContentLoaded', function () {
     // ...existing code...
