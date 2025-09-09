@@ -1359,7 +1359,7 @@ function setupOTPInputs() {
     otpInputs[0].focus();
 }
 
-// Check for recent mood tracking and update the mood button
+// Check for recent mood tracking and update the mood button - Global function
 async function checkAndUpdateMoodButton() {
     const authToken = localStorage.getItem('authToken');
     if (!authToken) return;

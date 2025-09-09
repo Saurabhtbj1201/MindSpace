@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - MindSpace</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/ico.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <!-- Add notification container -->
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindSpace</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="#" class="active">Profile</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button class="mood-tracker-btn">
+                    <i class="fas fa-chart-line"></i> Track Your Mood
+                </button>
+                <div class="user-profile-dropdown">
+                <div class="profile-trigger" id="profile-trigger">
+                    <div class="avatar-circle" id="header-avatar">U</div>
+                    <span id="header-username">User</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="dropdown-menu" id="profile-dropdown">
+                    <a href="profile.html" class="dropdown-item active">
+                        <i class="fas fa-user"></i> Profile
+                    </a>
+                    <a href="#settings" class="dropdown-item">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" id="logout-btn" class="dropdown-item">
+                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                    </a>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Profile Container -->
+    <div class="profile-container">
+        <div class="container">
+            <!-- Welcome Message -->
+            <div class="welcome-section">
+                <div class="welcome-content">
+                    <div class="welcome-text">
+                        <h1 id="welcome-message">👋 Hi, Welcome User!</h1>
+                        <p>Manage your personal information and track your wellness journey</p>
+                    </div>
+                    <!-- Profile Completion Notice -->
+                    <div class="profile-completion-notice" id="profile-completion-notice" style="display: none;">
+                        <div class="completion-content">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div class="completion-text">
+                                <h4>Complete Your Profile</h4>
+                                <p>Get personalized recommendations</p>
+                            </div>
+                            <div class="completion-progress">
+                                <div class="progress-circle">
+                                    <span id="completion-percentage">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Sections -->
+            <div class="profile-sections">
+                
+                <!-- 1. Information Section -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-user"></i> Personal Information</h2>
+                        <div class="section-actions">
+                            <button class="btn-edit" id="edit-personal-info">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-save" id="save-personal-info" style="display: none;">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button class="btn-cancel" id="cancel-personal-info" style="display: none;">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <!-- Profile Display Mode -->
+                        <div class="profile-display" id="personal-display">
+                            <div class="profile-grid">
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-user"></i> First Name
+                                    </div>
+                                    <div class="profile-value" id="display-firstName">Not provided</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-user"></i> Last Name
+                                    </div>
+                                    <div class="profile-value" id="display-lastName">Not provided</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-envelope"></i> Email Address
+                                    </div>
+                                    <div class="profile-value" id="display-email">Not provided</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-venus-mars"></i> Gender
+                                    </div>
+                                    <div class="profile-value" id="display-gender">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-calendar-alt"></i> Date of Birth
+                                    </div>
+                                    <div class="profile-value" id="display-dob">Not provided</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-hourglass-half"></i> Age
+                                    </div>
+                                    <div class="profile-value" id="display-age">Not calculated</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-tint"></i> Blood Group
+                                    </div>
+                                    <div class="profile-value" id="display-bloodGroup">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-wheelchair"></i> Disability
+                                    </div>
+                                    <div class="profile-value" id="display-disability">Not specified</div>
+                                </div>
+                                <div class="profile-item" id="display-disabilitySpecify" style="display: none;">
+                                    <div class="profile-label">
+                                        <i class="fas fa-info-circle"></i> Disability Details
+                                    </div>
+                                    <div class="profile-value" id="display-disabilityDetails">-</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-ruler-vertical"></i> Height
+                                    </div>
+                                    <div class="profile-value" id="display-height">Not provided</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-weight"></i> Weight
+                                    </div>
+                                    <div class="profile-value" id="display-weight">Not provided</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Address Details -->
+                            <div class="subsection">
+                                <h3><i class="fas fa-map-marker-alt"></i> Address Details</h3>
+                                <div class="profile-grid">
+                                    <div class="profile-item">
+                                        <div class="profile-label">
+                                            <i class="fas fa-city"></i> District
+                                        </div>
+                                        <div class="profile-value" id="display-district">Not provided</div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">
+                                            <i class="fas fa-flag"></i> State
+                                        </div>
+                                        <div class="profile-value" id="display-state">Not provided</div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">
+                                            <i class="fas fa-mail-bulk"></i> Pincode
+                                        </div>
+                                        <div class="profile-value" id="display-pincode">Not provided</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Mode Forms (Hidden by default) -->
+                        <div class="form-edit" id="personal-edit" style="display: none;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="firstName"><i class="fas fa-user"></i> First Name</label>
+                                    <input type="text" id="firstName" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName"><i class="fas fa-user"></i> Last Name</label>
+                                    <input type="text" id="lastName" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+                                    <input type="email" id="email" class="form-input" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gender"><i class="fas fa-venus-mars"></i> Gender</label>
+                                    <select id="gender" class="form-input">
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                        <option value="other">Other</option>
+                                        <option value="prefer-not-to-say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dob"><i class="fas fa-calendar-alt"></i> Date of Birth</label>
+                                    <input type="date" id="dob" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="age"><i class="fas fa-hourglass-half"></i> Age</label>
+                                    <input type="text" id="age" class="form-input" readonly disabled>
+                                    <small class="form-note">Auto-calculated from DOB</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bloodGroup"><i class="fas fa-tint"></i> Blood Group</label>
+                                    <select id="bloodGroup" class="form-input">
+                                        <option value="">Select Blood Group</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="disability"><i class="fas fa-wheelchair"></i> Disability</label>
+                                    <select id="disability" class="form-input">
+                                        <option value="">Select Option</option>
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="disabilitySpecify" style="display: none;">
+                                    <label for="disabilityDetails"><i class="fas fa-info-circle"></i> Please Specify</label>
+                                    <input type="text" id="disabilityDetails" class="form-input" placeholder="Please specify disability">
+                                </div>
+                                <div class="form-group">
+                                    <label for="height"><i class="fas fa-ruler-vertical"></i> Height (cm)</label>
+                                    <input type="number" id="height" class="form-input" placeholder="e.g., 170">
+                                </div>
+                                <div class="form-group">
+                                    <label for="weight"><i class="fas fa-weight"></i> Weight (kg)</label>
+                                    <input type="number" id="weight" class="form-input" placeholder="e.g., 65">
+                                </div>
+                            </div>
+                            
+                            <!-- Address Details -->
+                            <div class="subsection">
+                                <h3><i class="fas fa-map-marker-alt"></i> Address Details</h3>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="district"><i class="fas fa-city"></i> District</label>
+                                        <input type="text" id="district" class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="state"><i class="fas fa-flag"></i> State</label>
+                                        <input type="text" id="state" class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pincode"><i class="fas fa-mail-bulk"></i> Pincode</label>
+                                        <input type="text" id="pincode" class="form-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Academic Section -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-graduation-cap"></i> Academic Information</h2>
+                        <div class="section-actions">
+                            <button class="btn-edit" id="edit-academic-info">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-save" id="save-academic-info" style="display: none;">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button class="btn-cancel" id="cancel-academic-info" style="display: none;">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <!-- Profile Display Mode -->
+                        <div class="profile-display" id="academic-display">
+                            <div class="profile-grid">
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-user-graduate"></i> Current Status
+                                    </div>
+                                    <div class="profile-value" id="display-currentStatus">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-university"></i> College/University Name
+                                    </div>
+                                    <div class="profile-value" id="display-collegeName">Not provided</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-book"></i> Course Name
+                                    </div>
+                                    <div class="profile-value" id="display-courseName">Not provided</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-clock"></i> Course Duration
+                                    </div>
+                                    <div class="profile-value" id="display-courseDuration">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-calendar-check"></i> Current Year
+                                    </div>
+                                    <div class="profile-value" id="display-currentYear">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-calendar-plus"></i> Expected Completion Year
+                                    </div>
+                                    <div class="profile-value" id="display-expectedCompletion">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-exclamation-triangle"></i> Backlogs
+                                    </div>
+                                    <div class="profile-value" id="display-backlogs">Not specified</div>
+                                </div>
+                                <div class="profile-item" id="display-backlogCount" style="display: none;">
+                                    <div class="profile-label">
+                                        <i class="fas fa-hashtag"></i> Number of Subjects
+                                    </div>
+                                    <div class="profile-value" id="display-backlogSubjects">-</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-laptop"></i> Mode of Study
+                                    </div>
+                                    <div class="profile-value" id="display-studyMode">Not specified</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Current Residence -->
+                            <div class="subsection">
+                                <h3><i class="fas fa-home"></i> Current Residence</h3>
+                                <div class="profile-grid">
+                                    <div class="profile-item">
+                                        <div class="profile-label">
+                                            <i class="fas fa-users"></i> Living with Parents
+                                        </div>
+                                        <div class="profile-value" id="display-livingWithParents">Not specified</div>
+                                    </div>
+                                    <div class="profile-item" id="display-livingArrangement" style="display: none;">
+                                        <div class="profile-label">
+                                            <i class="fas fa-building"></i> Living In
+                                        </div>
+                                        <div class="profile-value" id="display-livingIn">-</div>
+                                    </div>
+                                    <div class="profile-item">
+                                        <div class="profile-label">
+                                            <i class="fas fa-route"></i> Distance from College
+                                        </div>
+                                        <div class="profile-value" id="display-collegeDistance">Not provided</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Mode Forms (Hidden by default) -->
+                        <div class="form-edit" id="academic-edit" style="display: none;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="currentStatus"><i class="fas fa-user-graduate"></i> Current Status</label>
+                                    <select id="currentStatus" class="form-input">
+                                        <option value="">Select Status</option>
+                                        <option value="job">Job</option>
+                                        <option value="ug">UG (Undergraduate)</option>
+                                        <option value="pg">PG (Postgraduate)</option>
+                                        <option value="12th">12th or Equivalent</option>
+                                        <option value="below-12">Below 12th</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="collegeName"><i class="fas fa-university"></i> College/University Name</label>
+                                    <input type="text" id="collegeName" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseName"><i class="fas fa-book"></i> Course Name</label>
+                                    <input type="text" id="courseName" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="courseDuration"><i class="fas fa-clock"></i> Course Duration</label>
+                                    <select id="courseDuration" class="form-input">
+                                        <option value="">Select Duration</option>
+                                        <option value="2">2 years</option>
+                                        <option value="3">3 years</option>
+                                        <option value="4">4 years</option>
+                                        <option value="5">5 years</option>
+                                        <option value="6">6 years</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="currentYear"><i class="fas fa-calendar-check"></i> Current Year</label>
+                                    <input type="number" id="currentYear" class="form-input" min="1" max="6">
+                                </div>
+                                <div class="form-group">
+                                    <label for="expectedCompletion"><i class="fas fa-calendar-plus"></i> Expected Course Completion Year</label>
+                                    <input type="number" id="expectedCompletion" class="form-input" min="2024" max="2035">
+                                </div>
+                                <div class="form-group">
+                                    <label for="backlogs"><i class="fas fa-exclamation-triangle"></i> Backlogs</label>
+                                    <select id="backlogs" class="form-input">
+                                        <option value="">Select Option</option>
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="backlogCount" style="display: none;">
+                                    <label for="backlogSubjects"><i class="fas fa-hashtag"></i> Number of Subjects</label>
+                                    <input type="number" id="backlogSubjects" class="form-input" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label for="studyMode"><i class="fas fa-laptop"></i> Mode of Study</label>
+                                    <select id="studyMode" class="form-input">
+                                        <option value="">Select Mode</option>
+                                        <option value="regular">Regular</option>
+                                        <option value="online">Online</option>
+                                        <option value="hybrid">Hybrid/Sometimes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Current Residence -->
+                            <div class="subsection">
+                                <h3><i class="fas fa-home"></i> Current Residence</h3>
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label for="livingWithParents"><i class="fas fa-users"></i> Currently living with Parents</label>
+                                        <select id="livingWithParents" class="form-input">
+                                            <option value="">Select Option</option>
+                                            <option value="yes">Yes</option>
+                                            <option value="no">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="livingArrangement" style="display: none;">
+                                        <label for="livingIn"><i class="fas fa-building"></i> Living In</label>
+                                        <select id="livingIn" class="form-input">
+                                            <option value="">Select Option</option>
+                                            <option value="hostel">Hostel</option>
+                                            <option value="pg">PG</option>
+                                            <option value="rented">Rented</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="collegeDistance"><i class="fas fa-route"></i> Distance from College (km)</label>
+                                        <input type="number" id="collegeDistance" class="form-input" min="0" step="0.1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Health & Wellness Section -->
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-heart"></i> Health & Wellness</h2>
+                        <div class="section-actions">
+                            <button class="btn-edit" id="edit-health-info">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-save" id="save-health-info" style="display: none;">
+                                <i class="fas fa-save"></i> Save
+                            </button>
+                            <button class="btn-cancel" id="cancel-health-info" style="display: none;">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <!-- Profile Display Mode -->
+                        <div class="profile-display" id="health-display">
+                            <div class="profile-grid">
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-bed"></i> Sleep Pattern
+                                    </div>
+                                    <div class="profile-value" id="display-sleepPattern">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-dumbbell"></i> Exercise Habit
+                                    </div>
+                                    <div class="profile-value" id="display-exerciseHabit">Not specified</div>
+                                </div>
+                                <div class="profile-item" id="display-exerciseFrequency" style="display: none;">
+                                    <div class="profile-label">
+                                        <i class="fas fa-calendar-week"></i> Exercise Frequency
+                                    </div>
+                                    <div class="profile-value" id="display-exerciseFreq">-</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-smoking-ban"></i> Smoking/Drinking Habits
+                                    </div>
+                                    <div class="profile-value" id="display-smokingDrinking">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-brain"></i> Mental Health Condition
+                                    </div>
+                                    <div class="profile-value" id="display-mentalHealthCondition">Not specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-pills"></i> Current Medication
+                                    </div>
+                                    <div class="profile-value" id="display-currentMedication">None specified</div>
+                                </div>
+                                <div class="profile-item">
+                                    <div class="profile-label">
+                                        <i class="fas fa-thermometer-half"></i> Stress Level
+                                    </div>
+                                    <div class="profile-value" id="display-stressLevel">5/10</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Edit Mode Forms (Hidden by default) -->
+                        <div class="form-edit" id="health-edit" style="display: none;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="sleepPattern"><i class="fas fa-bed"></i> Sleep Pattern</label>
+                                    <select id="sleepPattern" class="form-input">
+                                        <option value="">Select Sleep Pattern</option>
+                                        <option value="<4">&lt; 4 hours</option>
+                                        <option value="4-6">4–6 hours</option>
+                                        <option value="6-8">6–8 hours</option>
+                                        <option value=">8">&gt; 8 hours</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exerciseHabit"><i class="fas fa-dumbbell"></i> Exercise Habit</label>
+                                    <select id="exerciseHabit" class="form-input">
+                                        <option value="">Select Option</option>
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" id="exerciseFrequency" style="display: none;">
+                                    <label for="exerciseFreq"><i class="fas fa-calendar-week"></i> Exercise Frequency</label>
+                                    <select id="exerciseFreq" class="form-input">
+                                        <option value="">Select Frequency</option>
+                                        <option value="daily">Daily</option>
+                                        <option value="weekly">Weekly</option>
+                                        <option value="occasionally">Occasionally</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="smokingDrinking"><i class="fas fa-smoking-ban"></i> Smoking/Drinking Habits</label>
+                                    <select id="smokingDrinking" class="form-input">
+                                        <option value="">Select Option</option>
+                                        <option value="no">No</option>
+                                        <option value="yes">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="mentalHealthCondition"><i class="fas fa-brain"></i> Existing Mental Health Condition</label>
+                                    <select id="mentalHealthCondition" class="form-input">
+                                        <option value="">Select Option</option>
+                                        <option value="anxiety">Anxiety</option>
+                                        <option value="depression">Depression</option>
+                                        <option value="none">None</option>
+                                        <option value="prefer-not-to-say">Prefer not to say</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="currentMedication"><i class="fas fa-pills"></i> Current Medication (Optional)</label>
+                                    <textarea id="currentMedication" class="form-input" rows="3" placeholder="List any current medications..."></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="stressLevel"><i class="fas fa-thermometer-half"></i> Stress Level Self-Assessment (1-10)</label>
+                                    <div class="stress-level-container">
+                                        <input type="range" id="stressLevel" class="stress-slider" min="1" max="10" value="5">
+                                        <div class="stress-value">
+                                            <span id="stressValue">5</span>/10
+                                        </div>
+                                    </div>
+                                    <div class="stress-labels">
+                                        <span>Low Stress</span>
+                                        <span>High Stress</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mood Tracking History -->
+                        <div class="subsection">
+                            <h3><i class="fas fa-chart-line"></i> Recent Mood Tracking</h3>
+                            <div class="mood-history-container">
+                                <div class="mood-chart-container">
+                                    <canvas id="mood-trend-chart"></canvas>
+                                </div>
+                                <div class="mood-entries">
+                                    <h4>Last 7 Entries</h4>
+                                    <div id="recent-mood-entries" class="mood-entries-list">
+                                        <!-- Will be populated by JavaScript -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/profile.js"></script>
+    <script>
+        // Handle mood tracker button click
+        const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+        if (moodTrackerBtn) {
+            moodTrackerBtn.addEventListener('click', function() {
+                window.location.href = 'mood.html';
+            });
+        }
+    </script>
+</body>
+</html>

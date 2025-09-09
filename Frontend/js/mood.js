@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // API Configuration - will be loaded from server
     let apiConfig = {
-        backendApiUrl: 'https://mindspace-9a0l.onrender.com', // Default fallback
-        mlServiceUrl: 'https://mindspace-9a0l.onrender.com/predict_emotion' // Default fallback
+        backendApiUrl: 'http://localhost:5001', // Default fallback
+        mlServiceUrl: 'http://localhost:5000/predict_emotion' // Default fallback
     };
     
     // Initialize the page
@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to initialize the page
     async function initializePage() {
-        // Load API configuration from backend
-        await loadApiConfig();
+        // Load API configuration from frontend environment config
+        loadApiConfig();
         
         // Check if user has recently tracked their mood
         checkRecentMood();
@@ -115,24 +115,14 @@ document.addEventListener('DOMContentLoaded', function() {
         initMoodChart();
     }
     
-    // Function to load API configuration from backend
-    async function loadApiConfig() {
-        try {
-            const configUrl = `${apiConfig.backendApiUrl}/api/config`;
-            const response = await fetch(configUrl);
-            
-            if (response.ok) {
-                const data = await response.json();
-                if (data.success && data.config) {
-                    apiConfig.backendApiUrl = data.config.backendApiUrl;
-                    apiConfig.mlServiceUrl = data.config.mlServiceUrl;
-                    console.log('API configuration loaded:', apiConfig);
-                }
-            } else {
-                console.warn('Failed to load API config, using defaults');
-            }
-        } catch (error) {
-            console.warn('Error loading API config, using defaults:', error.message);
+    // Function to load API configuration from frontend environment config
+    function loadApiConfig() {
+        if (window.ENV_CONFIG) {
+            apiConfig.backendApiUrl = window.ENV_CONFIG.backendApiUrl;
+            apiConfig.mlServiceUrl = window.ENV_CONFIG.mlServiceUrl;
+            console.log('API configuration loaded from environment:', apiConfig);
+        } else {
+            console.warn('Environment config not available, using defaults:', apiConfig);
         }
     }
     

@@ -11,7 +11,6 @@
     <meta name="theme-color" content="#6A0DAD">
     
     <!-- Security Meta Tags -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://api.mindspace.edu;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -69,7 +68,7 @@
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="dropdown-menu" id="profile-dropdown">
-                        <a href="#profile" class="dropdown-item">
+                        <a href="profile.html" class="dropdown-item">
                             <i class="fas fa-user"></i> Profile
                         </a>
                         <a href="#settings" class="dropdown-item">
@@ -199,6 +198,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/config.js"></script>
     <script src="js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -260,7 +260,7 @@
                 // Redirect to home page after short delay
                 setTimeout(() => {
                     window.location.href = 'index.html';
-                }, 1500);
+                }, 1000);
             });
             
             // Check if user just logged in and show welcome notification only once
@@ -272,6 +272,26 @@
                 // Remove the flag so notification won't show on refresh
                 localStorage.removeItem('justLoggedIn');
             }
+            
+            // Handle mood tracker button click
+            const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+            if (moodTrackerBtn) {
+                moodTrackerBtn.addEventListener('click', function() {
+                    // Redirect to mood tracking page
+                    window.location.href = 'mood.html';
+                });
+            }
+            
+            // Handle Daily Check-in button click (redirect to mood page)
+            const dailyCheckinBtn = document.querySelector('.dashboard-card .btn-primary');
+            if (dailyCheckinBtn && dailyCheckinBtn.textContent === 'Start Check-in') {
+                dailyCheckinBtn.addEventListener('click', function() {
+                    window.location.href = 'mood.html';
+                });
+            }
+            
+            // Check and update mood button
+            checkAndUpdateMoodButton();
         });
     </script>
 

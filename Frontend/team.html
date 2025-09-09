@@ -88,10 +88,10 @@
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="dropdown-menu" id="profile-dropdown">
-                        <a href="#profile" class="dropdown-item">
+                        <a href="profile.html" class="dropdown-item">
                             <i class="fas fa-user"></i> Profile
                         </a>
-                        <a href="#settings" class="dropdown-item">
+                        <a href="#setting.html" class="dropdown-item">
                             <i class="fas fa-cog"></i> Settings
                         </a>
                         <div class="dropdown-divider"></div>
@@ -443,6 +443,7 @@
         </div>
     </footer>
 
+    <script src="js/config.js"></script>
     <script src="js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -627,6 +628,54 @@
                 }
             }
 
+            // Check for recent mood tracking and update the mood button
+            async function checkAndUpdateMoodButton() {
+                const authToken = localStorage.getItem('authToken');
+                if (!authToken) return;
+                
+                try {
+                    const apiUrl = `${window.ENV_API_URL || 'http://localhost:5001'}/api/mood/recent`;
+                    const response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success && data.isRecent) {
+                        // User has tracked mood within the last 2 hours
+                        const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+                        if (moodTrackerBtn) {
+                            const moodData = data.data;
+                            
+                            // Emoji map for moods
+                            const moodEmojis = {
+                                'Angry': '😠',
+                                'Disgust': '🤢',
+                                'Fear': '😨',
+                                'Happy': '😄',
+                                'Neutral': '😐',
+                                'Sad': '😢',
+                                'Surprise': '😲'
+                            };
+                            
+                            const emoji = moodEmojis[moodData.label] || '📊';
+                            
+                            moodTrackerBtn.innerHTML = `
+                                <span style="font-size: 16px;">${emoji}</span> ${moodData.label}
+                            `;
+                            
+                            // Add a CSS class for styling
+                            moodTrackerBtn.classList.add('current-mood');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking recent mood:', error);
+                }
+            }
+
             // Mood tracker button functionality
             const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
             if (moodTrackerBtn) {
@@ -639,6 +688,11 @@
                         window.location.href = 'index.html#login';
                     }
                 });
+            }
+            
+            // Check and update mood button if user is logged in
+            if (authToken) {
+                checkAndUpdateMoodButton();
             }
         });
     </script>
