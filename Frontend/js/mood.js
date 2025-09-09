@@ -214,12 +214,12 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (data.success) {
                 moodHistory = data.data;
-                // Always set filter to today on load
+                // Set max date to today but don't auto-select
                 if (historyDateFilter) {
                     const today = new Date();
                     const todayStr = today.toISOString().split('T')[0];
                     historyDateFilter.max = todayStr;
-                    if (!historyDateFilter.value) historyDateFilter.value = todayStr;
+                    // Don't auto-set the value - leave it empty by default
                 }
                 filterMoodHistoryByDate();
             }
@@ -232,12 +232,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Date filter for mood history
     const historyDateFilter = document.getElementById('history-date-filter');
     
-    // Set max date for filter to today and trigger filter on load
+    // Set max date for filter to today but don't auto-select a date
     if (historyDateFilter) {
         const today = new Date();
         const todayStr = today.toISOString().split('T')[0];
         historyDateFilter.max = todayStr;
-        historyDateFilter.value = todayStr;
+        // Leave value empty by default - don't auto-set to today
         historyDateFilter.addEventListener('change', function() {
             filterMoodHistoryByDate();
         });
@@ -251,16 +251,27 @@ document.addEventListener('DOMContentLoaded', function() {
             updateMoodChart();
             return;
         }
-        const selectedDate = historyDateFilter && historyDateFilter.value ? new Date(historyDateFilter.value) : new Date();
+        
+        // If no date is selected, show all entries (no filter)
+        if (!historyDateFilter || !historyDateFilter.value) {
+            filteredMoodHistory = moodHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            updateHistoryList();
+            updateMoodChart();
+            return;
+        }
+        
+        const selectedDate = new Date(historyDateFilter.value);
         selectedDate.setHours(23,59,59,999); // include full day
         const startDate = new Date(selectedDate);
         startDate.setDate(startDate.getDate() - 6); // 7 days window
         startDate.setHours(0,0,0,0);
+        
         // Filter and sort by most recent first
         filteredMoodHistory = moodHistory.filter(entry => {
             const entryDate = new Date(entry.createdAt);
             return entryDate >= startDate && entryDate <= selectedDate;
         }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
         updateHistoryList();
         updateMoodChart();
     }
