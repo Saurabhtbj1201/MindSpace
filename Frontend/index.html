@@ -154,13 +154,13 @@
 
     <section id="about" class="about">
         <div class="container">
-            <h2 class="section-title">About MindEase</h2>
+            <h2 class="section-title">About MindSpace</h2>
 
             <div class="about-container">
                 <div class="about-content">
                     <div class="about-text">
                         <h3>Empowering Students' Mental Wellness</h3>
-                        <p>MindEase is a comprehensive mental health platform dedicated to supporting students across
+                        <p>MindSpace is a comprehensive mental health platform dedicated to supporting students across
                             India. Founded in 2021, we bridge the gap between students facing mental health challenges
                             and professional support systems.</p>
                         <p>Our mission is to create a stigma-free environment where every student can access quality
@@ -298,68 +298,62 @@
             
             <div class="tab-content active" id="videos-content">
                 <div class="resources-grid">
-                    <div class="resource-card">
-                        <div class="resource-thumbnail">
-                            <img src="https://img.youtube.com/vi/WWloIAQpMcQ/maxresdefault.jpg" alt="Understanding Anxiety">
-                            <div class="play-icon"><i class="fas fa-play-circle"></i></div>
+                    <div class="resource-card video-card">
+                        <div class="resource-thumbnail" data-video-src="resource/video/3.mp4">
+                            <img src="resource/posters/1.png" alt="Understanding Anxiety">
                         </div>
                         <h3>Understanding Anxiety</h3>
                         <p>Learn about the science behind anxiety and effective coping mechanisms.</p>
-                        <a href="#" class="resource-link">Watch Now <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleResourceClick(event, 'resources.html')">Watch Now <i class="fas fa-arrow-right"></i></a>
                     </div>
                     
-                    <div class="resource-card">
-                        <div class="resource-thumbnail">
-                            <img src="https://img.youtube.com/vi/O-6f5wQXSu8/maxresdefault.jpg" alt="Mindfulness Meditation Guide">
-                            <div class="play-icon"><i class="fas fa-play-circle"></i></div>
+                    <div class="resource-card video-card">
+                        <div class="resource-thumbnail" data-video-src="resource/video/3.mp4">
+                            <img src="resource/posters/1.png" alt="Mindfulness Meditation Guide">
                         </div>
                         <h3>Mindfulness Meditation Guide</h3>
                         <p>A step-by-step meditation guide for beginners to reduce stress.</p>
-                        <a href="#" class="resource-link">Watch Now <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleResourceClick(event, 'resources.html')">Watch Now <i class="fas fa-arrow-right"></i></a>
                     </div>
                     
-                    <div class="resource-card">
-                        <div class="resource-thumbnail">
-                            <img src="https://img.youtube.com/vi/FrHN6iqn-ao/maxresdefault.jpg" alt="Exam Stress Management">
-                            <div class="play-icon"><i class="fas fa-play-circle"></i></div>
+                    <div class="resource-card video-card">
+                        <div class="resource-thumbnail" data-video-src="resource/video/3.mp4">
+                            <img src="resource/posters/1.png" alt="Exam Stress Management">
                         </div>
                         <h3>Exam Stress Management</h3>
                         <p>Practical techniques to manage academic pressure and exam anxiety.</p>
-                        <a href="#" class="resource-link">Watch Now <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleResourceClick(event, 'resources.html')">Watch Now <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
             
             <div class="tab-content" id="audio-content">
                 <div class="resources-grid">
-                    <div class="resource-card">
-                        <div class="resource-thumbnail audio-thumbnail">
+                    <div class="resource-card audio-card">
+                        <div class="resource-thumbnail audio-thumbnail" data-audio-src="resource/audio/1.mp3">
                             <img src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Nature Sounds">
-                            <div class="play-icon"><i class="fas fa-play-circle"></i></div>
                         </div>
                         <h3>Nature Sounds</h3>
                         <p>Soothing nature sounds to help with focus and relaxation.</p>
-                        <a href="#" class="resource-link">Listen Now <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleResourceClick(event, 'resources.html')">Listen Now <i class="fas fa-arrow-right"></i></a>
                     </div>
                     
-                    <div class="resource-card">
-                        <div class="resource-thumbnail audio-thumbnail">
+                    <div class="resource-card audio-card">
+                        <div class="resource-thumbnail audio-thumbnail" data-audio-src="resource/audio/1.mp3">
                             <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Guided Meditation">
-                            <div class="play-icon"><i class="fas fa-play-circle"></i></div>
                         </div>
                         <h3>Guided Meditation</h3>
                         <p>15-minute guided meditation for stress relief and mental clarity.</p>
-                        <a href="#" class="resource-link">Listen Now <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleResourceClick(event, 'resources.html')">Listen Now <i class="fas fa-arrow-right"></i></a>
                     </div>
                     
-                    <div class="resource-card">
-                        <div class="resource-thumbnail audio-thumbnail">
+                    <div class="resource-card audio-card">
+                        <div class="resource-thumbnail audio-thumbnail" data-audio-src="resource/audio/1.mp3">
                             <img src="https://images.unsplash.com/photo-1614624532983-4ce03382d63d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Sleep Sounds">
-                            <div class="play-icon"><i class="fas fa-play-circle"></i></div>
                         </div>
                         <h3>Sleep Sounds</h3>
                         <p>Calming audio to help you fall asleep faster and improve sleep quality.</p>
-                        <a href="#" class="resource-link">Listen Now <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleResourceClick(event, 'resources.html')">Listen Now <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -368,29 +362,29 @@
                 <div class="resources-grid">
                     <div class="resource-card">
                         <div class="resource-thumbnail poster-thumbnail">
-                            <img src="https://images.unsplash.com/photo-1582561833070-2d743f1a41d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Mental Health Awareness">
-                        </div>
-                        <h3>Mental Health Awareness</h3>
-                        <p>Educational poster about recognizing signs of common mental health issues.</p>
-                        <a href="#" class="resource-link">Download <i class="fas fa-download"></i></a>
-                    </div>
-                    
-                    <div class="resource-card">
-                        <div class="resource-thumbnail poster-thumbnail">
-                            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Stress Management">
-                        </div>
-                        <h3>Stress Management</h3>
-                        <p>Visual guide to effective stress management techniques for students.</p>
-                        <a href="#" class="resource-link">Download <i class="fas fa-download"></i></a>
-                    </div>
-                    
-                    <div class="resource-card">
-                        <div class="resource-thumbnail poster-thumbnail">
-                            <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Crisis Helplines">
+                            <img src="resource/posters/1.png" alt="Crisis Helplines">
                         </div>
                         <h3>Crisis Helplines</h3>
                         <p>Important phone numbers and resources for mental health emergencies.</p>
-                        <a href="#" class="resource-link">Download <i class="fas fa-download"></i></a>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/posters/3.png', 'Crisis-Helplines-Poster.png')">Download <i class="fas fa-download"></i></a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-thumbnail poster-thumbnail">
+                            <img src="resource/posters/1.png" alt="Crisis Helplines">
+                        </div>
+                        <h3>Crisis Helplines</h3>
+                        <p>Important phone numbers and resources for mental health emergencies.</p>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/posters/3.png', 'Crisis-Helplines-Poster.png')">Download <i class="fas fa-download"></i></a>
+                    </div>
+                    
+                    <div class="resource-card">
+                        <div class="resource-thumbnail poster-thumbnail">
+                            <img src="resource/posters/1.png" alt="Crisis Helplines">
+                        </div>
+                        <h3>Crisis Helplines</h3>
+                        <p>Important phone numbers and resources for mental health emergencies.</p>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/posters/3.png', 'Crisis-Helplines-Poster.png')">Download <i class="fas fa-download"></i></a>
                     </div>
                 </div>
             </div>
@@ -404,7 +398,7 @@
                         </div>
                         <h3>Exam Preparation Guide</h3>
                         <p>Comprehensive guide to effective study techniques and exam preparation.</p>
-                        <a href="#" class="resource-link">Download PDF <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/guides/1.pdf', 'Exam-Preparation-Guide.pdf')">Download PDF <i class="fas fa-arrow-right"></i></a>
                     </div>
                     
                     <div class="resource-card">
@@ -414,7 +408,7 @@
                         </div>
                         <h3>Self-Care Workbook</h3>
                         <p>Interactive workbook with exercises to improve your mental well-being.</p>
-                        <a href="#" class="resource-link">Download PDF <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/guides/1.pdf', 'Self-Care-Workbook.pdf')">Download PDF <i class="fas fa-arrow-right"></i></a>
                     </div>
                     
                     <div class="resource-card">
@@ -424,7 +418,7 @@
                         </div>
                         <h3>Nutrition and Mental Health</h3>
                         <p>Learn about the connection between nutrition and mental well-being.</p>
-                        <a href="#" class="resource-link">Download PDF <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/guides/1.pdf', 'Nutrition-and-Mental-Health.pdf')">Download PDF <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -438,7 +432,7 @@
                         </div>
                         <h3>The Anxiety and Phobia Workbook</h3>
                         <p>A practical guide with proven strategies for managing anxiety, panic attacks, and phobias effectively.</p>
-                        <a href="#" class="resource-link">View Details <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/books/1.pdf', 'The-Anxiety-and-Phobia-Workbook.pdf')">Download PDF <i class="fas fa-download"></i></a>
                     </div>
                     
                     <div class="resource-card">
@@ -448,7 +442,7 @@
                         </div>
                         <h3>Mindfulness for Students</h3>
                         <p>Learn practical mindfulness techniques specifically designed for academic stress and student life.</p>
-                        <a href="#" class="resource-link">View Details <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/books/1.pdf', 'Mindfulness-for-Students.pdf')">Download PDF <i class="fas fa-download"></i></a>
                     </div>
                     
                     <div class="resource-card">
@@ -458,7 +452,7 @@
                         </div>
                         <h3>The Self-Care Project</h3>
                         <p>How to develop self-care habits that actually work and lead to a healthier, happier you.</p>
-                        <a href="#" class="resource-link">View Details <i class="fas fa-arrow-right"></i></a>
+                        <a href="#" class="resource-link" onclick="handleDownload(event, 'resource/books/1.pdf', 'The-Self-Care-Project.pdf')">Download PDF <i class="fas fa-download"></i></a>
                     </div>
                 </div>
             </div>
@@ -471,7 +465,7 @@
                             <blockquote>"Your present circumstances don't determine where you can go; they merely determine where you start."</blockquote>
                             <p class="quote-author">— Nido Qubein</p>
                         </div>
-                        <a href="#" class="resource-link">Share <i class="fas fa-share-alt"></i></a>
+                        <a href="#" class="resource-link" onclick="handleQuoteShare(event, 'Your present circumstances don\'t determine where you can go; they merely determine where you start.', 'Nido Qubein')">Share <i class="fas fa-share-alt"></i></a>
                     </div>
                     
                     <div class="resource-card quote-card">
@@ -480,7 +474,7 @@
                             <blockquote>"You don't have to control your thoughts. You just have to stop letting them control you."</blockquote>
                             <p class="quote-author">— Dan Millman</p>
                         </div>
-                        <a href="#" class="resource-link">Share <i class="fas fa-share-alt"></i></a>
+                        <a href="#" class="resource-link" onclick="handleQuoteShare(event, 'You don\'t have to control your thoughts. You just have to stop letting them control you.', 'Dan Millman')">Share <i class="fas fa-share-alt"></i></a>
                     </div>
                     
                     <div class="resource-card quote-card">
@@ -489,7 +483,7 @@
                             <blockquote>"Mental health problems don't define who you are. They are something you experience, but you walk in your own shoes."</blockquote>
                             <p class="quote-author">— Matt Haig</p>
                         </div>
-                        <a href="#" class="resource-link">Share <i class="fas fa-share-alt"></i></a>
+                        <a href="#" class="resource-link" onclick="handleQuoteShare(event, 'Mental health problems don\'t define who you are. They are something you experience, but you walk in your own shoes.', 'Matt Haig')">Share <i class="fas fa-share-alt"></i></a>
                     </div>
                 </div>
             </div>
@@ -921,6 +915,314 @@
             console.log('Final API URL configured:', window.ENV_API_URL);
         }, 100);
     })();
+    </script>
+    <script>
+        // Global variables to track currently playing media
+        let currentlyPlayingVideo = null;
+        let currentlyPlayingAudio = null;
+        
+        // Initialize hover-based media playback when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeHoverMediaPlayback();
+        });
+        
+        // Function to stop all other media
+        function stopAllOtherMedia(currentMedia, type) {
+            // Stop other videos (but not the current one)
+            if (type !== 'video' && currentlyPlayingVideo && currentlyPlayingVideo !== currentMedia) {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo = null;
+            }
+            
+            // Stop other audio (but not the current one)
+            if (type !== 'audio' && currentlyPlayingAudio && currentlyPlayingAudio !== currentMedia) {
+                currentlyPlayingAudio.pause();
+                currentlyPlayingAudio = null;
+            }
+            
+            // Stop ALL other videos when playing audio, and vice versa
+            if (type === 'audio' && currentlyPlayingVideo) {
+                currentlyPlayingVideo.pause();
+                currentlyPlayingVideo = null;
+            }
+            
+            if (type === 'video' && currentlyPlayingAudio) {
+                currentlyPlayingAudio.pause();
+                currentlyPlayingAudio = null;
+            }
+        }
+        
+        // Initialize hover-based media playback
+        function initializeHoverMediaPlayback() {
+            // Handle video cards
+            document.querySelectorAll('.video-card .resource-thumbnail').forEach(thumbnail => {
+                thumbnail.addEventListener('mouseenter', () => {
+                    playVideoOnHover(thumbnail);
+                });
+                
+                thumbnail.addEventListener('mouseleave', () => {
+                    stopVideoOnLeave(thumbnail);
+                });
+            });
+            
+            // Handle audio cards
+            document.querySelectorAll('.audio-card .resource-thumbnail').forEach(thumbnail => {
+                thumbnail.addEventListener('mouseenter', () => {
+                    playAudioOnHover(thumbnail);
+                });
+                
+                thumbnail.addEventListener('mouseleave', () => {
+                    stopAudioOnLeave(thumbnail);
+                });
+            });
+        }
+        
+        // Play video on hover
+        function playVideoOnHover(thumbnail) {
+            const videoSrc = thumbnail.dataset.videoSrc;
+            if (!videoSrc) return;
+            
+            let video = thumbnail.querySelector('.resource-video');
+            
+            // If no video element exists, create one
+            if (!video) {
+                video = document.createElement('video');
+                video.className = 'resource-video';
+                video.controls = false;
+                video.muted = true; // Mute for autoplay compatibility
+                video.loop = true;
+                video.preload = 'metadata';
+                video.style.cssText = 'width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;';
+                
+                // Create source element
+                const source = document.createElement('source');
+                source.src = videoSrc;
+                source.type = 'video/mp4';
+                video.appendChild(source);
+                
+                // Hide the existing image
+                const img = thumbnail.querySelector('img');
+                if (img) img.style.display = 'none';
+                
+                thumbnail.appendChild(video);
+                
+                // Add playing overlay
+                const playingOverlay = document.createElement('div');
+                playingOverlay.className = 'video-playing-overlay';
+                playingOverlay.style.cssText = `
+                    position: absolute; 
+                    top: 10px; 
+                    right: 10px; 
+                    background: rgba(0,0,0,0.7); 
+                    color: white;
+                    padding: 5px 10px;
+                    border-radius: 15px;
+                    font-size: 12px;
+                    z-index: 2;
+                    display: none;
+                `;
+                playingOverlay.innerHTML = '<i class="fas fa-play"></i> Playing';
+                
+                thumbnail.appendChild(playingOverlay);
+            }
+            
+            // Stop other media and play this video
+            stopAllOtherMedia(video, 'video');
+            
+            setTimeout(() => {
+                video.play().then(() => {
+                    currentlyPlayingVideo = video;
+                    const overlay = thumbnail.querySelector('.video-playing-overlay');
+                    if (overlay) overlay.style.display = 'block';
+                }).catch(error => {
+                    console.error('Error playing video on hover:', error);
+                });
+            }, 100);
+        }
+        
+        // Stop video on mouse leave
+        function stopVideoOnLeave(thumbnail) {
+            const video = thumbnail.querySelector('.resource-video');
+            if (video && !video.paused) {
+                video.pause();
+                if (currentlyPlayingVideo === video) {
+                    currentlyPlayingVideo = null;
+                }
+                
+                const overlay = thumbnail.querySelector('.video-playing-overlay');
+                if (overlay) overlay.style.display = 'none';
+                
+                // Show image again
+                const img = thumbnail.querySelector('img');
+                if (img) img.style.display = 'block';
+            }
+        }
+        
+        // Play audio on hover
+        function playAudioOnHover(thumbnail) {
+            const audioSrc = thumbnail.dataset.audioSrc;
+            if (!audioSrc) return;
+            
+            let audio = thumbnail.querySelector('.resource-audio');
+            
+            // If no audio element exists, create one
+            if (!audio) {
+                audio = document.createElement('audio');
+                audio.className = 'resource-audio';
+                audio.preload = 'metadata';
+                audio.loop = true;
+                audio.style.display = 'none';
+                
+                // Create source element
+                const source = document.createElement('source');
+                source.src = audioSrc;
+                source.type = 'audio/mpeg';
+                audio.appendChild(source);
+                
+                thumbnail.appendChild(audio);
+                
+                // Add visual feedback for audio playing
+                const audioOverlay = document.createElement('div');
+                audioOverlay.className = 'audio-playing-overlay';
+                audioOverlay.style.cssText = `
+                    position: absolute; 
+                    top: 0; 
+                    left: 0; 
+                    width: 100%; 
+                    height: 100%; 
+                    background: rgba(64, 115, 192, 0.3); 
+                    display: none; 
+                    align-items: center; 
+                    justify-content: center; 
+                    z-index: 2;
+                `;
+                audioOverlay.innerHTML = `
+                    <div style="text-align: center; color: white;">
+                        <i class="fas fa-music" style="font-size: 24px; margin-bottom: 5px; display: block;"></i>
+                        <div style="font-size: 12px;">Playing...</div>
+                    </div>
+                `;
+                
+                thumbnail.appendChild(audioOverlay);
+            }
+            
+            // Stop other media and play this audio
+            stopAllOtherMedia(audio, 'audio');
+            
+            setTimeout(() => {
+                audio.play().then(() => {
+                    currentlyPlayingAudio = audio;
+                    const overlay = thumbnail.querySelector('.audio-playing-overlay');
+                    if (overlay) overlay.style.display = 'flex';
+                }).catch(error => {
+                    console.error('Error playing audio on hover:', error);
+                });
+            }, 100);
+        }
+        
+        // Stop audio on mouse leave
+        function stopAudioOnLeave(thumbnail) {
+            const audio = thumbnail.querySelector('.resource-audio');
+            if (audio && !audio.paused) {
+                audio.pause();
+                if (currentlyPlayingAudio === audio) {
+                    currentlyPlayingAudio = null;
+                }
+                
+                const overlay = thumbnail.querySelector('.audio-playing-overlay');
+                if (overlay) overlay.style.display = 'none';
+            }
+        }
+        
+        // Function to handle resource link clicks with authentication check
+        function handleResourceClick(event, targetUrl) {
+            event.preventDefault();
+            
+            const authToken = localStorage.getItem('authToken');
+            if (authToken) {
+                // User is logged in, redirect to target page
+                window.location.href = targetUrl;
+            } else {
+                // User is not logged in, show notification and open login dialog
+                showInfo('Please sign up or log in to access this feature');
+                toggleDialog('login-dialog', true);
+            }
+        }
+        
+        // Function to handle downloads with authentication check
+        function handleDownload(event, fileUrl, fileName) {
+            event.preventDefault();
+            
+            const authToken = localStorage.getItem('authToken');
+            if (authToken) {
+                // User is logged in, start download
+                const link = document.createElement('a');
+                link.href = fileUrl;
+                link.download = fileName || 'download';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showSuccess('Download started successfully!');
+            } else {
+                // User is not logged in, show notification and open login dialog
+                showInfo('Please sign up or log in to download this resource');
+                toggleDialog('login-dialog', true);
+            }
+        }
+        
+        // Function to handle quote sharing
+        function handleQuoteShare(event, quoteText, author) {
+            event.preventDefault();
+            
+            const shareText = `"${quoteText}" - ${author}`;
+            const shareUrl = window.location.href;
+            
+            // Check if Web Share API is supported
+            if (navigator.share) {
+                navigator.share({
+                    title: 'MindSpace - Inspirational Quote',
+                    text: shareText,
+                    url: shareUrl,
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                // Fallback - copy to clipboard
+                navigator.clipboard.writeText(`${shareText}\n\nShared from: ${shareUrl}`).then(() => {
+                    showSuccess('Quote copied to clipboard!');
+                }).catch(() => {
+                    // If clipboard API fails, show share options
+                    showShareOptions(shareText, shareUrl);
+                });
+            }
+        }
+        
+        // Function to show share options if Web Share API is not available
+        function showShareOptions(text, url) {
+            const encodedText = encodeURIComponent(text);
+            const encodedUrl = encodeURIComponent(url);
+            
+            const shareUrls = {
+                twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+                facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedText}`,
+                linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`,
+                whatsapp: `https://wa.me/?text=${encodedText}%20${encodedUrl}`
+            };
+            // Create a simple share modal
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+                    <div style="background: white; padding: 20px; border-radius: 10px; max-width: 300px;">
+                        <h3>Share this quote</h3>
+                        <div style="display: flex; gap: 10px; margin: 15px 0;">
+                            <a href="${shareUrls.twitter}" target="_blank" style="padding: 10px; background: #1da1f2; color: white; text-decoration: none; border-radius: 5px;">Twitter</a>
+                            <a href="${shareUrls.facebook}" target="_blank" style="padding: 10px; background: #4267b2; color: white; text-decoration: none; border-radius: 5px;">Facebook</a>
+                            <a href="${shareUrls.whatsapp}" target="_blank" style="padding: 10px; background: #25d366; color: white; text-decoration: none; border-radius: 5px;">WhatsApp</a>
+                        </div>
+                        <button onclick="this.closest('div').parentElement.remove()" style="background: #ccc; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
     </script>
     <script>
             // Add the user authentication and navigation handling code

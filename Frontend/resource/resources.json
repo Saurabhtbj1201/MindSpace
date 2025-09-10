@@ -1,0 +1,176 @@
+{
+  "videos": [
+    {
+      "id": 1,
+      "type": "videos",
+      "title": "Breathing Exercises for Anxiety",
+      "description": "Learn simple breathing techniques to manage anxiety and stress in daily life.",
+      "file": "resource/video/3.mp4",
+      "tags": ["fear", "neutral"],
+      "duration": "1:32"
+    },
+    {
+      "id": 2,
+      "type": "videos",
+      "title": "Mindfulness Meditation for Students",
+      "description": "A guided meditation session designed specifically for students to reduce stress and improve focus.",
+      "file": "resource/video/3.mp4",
+      "tags": ["neutral", "sad"],
+      "duration": "10:15"
+    },
+    {
+      "id": 3,
+      "type": "videos",
+      "title": "Dealing with Academic Pressure",
+      "description": "Tips and strategies for managing academic stress and maintaining mental health.",
+      "file": "resource/video/3.mp4",
+      "tags": ["angry", "fear", "sad"],
+      "duration": "8:45"
+    }
+  ],
+  "audio": [
+    {
+      "id": 4,
+      "type": "audio",
+      "title": "Calming Nature Sounds",
+      "description": "Relaxing sounds of rain, forest, and ocean waves to help you unwind.",
+      "thumbnail": "resource/posters/1.png",
+      "file": "resource/audio/1.mp3",
+      "tags": ["neutral", "sad", "fear"],
+      "duration": "30:00"
+    },
+    {
+      "id": 5,
+      "type": "audio",
+      "title": "Sleep Meditation",
+      "description": "A gentle guided meditation to help you fall asleep peacefully.",
+      "thumbnail": "resource/posters/1.png",
+      "file": "resource/audio/1.mp3",
+      "tags": ["neutral", "sad"],
+      "duration": "15:30"
+    },
+    {
+      "id": 6,
+      "type": "audio",
+      "title": "Confidence Boosting Affirmations",
+      "description": "Positive affirmations to build self-confidence and self-esteem.",
+      "thumbnail": "resource/posters/1.png",
+      "file": "resource/audio/1.mp3",
+      "tags": ["happy", "neutral"],
+      "duration": "12:20"
+    }
+  ],
+  "posters": [
+    {
+      "id": 7,
+      "type": "posters",
+      "title": "Mental Health Awareness",
+      "description": "Informative poster about recognizing signs of mental health issues.",
+      "file": "resource/posters/1.png",
+      "tags": ["neutral", "sad", "fear"]
+    },
+    {
+      "id": 8,
+      "type": "posters",
+      "title": "Stress Management Tips",
+      "description": "Visual guide with practical tips for managing daily stress.",
+      "file": "resource/posters/1.png",
+      "tags": ["angry", "fear", "neutral"]
+    },
+    {
+      "id": 9,
+      "type": "posters",
+      "title": "Positive Mindset Poster",
+      "description": "Motivational poster to encourage positive thinking and resilience.",
+      "file": "resource/posters/1.png",
+      "tags": ["happy", "neutral", "surprise"]
+    }
+  ],
+  "guides": [
+    {
+      "id": 10,
+      "type": "guides",
+      "title": "Student Mental Health Guide",
+      "description": "Comprehensive guide covering mental health resources and strategies for students.",
+      "file": "resource/guides/1.pdf",
+      "tags": ["neutral", "sad", "fear"]
+    },
+    {
+      "id": 11,
+      "type": "guides",
+      "title": "Anxiety Management Workbook",
+      "description": "Step-by-step workbook with exercises and techniques for managing anxiety.",
+      "file": "resource/guides/1.pdf",
+      "tags": ["fear", "neutral"]
+    },
+    {
+      "id": 12,
+      "type": "guides",
+      "title": "Building Resilience",
+      "description": "Guide to developing emotional resilience and coping strategies.",
+      "file": "resource/guides/1.pdf",
+      "tags": ["sad", "neutral", "happy"]
+    }
+  ],
+  "books": [
+    {
+      "id": 13,
+      "type": "books",
+      "title": "The Anxiety and Worry Workbook",
+      "description": "A comprehensive workbook with cognitive behavioral therapy techniques.",
+      "file": "resource/books/1.pdf",
+      "tags": ["fear", "neutral"]
+    },
+    {
+      "id": 14,
+      "type": "books",
+      "title": "Mindfulness for Students",
+      "description": "Practical mindfulness techniques adapted for student life.",
+      "file": "resource/books/1.pdf",
+      "tags": ["neutral", "sad", "happy"]
+    },
+    {
+      "id": 15,
+      "type": "books",
+      "title": "Emotional Intelligence Guide",
+      "description": "Learn to understand and manage your emotions effectively.",
+      "file": "resource/books/1.pdf",
+      "tags": ["angry", "happy", "neutral"]
+    }
+  ],
+  "quotes": [
+    {
+      "id": 16,
+      "type": "quotes",
+      "quotes": [
+        "The only way to do great work is to love what you do. - Steve Jobs",
+        "Believe you can and you're halfway there. - Theodore Roosevelt",
+        "Success is not final, failure is not fatal: it is the courage to continue that counts. - Winston Churchill",
+        "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt"
+      ],
+      "tags": ["happy", "neutral", "surprise"]
+    },
+    {
+      "id": 17,
+      "type": "quotes",
+      "quotes": [
+        "What lies behind us and what lies before us are tiny matters compared to what lies within us. - Ralph Waldo Emerson",
+        "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+        "It is during our darkest moments that we must focus to see the light. - Aristotle",
+        "Strength doesn't come from what you can do. It comes from overcoming the things you once thought you couldn't."
+      ],
+      "tags": ["sad", "fear", "neutral"]
+    },
+    {
+      "id": 18,
+      "type": "quotes",
+      "quotes": [
+        "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment. - Ralph Waldo Emerson",
+        "You yourself, as much as anybody in the entire universe, deserve your love and affection. - Buddha",
+        "Self-care is not selfish. You cannot serve from an empty vessel. - Eleanor Brown",
+        "Be kind to yourself. You're doing the best you can."
+      ],
+      "tags": ["sad", "happy", "neutral"]
+    }
+  ]
+}

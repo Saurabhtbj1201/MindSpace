@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindSpace - Mental Health Resources</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/ico.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/resources.css">
+</head>
+<body>
+    <!-- Add notification container -->
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindSpace</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="#" class="active">Resources</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button class="mood-tracker-btn">
+                    <i class="fas fa-chart-line"></i> Track Your Mood
+                </button>
+                <div class="user-profile-dropdown">
+                    <div class="profile-trigger" id="profile-trigger">
+                        <div class="avatar-circle" id="header-avatar">U</div>
+                        <span id="header-username">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="#settings" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Resources Container -->
+    <div class="resources-container">
+        <div class="container">
+
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="filters-container">
+                    <!-- Resource Type Filter -->
+                    <div class="filter-group">
+                        <label for="type-filter">Resource Type:</label>
+                        <select id="type-filter" class="filter-select">
+                            <option value="all">All Types</option>
+                            <option value="videos">Videos</option>
+                            <option value="audio">Calming Audio</option>
+                            <option value="posters">Awareness Posters</option>
+                            <option value="guides">Self-Help Guides</option>
+                            <option value="books">Books</option>
+                            <option value="quotes">Quotes</option>
+                        </select>
+                    </div>
+
+                    <!-- Mood Tag Filter -->
+                    <div class="filter-group">
+                        <label for="mood-filter">Mood Tag:</label>
+                        <select id="mood-filter" class="filter-select">
+                            <option value="all">All Moods</option>
+                            <option value="angry">Angry</option>
+                            <option value="disgust">Disgust</option>
+                            <option value="fear">Fear</option>
+                            <option value="happy">Happy</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="sad">Sad</option>
+                            <option value="surprise">Surprise</option>
+                        </select>
+                    </div>
+
+                    <!-- Search Filter -->
+                    <div class="filter-group search-group">
+                        <label for="search-filter">Search:</label>
+                        <input type="text" id="search-filter" class="filter-input" placeholder="Search resources...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+
+                    <!-- Clear Filters -->
+                    <button id="clear-filters" class="clear-filters-btn">
+                        <i class="fas fa-times"></i> Clear Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resources Grid -->
+            <div class="resources-grid" id="resources-grid">
+                <!-- Resources will be dynamically loaded here -->
+            </div>
+
+            <!-- No Results Message -->
+            <div class="no-results" id="no-results" style="display: none;">
+                <div class="no-results-content">
+                    <i class="fas fa-search"></i>
+                    <h3>No resources found</h3>
+                    <p>Try adjusting your filters or search terms to find more resources.</p>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="loading-indicator" id="loading-indicator">
+                <div class="loading-spinner"></div>
+                <p>Loading resources...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resource Modal -->
+    <div class="resource-modal" id="resource-modal">
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-content" id="modal-content">
+            <!-- Modal content will be dynamically loaded -->
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <h2>MindSpace</h2>
+                    </div>
+                    <p>Supporting student mental health and wellbeing across higher education institutions in India.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@mindspace.edu</li>
+                        <li><i class="fas fa-phone"></i> Helpline: 1800-123-4567</li>
+                        <li><i class="fas fa-map-marker-alt"></i> India</li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by Team <a href="team.html">MindSpace Warriors</a></p>
+                <div class="footer-links">
+                    <a href="policy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/resources.js"></script>
+</body>
+</html>
