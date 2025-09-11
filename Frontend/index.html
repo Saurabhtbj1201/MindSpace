@@ -892,7 +892,50 @@
             </div>
         </div>
     </div>
-        <!-- Scripts -->
+        <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chatbot-toggle" id="chatbot-toggle">
+            <img src="images/chatbot.gif" alt="MindSpace Assistant" class="chatbot-icon">
+            <div class="chatbot-notification" id="chatbot-notification">1</div>
+        </button>
+        
+        <div class="chatbot-container" id="chatbot-container">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <img src="images/chatbot.gif" alt="Assistant" class="chatbot-avatar">
+                    <div class="chatbot-info">
+                        <h4>MindSpace Assistant</h4>
+                        <p>Online • Ready to help</p>
+                    </div>
+                </div>
+                <button class="chatbot-close" id="chatbot-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbot-messages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+            
+            <div class="typing-indicator" id="typing-indicator">
+                <img src="images/chatbot.gif" alt="Assistant" class="message-avatar">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-container">
+                <input type="text" class="chatbot-input" id="chatbot-input" placeholder="Type your message..." maxlength="500">
+                <button class="chatbot-send" id="chatbot-send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
     <script>
     // Configure API URL based on environment - will be overridden by config.js
     (function() {
@@ -1361,5 +1404,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/config.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/chatbot.js"></script>
 </body>
 </html>
