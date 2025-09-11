@@ -210,6 +210,8 @@ header .container {
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
+    padding: 5px;
+    z-index: 1000;
 }
 
 .hamburger span {
@@ -218,6 +220,29 @@ header .container {
     background-color: var(--dark-color);
     border-radius: 5px;
     transition: var(--transition);
+}
+
+/* Show hamburger on mobile */
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex !important;
+    }
+    
+    .nav-links {
+        display: none !important;
+    }
+    
+    .auth-buttons-container {
+        display: none !important;
+    }
+    
+    .user-profile-dropdown {
+        display: none !important;
+    }
+    
+    .mood-tracker-btn {
+        display: none !important;
+    }
 }
 
 /* Hero Section */

@@ -1,42 +1,155 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Mobile menu toggle
+    // Mobile menu toggle - Enhanced for all pages
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     const authButtons = document.querySelector('.auth-buttons');
+    const userProfileDropdown = document.querySelector('.user-profile-dropdown');
+    const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
 
     if (hamburger) {
         hamburger.addEventListener('click', function () {
             this.classList.toggle('active');
-
+            
             // Create mobile menu if it doesn't exist
-            if (!document.querySelector('.mobile-menu')) {
-                const mobileMenu = document.createElement('div');
-                mobileMenu.classList.add('mobile-menu');
-
-                // Clone nav links
-                const navClone = navLinks.cloneNode(true);
-                mobileMenu.appendChild(navClone);
-
-                // Add mood tracker button to mobile menu
-                const moodTrackerBtn = document.createElement('button');
-                moodTrackerBtn.className = 'mood-tracker-btn';
-                moodTrackerBtn.innerHTML = '<i class="fas fa-chart-line"></i> Track Your Mood';
-                moodTrackerBtn.style.margin = '10px 0';
-                moodTrackerBtn.style.alignSelf = 'center';
-                mobileMenu.appendChild(moodTrackerBtn);
-
-                // Clone auth buttons
-                const authClone = authButtons.cloneNode(true);
-                mobileMenu.appendChild(authClone);
-
-                // Append to header
-                document.querySelector('header').appendChild(mobileMenu);
+            let mobileMenu = document.querySelector('.mobile-menu');
+            if (!mobileMenu) {
+                mobileMenu = document.createElement('div');
+                mobileMenu.className = 'mobile-menu';
+                
+                // Clone navigation for mobile
+                if (navLinks) {
+                    const clonedNavLinks = navLinks.cloneNode(true);
+                    clonedNavLinks.className = 'mobile-nav-links';
+                    mobileMenu.appendChild(clonedNavLinks);
+                }
+                
+                // Check if user is logged in and add appropriate menu items
+                const authToken = localStorage.getItem('authToken');
+                if (authToken) {
+                    // User is logged in - show profile menu
+                    const profileContainer = document.createElement('div');
+                    profileContainer.className = 'mobile-profile';
+                    
+                    // Get user data
+                    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+                    const userName = userData.firstName || 'User';
+                    const initials = ((userData.firstName || '').charAt(0) + (userData.lastName || '').charAt(0)).toUpperCase() || 'U';
+                    
+                    profileContainer.innerHTML = `
+                        <div class="mobile-profile-info">
+                            <div class="mobile-avatar-circle">${initials}</div>
+                            <span class="mobile-username">${userName}</span>
+                        </div>
+                        <div class="mobile-profile-actions">
+                            <a href="profile.html" class="mobile-menu-item">
+                                <i class="fas fa-user"></i> Profile
+                            </a>
+                            <a href="settings.html" class="mobile-menu-item">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                            <a href="#" id="mobile-logout-btn" class="mobile-menu-item">
+                                <i class="fas fa-sign-out-alt"></i> Sign Out
+                            </a>
+                        </div>
+                    `;
+                    mobileMenu.appendChild(profileContainer);
+                    
+                    // Handle mobile logout
+                    const mobileLogoutBtn = profileContainer.querySelector('#mobile-logout-btn');
+                    if (mobileLogoutBtn) {
+                        mobileLogoutBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('authToken');
+                            localStorage.removeItem('userData');
+                            showSuccess('Logged out successfully!');
+                            setTimeout(() => {
+                                window.location.href = 'index.html';
+                            }, 1500);
+                        });
+                    }
+                } else {
+                    // User is not logged in - show auth buttons
+                    if (authButtons) {
+                        const clonedAuthButtons = authButtons.cloneNode(true);
+                        clonedAuthButtons.className = 'mobile-auth-buttons';
+                        
+                        // Add click handlers for mobile auth buttons
+                        const mobileLoginBtn = clonedAuthButtons.querySelector('.btn-secondary');
+                        const mobileRegisterBtn = clonedAuthButtons.querySelector('.btn-primary');
+                        
+                        if (mobileLoginBtn) {
+                            mobileLoginBtn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                toggleDialog('login-dialog', true);
+                                // Close mobile menu
+                                hamburger.classList.remove('active');
+                                mobileMenu.classList.remove('active');
+                            });
+                        }
+                        
+                        if (mobileRegisterBtn) {
+                            mobileRegisterBtn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                toggleDialog('register-dialog', true);
+                                // Close mobile menu
+                                hamburger.classList.remove('active');
+                                mobileMenu.classList.remove('active');
+                            });
+                        }
+                        
+                        mobileMenu.appendChild(clonedAuthButtons);
+                    }
+                }
+                
+                document.body.appendChild(mobileMenu);
             }
-
-            // Toggle mobile menu
+            
+            mobileMenu.classList.toggle('active');
+        });
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
             const mobileMenu = document.querySelector('.mobile-menu');
-            if (mobileMenu) {
-                mobileMenu.classList.toggle('active');
+            if (mobileMenu && mobileMenu.classList.contains('active') && 
+                !hamburger.contains(event.target) && 
+                !mobileMenu.contains(event.target)) {
+                hamburger.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                // Clean up mobile menu after animation
+                setTimeout(() => {
+                    if (mobileMenu && !mobileMenu.classList.contains('active')) {
+                        mobileMenu.remove();
+                    }
+                }, 300);
+            }
+        });
+        
+        // Close mobile menu when clicking on navigation links
+        document.addEventListener('click', function(event) {
+            if (event.target.closest('.mobile-nav-links a') || event.target.closest('.mobile-menu-item')) {
+                const mobileMenu = document.querySelector('.mobile-menu');
+                if (mobileMenu) {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    // Clean up mobile menu after animation
+                    setTimeout(() => {
+                        if (mobileMenu && !mobileMenu.classList.contains('active')) {
+                            mobileMenu.remove();
+                        }
+                    }, 300);
+                }
+            }
+        });
+        
+        // Handle window resize to clean up mobile menu on desktop view
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                const mobileMenu = document.querySelector('.mobile-menu');
+                if (mobileMenu) {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    mobileMenu.remove();
+                }
             }
         });
     }
@@ -181,31 +294,197 @@ style.textContent = `
         width: 100%;
         background-color: white;
         padding: 20px;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
         display: flex;
         flex-direction: column;
         gap: 20px;
-        transform: translateY(-100%);
+        transform: translateX(-100%);
         opacity: 0;
+        visibility: hidden;
         transition: all 0.3s ease;
-        z-index: 99;
+        z-index: 999;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        border-top: 1px solid #e5e7eb;
     }
     
     .mobile-menu.active {
-        transform: translateY(0);
+        transform: translateX(0);
         opacity: 1;
+        visibility: visible;
     }
     
-    .mobile-menu .nav-links {
+    /* Mobile menu backdrop */
+    .mobile-menu-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .mobile-menu-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .mobile-nav-links {
         display: flex;
         flex-direction: column;
         gap: 15px;
+        margin: 0;
+        padding: 0;
+        border-bottom: 1px solid #e5e7eb;
+        padding-bottom: 20px;
     }
     
-    .mobile-menu .auth-buttons {
+    .mobile-nav-links li {
+        list-style: none;
+    }
+    
+    .mobile-nav-links a {
+        display: block;
+        padding: 12px 15px;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .mobile-nav-links a:hover,
+    .mobile-nav-links a.active {
+        background-color: #f3f4f6;
+        color: var(--primary-color);
+    }
+    
+    .mobile-profile {
+        padding: 15px 0;
+    }
+    
+    .mobile-profile-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px;
+        background-color: #f8fafc;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .mobile-avatar-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+    
+    .mobile-username {
+        font-weight: 600;
+        color: #1f2937;
+        font-size: 16px;
+    }
+    
+    .mobile-profile-actions {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
+    }
+    
+    .mobile-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 15px;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .mobile-menu-item:hover {
+        background-color: #f3f4f6;
+        color: var(--primary-color);
+    }
+    
+    .mobile-menu-item i {
+        width: 20px;
+        text-align: center;
+    }
+    
+    .mobile-auth-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px 0;
+    }
+    
+    .mobile-auth-buttons .btn-secondary,
+    .mobile-auth-buttons .btn-primary {
+        width: 100%;
+        padding: 12px 20px;
+        font-size: 16px;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    /* Hide hamburger on desktop */
+    @media (min-width: 769px) {
+        .hamburger {
+            display: none !important;
+        }
+    }
+    
+    /* Show hamburger only on mobile */
+    @media (max-width: 768px) {
+        .hamburger {
+            display: flex !important;
+        }
+        
+        .nav-links {
+            display: none !important;
+        }
+        
+        .auth-buttons-container {
+            display: none !important;
+        }
+        
+        .user-profile-dropdown {
+            display: none !important;
+        }
+        
+        /* Keep mood button visible on mobile next to hamburger */
+        .mood-tracker-btn {
+            display: flex !important;
+            font-size: 14px;
+            padding: 8px 12px;
+            margin-right: 10px;
+        }
+        
+        /* Adjust header container spacing for mobile */
+        header .container {
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* Position mood button and hamburger together */
+        header .container > div:last-child {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
     }
 `;
 document.head.appendChild(style);
@@ -1378,6 +1657,8 @@ async function checkAndUpdateMoodButton() {
         if (data.success && data.isRecent) {
             // User has tracked mood within the last 2 hours
             const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+            const mobileMoodBtn = document.querySelector('.mobile-mood-tracker .mood-tracker-btn');
+            
             if (moodTrackerBtn) {
                 const moodData = data.data;
                 
@@ -1394,16 +1675,38 @@ async function checkAndUpdateMoodButton() {
                 
                 const emoji = moodEmojis[moodData.label] || '📊';
                 
+                // Update desktop mood button
                 moodTrackerBtn.innerHTML = `
                     <span style="font-size: 16px;">${emoji}</span> ${moodData.label}
                 `;
                 
+                // Update mobile mood button with simplified text
+                if (mobileMoodBtn) {
+                    mobileMoodBtn.innerHTML = `<i class="fas fa-chart-line"></i> ${moodData.label}`;
+                }
+                
                 // Add a CSS class for styling
                 moodTrackerBtn.classList.add('current-mood');
+                if (mobileMoodBtn) {
+                    mobileMoodBtn.classList.add('current-mood');
+                }
+            }
+        } else {
+            // No recent mood or failed to fetch - ensure mobile shows simple "Mood"
+            const mobileMoodBtn = document.querySelector('.mobile-mood-tracker .mood-tracker-btn');
+            if (mobileMoodBtn) {
+                mobileMoodBtn.innerHTML = '<i class="fas fa-chart-line"></i> Mood';
+                mobileMoodBtn.classList.remove('current-mood');
             }
         }
     } catch (error) {
         console.error('Error checking recent mood:', error);
+        // On error, ensure mobile shows simple "Mood"
+        const mobileMoodBtn = document.querySelector('.mobile-mood-tracker .mood-tracker-btn');
+        if (mobileMoodBtn) {
+            mobileMoodBtn.innerHTML = '<i class="fas fa-chart-line"></i> Mood';
+            mobileMoodBtn.classList.remove('current-mood');
+        }
     }
 }
 
