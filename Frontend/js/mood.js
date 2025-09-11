@@ -492,6 +492,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update mood tracker button
                 updateMoodTrackerButton({ value, label });
                 
+                // Load recommendations for the detected mood
+                await loadRecommendations(label);
+                
                 return true;
             } else {
                 showError('Failed to save your mood. Please try again.');
@@ -801,4 +804,191 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // Call setupProfileDropdown after DOM ready
     setupProfileDropdown();
+    
+    // Function to load and display recommendations based on mood
+    async function loadRecommendations(moodLabel) {
+        try {
+            // Load resources from resources.json
+            const response = await fetch('resource/resources.json');
+            const resources = await response.json();
+            
+            // Filter resources based on mood
+            const filteredResources = filterResourcesByMood(resources, moodLabel.toLowerCase());
+            
+            // Display recommendations
+            displayRecommendations(filteredResources, moodLabel);
+            
+            // Show the recommendations section
+            const recommendationsSection = document.getElementById('mood-recommendations');
+            recommendationsSection.style.display = 'block';
+            
+        } catch (error) {
+            console.error('Error loading recommendations:', error);
+            showError('Failed to load recommendations. Please try again later.');
+        }
+    }
+    
+    // Function to filter resources by mood
+    function filterResourcesByMood(resources, mood) {
+        const filtered = {
+            quotes: [],
+            videos: [],
+            audio: [],
+            posters: [],
+            guides: [],
+            books: []
+        };
+        
+        // Filter each resource type
+        Object.keys(resources).forEach(resourceType => {
+            if (Array.isArray(resources[resourceType])) {
+                resources[resourceType].forEach(resource => {
+                    if (resource.tags && resource.tags.includes(mood)) {
+                        filtered[resourceType].push(resource);
+                    }
+                });
+            }
+        });
+        
+        return filtered;
+    }
+    
+    // Function to display recommendations in masonry layout
+    function displayRecommendations(resources, moodLabel) {
+        const recommendationContent = document.getElementById('recommendation-content');
+        
+        // Create masonry container
+        let html = `
+            <div class="recommendations-header">
+                <h4>Recommended for your ${moodLabel} mood</h4>
+                <p>Here are some resources that might help you feel better:</p>
+            </div>
+            <div class="masonry-container">
+        `;
+        
+        // Add quotes
+        if (resources.quotes && resources.quotes.length > 0) {
+            resources.quotes.forEach(quoteGroup => {
+                if (quoteGroup.quotes && quoteGroup.quotes.length > 0) {
+                    const randomQuote = quoteGroup.quotes[Math.floor(Math.random() * quoteGroup.quotes.length)];
+                    html += `
+                        <div class="masonry-item quote-item">
+                            <h5>Inspirational Quote</h5>
+                            <p class="quote-text">"${randomQuote}"</p>
+                        </div>
+                    `;
+                }
+            });
+        }
+        
+        // Add videos
+        if (resources.videos && resources.videos.length > 0) {
+            resources.videos.slice(0, 2).forEach((video, index) => {
+                const videoId = `video-${index}`;
+                html += `
+                    <div class="masonry-item video-item">
+                        <h5>${video.title}</h5>
+                        <p>${video.description}</p>
+                        <div class="video-container-inline">
+                            <video id="${videoId}" controls style="width: 100%; border-radius: 8px;">
+                                <source src="${video.file}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <button class="fullscreen-btn" onclick="toggleFullscreen('${videoId}')">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                        <div class="resource-meta">
+                            <span class="duration">${video.duration}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        // Add audio
+        if (resources.audio && resources.audio.length > 0) {
+            resources.audio.slice(0, 2).forEach(audio => {
+                html += `
+                    <div class="masonry-item audio-item">
+                        <h5>${audio.title}</h5>
+                        <p>${audio.description}</p>
+                        <div class="audio-container-inline">
+                            <audio controls style="width: 100%;">
+                                <source src="${audio.file}" type="audio/mpeg">
+                                Your browser does not support the audio tag.
+                            </audio>
+                        </div>
+                        <div class="resource-meta">
+                            <span class="duration">${audio.duration}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        // Add posters
+        if (resources.posters && resources.posters.length > 0) {
+            resources.posters.slice(0, 2).forEach(poster => {
+                html += `
+                    <div class="masonry-item poster-item">
+                        <h5>${poster.title}</h5>
+                        <p>${poster.description}</p>
+                        <div class="poster-preview">
+                            <img src="${poster.file}" alt="${poster.title}" style="width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px;">
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        
+        // Add guides
+        if (resources.guides && resources.guides.length > 0) {
+            resources.guides.slice(0, 1).forEach(guide => {
+                html += `
+                    <div class="masonry-item guide-item">
+                        <h5>${guide.title}</h5>
+                        <p>${guide.description}</p>
+                        <button class="btn-small" onclick="openPDF('${guide.file}')">Read Guide</button>
+                    </div>
+                `;
+            });
+        }
+        
+        // Add books
+        if (resources.books && resources.books.length > 0) {
+            resources.books.slice(0, 1).forEach(book => {
+                html += `
+                    <div class="masonry-item book-item">
+                        <h5>${book.title}</h5>
+                        <p>${book.description}</p>
+                        <button class="btn-small" onclick="openPDF('${book.file}')">Read Book</button>
+                    </div>
+                `;
+            });
+        }
+        
+        html += '</div>';
+        
+        recommendationContent.innerHTML = html;
+    }
+    
+    // Function to toggle fullscreen for videos
+    window.toggleFullscreen = function(videoId) {
+        const video = document.getElementById(videoId);
+        if (video) {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen();
+            } else if (video.msRequestFullscreen) {
+                video.msRequestFullscreen();
+            }
+        }
+    };
+    
+    // Function to open PDF files
+    window.openPDF = function(file) {
+        window.open(file, '_blank');
+    };
 });
