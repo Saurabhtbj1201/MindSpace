@@ -391,170 +391,6 @@
     text-align: center;
 }
 
-/* Stress Level Slider */
-.stress-level-container {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 10px;
-}
-
-.stress-slider {
-    flex: 1;
-    height: 6px;
-    border-radius: 3px;
-    background: #e5e7eb;
-    outline: none;
-}
-
-.stress-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #4073c0 0%, #667eea 100%);
-    cursor: pointer;
-    box-shadow: 0 3px 8px rgba(64, 115, 192, 0.4);
-    border: 2px solid white;
-    transition: all 0.3s ease;
-}
-
-.stress-slider::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(64, 115, 192, 0.6);
-}
-
-.stress-slider::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #4073c0;
-    cursor: pointer;
-    border: none;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-}
-
-.stress-value {
-    background: #4073c0;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-weight: 600;
-    min-width: 60px;
-    text-align: center;
-}
-
-.stress-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #6b7280;
-    margin-top: 5px;
-}
-
-/* Mood History Section */
-.mood-history-container {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 30px;
-    margin-top: 20px;
-}
-
-.mood-chart-container {
-    background: #f8fafc;
-    border-radius: 10px;
-    padding: 20px;
-    height: 300px;
-    position: relative;
-}
-
-.mood-entries h4 {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1f2937;
-    margin-bottom: 15px;
-}
-
-.mood-entries-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.mood-entry {
-    background: #f8fafc;
-    border-radius: 6px;
-    padding: 10px 12px;
-    border-left: 3px solid #4073c0;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.mood-entry:hover {
-    background: #f1f5f9;
-    transform: translateX(2px);
-}
-
-.mood-entry-main {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex: 1;
-}
-
-.mood-entry-date {
-    font-size: 12px;
-    color: #6b7280;
-    font-weight: 500;
-    white-space: nowrap;
-}
-
-.mood-entry-separator {
-    color: #9ca3af;
-    font-weight: 600;
-}
-
-.mood-entry-info {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.mood-emoji {
-    font-size: 16px;
-}
-
-.mood-label {
-    font-weight: 500;
-    color: #374151;
-    font-size: 14px;
-}
-
-.mood-method {
-    font-size: 10px;
-    background: #e5e7eb;
-    color: #6b7280;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.mood-method.ai {
-    background: #dbeafe;
-    color: #1e40af;
-}
-
-.mood-method.manual {
-    background: #d1fae5;
-    color: #065f46;
-}
-
 /* Animation Classes */
 .changing {
     animation: pulse 0.3s ease-in-out;
@@ -674,11 +510,6 @@
         gap: 15px !important;
     }
     
-    .mood-history-container {
-        grid-template-columns: 1fr;
-        gap: 25px;
-    }
-    
     .mood-chart-container {
         height: 250px;
     }
@@ -727,6 +558,12 @@
     
     .profile-item::before {
         left: 45% !important;
+    }
+    
+    .stress-level-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
     }
     
     .stress-level-container {

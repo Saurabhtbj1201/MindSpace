@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Profile state management
     let isEditMode = false;
     let originalData = {};
-    let moodChart = null;
     
     // API Configuration - use environment config
     const apiConfig = window.ENV_CONFIG || {
@@ -95,12 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Set up edit mode functionality
         setupEditMode();
-        
-        // Load mood history chart
-        await loadMoodHistory();
-        
-        // Update stress level display
-        updateStressLevelDisplay();
     }
     
     // Function to update profile information in header
@@ -236,7 +229,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('display-smokingDrinking').textContent = formatYesNo(profile.smokingDrinking) || 'Not specified';
         document.getElementById('display-mentalHealthCondition').textContent = formatMentalHealth(profile.mentalHealthCondition) || 'Not specified';
         document.getElementById('display-currentMedication').textContent = profile.currentMedication || 'None specified';
-        document.getElementById('display-stressLevel').textContent = `${profile.stressLevel || 5}/10`;
         
         // Exercise frequency
         if (profile.exerciseHabit === 'yes' && profile.exerciseFreq) {
@@ -299,10 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (profile.smokingDrinking) document.getElementById('smokingDrinking').value = profile.smokingDrinking;
         if (profile.mentalHealthCondition) document.getElementById('mentalHealthCondition').value = profile.mentalHealthCondition;
         if (profile.currentMedication) document.getElementById('currentMedication').value = profile.currentMedication;
-        if (profile.stressLevel) {
-            document.getElementById('stressLevel').value = profile.stressLevel;
-            document.getElementById('stressValue').textContent = profile.stressLevel;
-        }
     }
     
     // Function to set up form interactions
@@ -332,11 +320,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Exercise habit change handler
         document.getElementById('exerciseHabit').addEventListener('change', function() {
             toggleExerciseFrequency(this.value === 'yes');
-        });
-        
-        // Stress level slider change handler
-        document.getElementById('stressLevel').addEventListener('input', function() {
-            document.getElementById('stressValue').textContent = this.value;
         });
     }
     
@@ -428,7 +411,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (profileData.backlogSubjects) profileData.backlogSubjects = Number(profileData.backlogSubjects);
             if (profileData.collegeDistance) profileData.collegeDistance = Number(profileData.collegeDistance);
             if (profileData.courseDuration) profileData.courseDuration = Number(profileData.courseDuration);
-            if (profileData.stressLevel) profileData.stressLevel = Number(profileData.stressLevel);
             
             console.log('Sending profile data:', profileData);
             
@@ -622,7 +604,6 @@ document.addEventListener('DOMContentLoaded', function() {
             data.smokingDrinking = document.getElementById('smokingDrinking').value;
             data.mentalHealthCondition = document.getElementById('mentalHealthCondition').value;
             data.currentMedication = document.getElementById('currentMedication').value;
-            data.stressLevel = document.getElementById('stressLevel').value;
         }
         
         return data;
@@ -679,10 +660,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.smokingDrinking !== undefined) document.getElementById('smokingDrinking').value = data.smokingDrinking || '';
             if (data.mentalHealthCondition !== undefined) document.getElementById('mentalHealthCondition').value = data.mentalHealthCondition || '';
             if (data.currentMedication !== undefined) document.getElementById('currentMedication').value = data.currentMedication || '';
-            if (data.stressLevel !== undefined) {
-                document.getElementById('stressLevel').value = data.stressLevel || 5;
-                document.getElementById('stressValue').textContent = data.stressLevel || 5;
-            }
         }
     }
     
@@ -706,7 +683,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             // Convert numeric strings to numbers where appropriate
-            const numericFields = ['height', 'weight', 'currentYear', 'expectedCompletion', 'backlogSubjects', 'collegeDistance', 'courseDuration', 'stressLevel'];
+            const numericFields = ['height', 'weight', 'currentYear', 'expectedCompletion', 'backlogSubjects', 'collegeDistance', 'courseDuration'];
             numericFields.forEach(field => {
                 if (sectionData[field]) {
                     sectionData[field] = Number(sectionData[field]);
@@ -834,8 +811,7 @@ document.addEventListener('DOMContentLoaded', function() {
             exerciseFreq: document.getElementById('exerciseFreq').value,
             smokingDrinking: document.getElementById('smokingDrinking').value,
             mentalHealthCondition: document.getElementById('mentalHealthCondition').value,
-            currentMedication: document.getElementById('currentMedication').value,
-            stressLevel: document.getElementById('stressLevel').value
+            currentMedication: document.getElementById('currentMedication').value
         };
     }
     
@@ -871,15 +847,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function toggleExerciseFrequency(show) {
         const exerciseFreqGroup = document.getElementById('exerciseFrequency');
         exerciseFreqGroup.style.display = show ? 'flex' : 'none';
-    }
-    
-    function updateStressLevelDisplay() {
-        const stressSlider = document.getElementById('stressLevel');
-        const stressValue = document.getElementById('stressValue');
-        
-        stressSlider.addEventListener('input', function() {
-            stressValue.textContent = this.value;
-        });
     }
     
     // Helper functions for formatting display values
@@ -978,181 +945,6 @@ document.addEventListener('DOMContentLoaded', function() {
             'occasionally': 'Occasionally'
         };
         return freqMap[freq] || freq;
-    }
-    
-    // Function to load mood history and create chart
-    async function loadMoodHistory() {
-        try {
-            const apiUrl = `${apiConfig.backendApiUrl}/api/mood?limit=7`;
-            const response = await fetch(apiUrl, {
-                method: 'GET',
-                headers
-            });
-            
-            if (response.ok) {
-                const data = await response.json();
-                if (data.success && data.data.length > 0) {
-                    createMoodChart(data.data);
-                    populateRecentMoodEntries(data.data);
-                } else {
-                    showEmptyMoodState();
-                }
-            } else {
-                console.warn('Could not load mood history');
-                showEmptyMoodState();
-            }
-        } catch (error) {
-            console.error('Error loading mood history:', error);
-            showEmptyMoodState();
-        }
-    }
-    
-    // Function to create mood trend chart
-    function createMoodChart(moodData) {
-        const ctx = document.getElementById('mood-trend-chart').getContext('2d');
-        
-        // Prepare data for chart (reverse to show oldest to newest)
-        const chartData = moodData.reverse();
-        const labels = chartData.map(entry => {
-            const date = new Date(entry.createdAt);
-            return date.toLocaleDateString(undefined, { 
-                month: 'short', 
-                day: 'numeric'
-            });
-        });
-        
-        const data = chartData.map(entry => entry.value);
-        const moodLabels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Neutral', 'Sad', 'Surprise'];
-        
-        // Create gradient
-        const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, 'rgba(64, 115, 192, 0.3)');
-        gradient.addColorStop(1, 'rgba(64, 115, 192, 0.05)');
-        
-        moodChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Mood Trend',
-                    data: data,
-                    backgroundColor: gradient,
-                    borderColor: '#4073c0',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#4073c0',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6,
-                    pointHoverRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        min: 0,
-                        max: 6,
-                        ticks: {
-                            stepSize: 1,
-                            callback: function(value) {
-                                return moodLabels[value] || '';
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        callbacks: {
-                            title: function(context) {
-                                const index = context[0].dataIndex;
-                                const entry = chartData[index];
-                                const date = new Date(entry.createdAt);
-                                return date.toLocaleString();
-                            },
-                            label: function(context) {
-                                const value = context.raw;
-                                return `Mood: ${moodLabels[value]}`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-    
-    // Function to populate recent mood entries
-    function populateRecentMoodEntries(moodData) {
-        const container = document.getElementById('recent-mood-entries');
-        const moodEmojis = {
-            'Angry': '😠',
-            'Disgust': '🤢',
-            'Fear': '😨',
-            'Happy': '😄',
-            'Neutral': '😐',
-            'Sad': '😢',
-            'Surprise': '😲'
-        };
-        
-        container.innerHTML = '';
-        
-        moodData.slice(0, 7).forEach(entry => {
-            const date = new Date(entry.createdAt);
-            const moodEntry = document.createElement('div');
-            moodEntry.className = 'mood-entry';
-            
-            moodEntry.innerHTML = `
-                <div class="mood-entry-date">
-                    ${date.toLocaleDateString(undefined, { 
-                        month: 'short', 
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}
-                </div>
-                <div class="mood-entry-info">
-                    <span class="mood-emoji">${moodEmojis[entry.label] || '🤔'}</span>
-                    <span class="mood-label">${entry.label}</span>
-                    <span class="mood-method ${entry.capturedVia}">${entry.capturedVia === 'ai' ? 'AI' : 'Manual'}</span>
-                </div>
-            `;
-            
-            container.appendChild(moodEntry);
-        });
-    }
-    
-    // Function to show empty mood state
-    function showEmptyMoodState() {
-        const container = document.getElementById('recent-mood-entries');
-        container.innerHTML = `
-            <div style="text-align: center; padding: 40px 20px; color: #6b7280;">
-                <i class="fas fa-chart-line" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
-                <p>No mood data available yet.</p>
-                <p><a href="mood.html" style="color: #4073c0;">Track your first mood</a> to see trends here.</p>
-            </div>
-        `;
-        
-        // Hide chart container
-        const chartContainer = document.getElementById('mood-trend-chart').parentElement;
-        chartContainer.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #6b7280; flex-direction: column;">
-                <i class="fas fa-chart-area" style="font-size: 64px; margin-bottom: 16px; opacity: 0.3;"></i>
-                <p>Mood trend will appear here once you start tracking</p>
-            </div>
-        `;
     }
     
     // Function to check profile completion

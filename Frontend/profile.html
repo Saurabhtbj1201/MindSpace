@@ -558,12 +558,6 @@
                                     </div>
                                     <div class="profile-value" id="display-currentMedication">None specified</div>
                                 </div>
-                                <div class="profile-item">
-                                    <div class="profile-label">
-                                        <i class="fas fa-thermometer-half"></i> Stress Level
-                                    </div>
-                                    <div class="profile-value" id="display-stressLevel">5/10</div>
-                                </div>
                             </div>
                         </div>
 
@@ -618,35 +612,6 @@
                                 <div class="form-group">
                                     <label for="currentMedication"><i class="fas fa-pills"></i> Current Medication (Optional)</label>
                                     <textarea id="currentMedication" class="form-input" rows="3" placeholder="List any current medications..."></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="stressLevel"><i class="fas fa-thermometer-half"></i> Stress Level Self-Assessment (1-10)</label>
-                                    <div class="stress-level-container">
-                                        <input type="range" id="stressLevel" class="stress-slider" min="1" max="10" value="5">
-                                        <div class="stress-value">
-                                            <span id="stressValue">5</span>/10
-                                        </div>
-                                    </div>
-                                    <div class="stress-labels">
-                                        <span>Low Stress</span>
-                                        <span>High Stress</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Mood Tracking History -->
-                        <div class="subsection">
-                            <h3><i class="fas fa-chart-line"></i> Recent Mood Tracking</h3>
-                            <div class="mood-history-container">
-                                <div class="mood-chart-container">
-                                    <canvas id="mood-trend-chart"></canvas>
-                                </div>
-                                <div class="mood-entries">
-                                    <h4>Last 7 Entries</h4>
-                                    <div id="recent-mood-entries" class="mood-entries-list">
-                                        <!-- Will be populated by JavaScript -->
-                                    </div>
                                 </div>
                             </div>
                         </div>

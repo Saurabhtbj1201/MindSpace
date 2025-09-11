@@ -94,12 +94,6 @@ const ProfileSchema = new mongoose.Schema({
     enum: ['anxiety', 'depression', 'none', 'prefer-not-to-say']
   },
   currentMedication: String,
-  stressLevel: {
-    type: Number,
-    min: 1,
-    max: 10,
-    default: 5
-  },
   
   // Timestamps
   createdAt: {

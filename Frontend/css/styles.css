@@ -585,15 +585,16 @@ footer {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .footer-bottom a {
-    color: rgb(255, 0, 0);
+    color: rgba(183, 255, 228, 0.8);
     font-weight: 500;
 }
 .footer-bottom a:hover {
-    color: rgb(255, 53, 53);
-    text-decoration: underline;
+    color: rgb(164, 255, 222);
+    text-decoration: none;
 }
 
 .footer-links {
@@ -602,13 +603,14 @@ footer {
 }
 
 .footer-links a {
-    color: rgb(0, 216, 220);
+    color: rgba(255, 255, 255, 0.712);
     transition: var(--transition);
 }
 
 .footer-links a:hover {
     opacity: 1;
-    color: rgb(0, 235, 224);
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.947);
 }
 
 /* Animation Classes */
