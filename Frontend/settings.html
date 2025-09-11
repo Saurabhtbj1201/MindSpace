@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - MindSpace</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/ico.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/settings.css">
+</head>
+<body>
+    <!-- Add notification container -->
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindSpace</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button class="mood-tracker-btn">
+                    <i class="fas fa-chart-line"></i> Track Your Mood
+                </button>
+                <div class="user-profile-dropdown">
+                    <div class="profile-trigger" id="profile-trigger">
+                        <div class="avatar-circle" id="header-avatar">U</div>
+                        <span id="header-username">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item active">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Settings Container -->
+    <div class="settings-container">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="header-content">
+                    <h1><i class="fas fa-cog"></i> Account Settings</h1>
+                    <p>Manage your account security and preferences</p>
+                </div>
+                <div class="breadcrumb">
+                    <a href="dashboard.html">Dashboard</a>
+                    <span><i class="fas fa-chevron-right"></i></span>
+                    <span>Settings</span>
+                </div>
+            </div>
+
+            <!-- Settings Sections -->
+            <div class="settings-sections">
+                
+                <!-- Account Information Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-user-circle"></i> Account Information</h2>
+                        <p>View your current account details</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-envelope"></i>
+                                    Current Email
+                                </div>
+                                <div class="info-value" id="current-email">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    Account Created
+                                </div>
+                                <div class="info-value" id="account-created">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-key"></i>
+                                    Last Password Change
+                                </div>
+                                <div class="info-value" id="last-password-change">Loading...</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">
+                                    <i class="fas fa-shield-alt"></i>
+                                    Account Status
+                                </div>
+                                <div class="info-value">
+                                    <span class="status-badge verified" id="account-status">
+                                        <i class="fas fa-check-circle"></i> Verified
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Email Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-envelope-open"></i> Change Email Address</h2>
+                        <p>Update your email address with OTP verification</p>
+                    </div>
+                    <div class="section-content">
+                        <form id="change-email-form" class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="current-email-input">
+                                        <i class="fas fa-envelope"></i> Current Email
+                                    </label>
+                                    <input type="email" id="current-email-input" class="form-input" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="new-email">
+                                        <i class="fas fa-envelope-open"></i> New Email Address
+                                    </label>
+                                    <input type="email" id="new-email" class="form-input" placeholder="Enter new email address" required>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-paper-plane"></i> Send Verification OTP
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Change Password Section -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-lock"></i> Change Password</h2>
+                        <p>Update your password for better security</p>
+                    </div>
+                    <div class="section-content">
+                        <form id="change-password-form" class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="current-password">
+                                        <i class="fas fa-lock"></i> Current Password
+                                    </label>
+                                    <div class="password-input-group">
+                                        <input type="password" id="current-password" class="form-input" placeholder="Enter current password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('current-password', this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="new-password">
+                                        <i class="fas fa-key"></i> New Password
+                                    </label>
+                                    <div class="password-input-group">
+                                        <input type="password" id="new-password" class="form-input" placeholder="Enter new password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('new-password', this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-requirements">
+                                        <small>Password must be at least 6 characters long</small>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-new-password">
+                                        <i class="fas fa-key"></i> Confirm New Password
+                                    </label>
+                                    <div class="password-input-group">
+                                        <input type="password" id="confirm-new-password" class="form-input" placeholder="Confirm new password" required>
+                                        <button type="button" class="password-toggle" onclick="togglePasswordVisibility('confirm-new-password', this)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i> Update Password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danger Zone Section -->
+                <div class="settings-section danger-zone">
+                    <div class="section-header">
+                        <h2><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
+                        <p>Irreversible actions that affect your account</p>
+                    </div>
+                    <div class="section-content">
+                        <div class="danger-item">
+                            <div class="danger-info">
+                                <h3>Delete Account</h3>
+                                <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+                            </div>
+                            <button class="btn-danger" id="delete-account-btn">
+                                <i class="fas fa-trash-alt"></i> Delete Account
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Verification Modal -->
+    <div class="modal-overlay" id="otp-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-shield-alt"></i> Email Verification</h3>
+                <button class="modal-close" onclick="closeOTPModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="verification-text">
+                    We've sent a 6-digit verification code to your new email address. 
+                    Please enter it below to confirm the change.
+                </p>
+                <form id="email-otp-form">
+                    <div class="otp-input-container">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]">
+                        <input type="text" class="otp-input" maxlength="1" pattern="[0-9]">
+                    </div>
+                    <div class="otp-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-check"></i> Verify Email
+                        </button>
+                        <button type="button" class="btn-secondary" id="resend-email-otp">
+                            <i class="fas fa-redo"></i> Resend Code
+                        </button>
+                    </div>
+                </form>
+                <div class="otp-timer" id="email-otp-timer" style="display: none;">
+                    <span>Resend code in <span id="email-timer-countdown">60</span> seconds</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Account Confirmation Modal -->
+    <div class="modal-overlay" id="delete-confirmation-modal">
+        <div class="modal-content danger-modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Delete Account</h3>
+                <button class="modal-close" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="warning-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p><strong>This action cannot be undone!</strong></p>
+                    <p>This will permanently delete your account and remove all your data from our servers, including:</p>
+                    <ul>
+                        <li>Your profile information</li>
+                        <li>All mood tracking history</li>
+                        <li>Counseling session records</li>
+                        <li>Account settings and preferences</li>
+                    </ul>
+                </div>
+                <form id="delete-account-form">
+                    <div class="form-group">
+                        <label for="delete-password">
+                            <i class="fas fa-lock"></i> Enter your password to confirm deletion
+                        </label>
+                        <div class="password-input-group">
+                            <input type="password" id="delete-password" class="form-input" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility('delete-password', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="confirmation-text">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="confirm-delete" required>
+                            <span class="checkmark"></span>
+                            I understand that this action is permanent and cannot be undone
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeDeleteModal()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn-danger">
+                            <i class="fas fa-trash-alt"></i> Delete My Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/settings.js"></script>
+    <script>
+        // Handle mood tracker button click
+        const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+        if (moodTrackerBtn) {
+            moodTrackerBtn.addEventListener('click', function() {
+                window.location.href = 'mood.html';
+            });
+        }
+    </script>
+</body>
+</html>

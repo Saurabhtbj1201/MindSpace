@@ -44,6 +44,9 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  lastPasswordChange: {
+    type: Date
+  },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   verificationToken: String,
@@ -62,6 +65,12 @@ UserSchema.pre('save', async function(next) {
   
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  
+  // Set lastPasswordChange only if this is not a new user (has an _id)
+  if (!this.isNew) {
+    this.lastPasswordChange = Date.now();
+  }
+  
   next();
 });
 

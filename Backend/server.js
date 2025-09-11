@@ -5,6 +5,7 @@ const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes');
 const moodRoutes = require('./routes/moodRoutes');
 const profileRoutes = require('./routes/profileRoutes');
+const settingRoutes = require('./routes/settingRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -73,6 +74,7 @@ mongoose.connect(process.env.MONGODB_URI, mongoOptions)
 app.use('/api/auth', authRoutes);
 app.use('/api/mood', moodRoutes);
 app.use('/api/user/profile', profileRoutes);
+app.use('/api/settings', settingRoutes);
 
 // Config endpoint to serve environment URLs to frontend
 app.get('/api/config', (req, res) => {
