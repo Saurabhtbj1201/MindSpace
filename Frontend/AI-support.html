@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Primary Meta Tags -->
+    <meta name="description" content="MindSpace AI Support - Get personalized mental health support through our AI-powered chat assistant.">
+    <meta name="keywords" content="AI support, mental health chat, student counseling, emotional support, AI therapist">
+    <meta name="author" content="MindSpace Warriors">
+    <meta name="robots" content="noindex, nofollow"> <!-- Protected page -->
+    <meta name="theme-color" content="#6A0DAD">
+    
+    <!-- Security Meta Tags -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/ico.png">
+    <link rel="manifest" href="images/favicon/site.webmanifest">
+    
+    <!-- Mobile App Capability -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Authentication Required -->
+    <meta name="auth-required" content="true">
+    
+    <title>MindSpace - AI Support</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/ai-support.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Add notification container -->
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindSpace</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="#ai-support" class="active">AI Support</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <div id="mood-tracker-container">
+                    <button class="mood-tracker-btn" id="mood-tracker-btn" onclick="window.location.href='mood.html'">
+                        <i class="fas fa-chart-line"></i> Track Your Mood
+                    </button>
+                </div>
+                
+                <!-- User profile dropdown -->
+                <div class="user-profile-dropdown">
+                    <div class="profile-trigger" id="profile-trigger">
+                        <div class="avatar-circle" id="header-avatar">U</div>
+                        <span id="header-username">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- AI Support Section -->
+    <section id="ai-support" class="ai-support-container">
+        <div class="container">
+            <!-- Chat Interface -->
+            <div class="chat-interface">
+                <!-- Main Chat Container -->
+                <div class="chat-container" id="chat-container">
+                    <div class="chat-header">
+                        <div class="chat-header-info">
+                            <div class="ai-status-indicator"></div>
+                            <div class="ai-info">
+                                <h3>Chat Session</h3>
+                                <p class="ai-status" id="chat-status">Ready to help you</p>
+                            </div>
+                        </div>
+                        <div class="chat-controls">
+                            <button class="chat-control-btn" id="clear-chat-btn" title="Clear Chat">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="chat-control-btn" id="toggle-chat-btn" title="Minimize Chat">
+                                <i class="fas fa-compress"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message ai-message">
+                            <div class="message-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="message-content">
+                                <div class="message-text">
+                                    <h4>Hello! I'm your MindSpace AI Assistant</h4>
+                                    <p>I'm here to provide emotional support and guidance tailored to your needs. Feel free to share what's on your mind today.</p>
+                                    <ul>
+                                        <li>Share your feelings openly</li>
+                                        <li>Ask for coping strategies</li>
+                                        <li>Get personalized recommendations</li>
+                                        <li>Access helpful resources</li>
+                                    </ul>
+                                    <p><strong>How are you feeling today?</strong></p>
+                                </div>
+                                <div class="message-time" id="welcome-time"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="typing-indicator" id="typing-indicator">
+                        <div class="typing-animation">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <span>AI is thinking...</span>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <div class="chat-input-wrapper">
+                            <textarea 
+                                id="chat-input" 
+                                placeholder="Type your message here... Express your feelings freely"
+                                rows="1"
+                                maxlength="500"
+                            ></textarea>
+                        </div>
+                        
+                        <div class="input-actions">
+                            <div class="input-actions-left">
+                                <button class="quick-action-btn" data-message="I'm feeling anxious and overwhelmed">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    Anxious
+                                </button>
+                                <button class="quick-action-btn" data-message="I'm feeling sad and lonely">
+                                    <i class="fas fa-heart-broken"></i>
+                                    Sad
+                                </button>
+                                <button class="quick-action-btn" data-message="I'm stressed about my studies">
+                                    <i class="fas fa-book"></i>
+                                    Stressed
+                                </button>
+                                <button class="quick-action-btn" data-message="I need motivation and encouragement">
+                                    <i class="fas fa-hand-holding-heart"></i>
+                                    Need Support
+                                </button>
+                            </div>
+                            <div class="input-actions-right">
+                                <span class="char-count" id="char-count">0/500</span>
+                                <button class="send-btn" id="send-btn" disabled>
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="chat-sidebar">
+                    <!-- AI Assistant Header - Updated Structure -->
+                    <div class="ai-assistant-header">
+                        <div class="ai-header-content">
+                            <div class="ai-header-main">
+                                <div class="ai-header-avatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="ai-header-info">
+                                    <h1>AI Assistant</h1>
+                                    <p>Your personal mental health companion</p>
+                                </div>
+                            </div>
+                            <div class="mood-status-pill" id="mood-status-pill">
+                                <div class="ai-status-indicator"></div>
+                                <span id="ai-status">Initializing...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resources Panel -->
+                    <div class="resources-panel" id="resources-panel">
+                        <h3>
+                            <i class="fas fa-lightbulb"></i>
+                            Recommended Resources
+                        </h3>
+                        
+                        <div class="resource-tabs">
+                            <button class="resource-tab active" data-tab="videos">Videos</button>
+                            <button class="resource-tab" data-tab="audio">Audio</button>
+                            <button class="resource-tab" data-tab="guides">Guides</button>
+                        </div>
+                        
+                        <div class="resource-content active" id="videos-content">
+                            <!-- Videos will be populated here -->
+                        </div>
+                        
+                        <div class="resource-content" id="audio-content">
+                            <!-- Audio will be populated here -->
+                        </div>
+                        
+                        <div class="resource-content" id="guides-content">
+                            <!-- Guides will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Crisis Support - Fixed Positioning and Styling -->
+                    <div class="crisis-support">
+                        <div class="crisis-content">
+                            <h4>
+                                <i class="fas fa-phone-alt"></i>
+                                Need Immediate Help?
+                            </h4>
+                            <p>If you're having thoughts of self-harm, please reach out for immediate support.</p>
+                            <div class="crisis-actions">
+                                <a href="tel:9152987821" class="crisis-btn">
+                                    <i class="fas fa-phone"></i>
+                                    Call: 9152987821
+                                </a>
+                                <a href="tel:100" class="crisis-btn">
+                                    <i class="fas fa-ambulance"></i>
+                                    Emergency: 100
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section - Complete Content Added -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <h2>MindSpace</h2>
+                    </div>
+                    <p>Supporting student mental health and wellbeing across higher education institutions in India.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="dashboard.html">Dashboard</a></li>
+                        <li><a href="AI-support.html">AI Support</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="mood.html">Mood Tracker</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@mindspace.edu</li>
+                        <li><i class="fas fa-phone"></i> Helpline: 9152987821</li>
+                        <li><i class="fas fa-ambulance"></i> Emergency: 100</li>
+                        <li><i class="fas fa-map-marker-alt"></i> India</li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by Team <a href="team.html">MindSpace Warriors</a></p>
+                <div class="footer-links">
+                    <a href="policy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/ai-support.js"></script>
+</body>
+</html>

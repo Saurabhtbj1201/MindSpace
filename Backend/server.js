@@ -2,13 +2,24 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+
+// Load environment variables FIRST
+dotenv.config();
+
+// Debug environment variables
+console.log('Environment variables loaded:');
+console.log('PORT:', process.env.PORT || 'Not set');
+console.log('NODE_ENV:', process.env.NODE_ENV || 'Not set');
+console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
+console.log('JWT_SECRET exists:', !!process.env.JWT_SECRET);
+console.log('GOOGLE_AI_API_KEY exists:', !!process.env.GOOGLE_AI_API_KEY);
+console.log('GOOGLE_AI_API_KEY length:', process.env.GOOGLE_AI_API_KEY ? process.env.GOOGLE_AI_API_KEY.length : 0);
+
 const authRoutes = require('./routes/authRoutes');
 const moodRoutes = require('./routes/moodRoutes');
 const profileRoutes = require('./routes/profileRoutes');
 const settingRoutes = require('./routes/settingRoutes');
-
-// Load environment variables
-dotenv.config();
+const aiRoutes = require('./routes/aiRoutes');
 
 // Initialize express app
 const app = express();
@@ -75,6 +86,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/mood', moodRoutes);
 app.use('/api/user/profile', profileRoutes);
 app.use('/api/settings', settingRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Config endpoint to serve environment URLs to frontend
 app.get('/api/config', (req, res) => {
@@ -94,7 +106,8 @@ app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'ok', 
     message: 'Server is running',
-    database: dbStatus
+    database: dbStatus,
+    aiEnabled: !!process.env.GOOGLE_AI_API_KEY
   });
 });
 
