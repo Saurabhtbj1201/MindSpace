@@ -1,0 +1,35 @@
+const express = require('express');
+const { protect } = require('../middleware/authMiddleware');
+const {
+  analyzeMentalHealth,
+  getMentalHealthReports,
+  getMentalHealthReport,
+  emailMentalHealthReport
+} = require('../controllers/mentalHealthController');
+
+const router = express.Router();
+
+// Protect all routes
+router.use(protect);
+
+// @route   POST /api/mental-health/analyze
+// @desc    Analyze mental health data and generate report
+// @access  Private
+router.post('/analyze', analyzeMentalHealth);
+
+// @route   GET /api/mental-health/reports
+// @desc    Get user's mental health reports
+// @access  Private
+router.get('/reports', getMentalHealthReports);
+
+// @route   GET /api/mental-health/reports/:id
+// @desc    Get specific mental health report
+// @access  Private
+router.get('/reports/:id', getMentalHealthReport);
+
+// @route   POST /api/mental-health/email-report
+// @desc    Email mental health report to user
+// @access  Private
+router.post('/email-report', emailMentalHealthReport);
+
+module.exports = router;

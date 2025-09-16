@@ -986,7 +986,7 @@ function showNotification(message, type = notificationTypes.INFO, title = '', du
     if (duration > 0) {
         // Animate progress bar
         const progressBar = notification.querySelector('.notification-progress');
-        progressBar.style.animation = `progress-shrink ${duration / 1000}s linear forwards`;
+        progressBar.style.animation = `progress-shrink ${duration / 800}s linear forwards`;
 
         // Set timer to remove notification
         notificationTimers[id] = setTimeout(() => {
@@ -1024,19 +1024,19 @@ function dismissNotification(id) {
 }
 
 // Convenience functions for specific notification types
-function showSuccess(message, title = 'Success', duration = 3000) {
+function showSuccess(message, title = 'Success', duration = 2000) {
     return showNotification(message, notificationTypes.SUCCESS, title, duration);
 }
 
-function showError(message, title = 'Error', duration = 3000) {
+function showError(message, title = 'Error', duration = 2000) {
     return showNotification(message, notificationTypes.ERROR, title, duration);
 }
 
-function showInfo(message, title = 'Information', duration = 3000) {
+function showInfo(message, title = 'Information', duration = 2000) {
     return showNotification(message, notificationTypes.INFO, title, duration);
 }
 
-function showWarning(message, title = 'Warning', duration = 3000) {
+function showWarning(message, title = 'Warning', duration = 2000) {
     return showNotification(message, notificationTypes.WARNING, title, duration);
 }
 
@@ -1737,3 +1737,26 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+// Function to check login and redirect for protected pages
+function checkLoginAndRedirect(page) {
+    const authToken = localStorage.getItem('authToken');
+    
+    if (authToken) {
+        // User is logged in, redirect to the page
+        window.location.href = page;
+    } else {
+        // User is not logged in, show message and redirect to login
+        showInfo('Please sign up or log in to access this feature');
+        setTimeout(() => {
+            // Scroll to login section or open login dialog
+            const loginDialog = document.getElementById('login-dialog');
+            if (loginDialog) {
+                toggleDialog('login-dialog', true);
+            } else {
+                // If on a different page, redirect to home with hash
+                window.location.href = 'index.html#login';
+            }
+        }, 1500);
+    }
+}

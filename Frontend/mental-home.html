@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Assessment - MindSpace</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/ico.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/mental-home.css">
+</head>
+<body>
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindSpace</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="AI-support.html">AI-Support</a></li>
+                    <li><a href="mental-home.html" class="active">Mental Health</a></li>
+                    <li><a href="appointment.html">Appointment</a></li>
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button class="mood-tracker-btn">
+                    <i class="fas fa-chart-line"></i> Track Your Mood
+                </button>
+                <div class="user-profile-dropdown">
+                    <div class="profile-trigger" id="profile-trigger">
+                        <div class="avatar-circle" id="header-avatar">U</div>
+                        <span id="header-username">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a href="profile.html" class="dropdown-item"><i class="fas fa-user"></i> Profile</a>
+                        <a href="settings.html" class="dropdown-item"><i class="fas fa-cog"></i> Settings</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger"><span></span><span></span><span></span></div>
+        </div>
+    </header>
+
+    <main class="mental-home-container">
+        <!-- Page Header with Zigzag Images -->
+        <div class="page-header">
+            <div class="container">
+                <div class="header-content">
+                    <h1><i class="fas fa-brain"></i> Mental Health Assessment Center</h1>
+                    <p>Track your mental wellness journey with comprehensive assessments and personalized insights designed specifically for students.</p>
+                </div>
+                
+                <div class="header-images">
+                    <div class="zigzag-container">
+                        <div class="header-image image-1">
+                            <div class="gradient-overlay"></div>
+                            <div class="icon-overlay">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="header-image image-2">
+                            <div class="gradient-overlay"></div>
+                            <div class="icon-overlay">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="header-image image-3">
+                            <div class="gradient-overlay"></div>
+                            <div class="icon-overlay">
+                                <i class="fas fa-meditation"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="header-image image-4">
+                            <div class="gradient-overlay"></div>
+                            <div class="icon-overlay">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="header-image image-5">
+                            <div class="gradient-overlay"></div>
+                            <div class="icon-overlay">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Floating decorative shapes -->
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+            </div>
+            
+            <!-- Statistics preview -->
+            <div class="stats-preview">
+                <div class="stat-item">
+                    <span class="stat-number">50K+</span>
+                    <span class="stat-label">Students Helped</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Accuracy Rate</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Support Available</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <!-- Prerequisites Check Section -->
+            <div id="prerequisites-section" class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-clipboard-check"></i> Assessment Prerequisites</h2>
+                    <p>To start a new mental health assessment, you must complete all the requirements below. This ensures accurate and personalized results.</p>
+                </div>
+                <div id="prerequisites-content">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i> Checking requirements...
+                    </div>
+                </div>
+                <div id="start-assessment-container" style="display: none;">
+                    <button id="start-new-assessment" class="btn-primary btn-large">
+                        <i class="fas fa-play"></i> Start New Assessment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Assessment History Section -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> Assessment History</h2>
+                    <p>View your previous mental health assessments and track your progress</p>
+                </div>
+                <div id="assessment-history">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i> Loading assessment history...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessment Modules Overview -->
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-list-check"></i> Assessment Modules</h2>
+                    <p>Our comprehensive mental health assessment includes these validated screening tools</p>
+                </div>
+                <div class="modules-grid">
+                    <div class="module-card">
+                        <div class="module-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>Health & Vitals</h3>
+                        <p>Physical health indicators including blood pressure, heart rate, sleep patterns, and lifestyle factors.</p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check"></i> Vital signs monitoring</li>
+                            <li><i class="fas fa-check"></i> Lifestyle assessment</li>
+                            <li><i class="fas fa-check"></i> Health history review</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>DASS-21 Scale</h3>
+                        <p>Depression, Anxiety and Stress Scale - a comprehensive tool for measuring emotional states.</p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check"></i> Depression screening</li>
+                            <li><i class="fas fa-check"></i> Anxiety assessment</li>
+                            <li><i class="fas fa-check"></i> Stress level evaluation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>GAD-7 Assessment</h3>
+                        <p>Generalized Anxiety Disorder scale for identifying and measuring anxiety symptoms.</p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check"></i> Anxiety screening</li>
+                            <li><i class="fas fa-check"></i> Severity measurement</li>
+                            <li><i class="fas fa-check"></i> Clinical validation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="module-card">
+                        <div class="module-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h3>PHQ-9 Screening</h3>
+                        <p>Patient Health Questionnaire for depression screening and severity assessment.</p>
+                        <ul class="module-features">
+                            <li><i class="fas fa-check"></i> Depression screening</li>
+                            <li><i class="fas fa-check"></i> Severity grading</li>
+                            <li><i class="fas fa-check"></i> Treatment monitoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <a href="resources.html" class="action-card">
+                    <i class="fas fa-book-open"></i>
+                    <h3>Mental Health Resources</h3>
+                    <p>Access helpful resources and educational materials</p>
+                </a>
+                
+                <a href="AI-support.html" class="action-card">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Mental Health Support</h3>
+                    <p>Get immediate support from our AI counselor</p>
+                </a>
+                
+                <a href="mood.html" class="action-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <h3>Book Appointment</h3>
+                    <p>Schedule a session with a mental health professional</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+     <!-- Footer Section -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <h2>MindSpace</h2>
+                    </div>
+                    <p>Supporting student mental health and wellbeing across higher education institutions in India.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="mood.html">Track Mood</a></li>
+                        <li><a href="mental-home.html">Check Mental Health</a></li>
+                        <li><a href="AI-support.html">AI Support</a></li>
+                        <li><a href="appointment.html">Book Appointments</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@mindspace.edu</li>
+                        <li><i class="fas fa-phone"></i> Helpline: 9152987821</li>
+                        <li><i class="fas fa-ambulance"></i> Emergency: 100</li>
+                        <li><i class="fas fa-map-marker-alt"></i> India</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by Team <a href="team.html">MindSpace Warriors</a></p>
+                <div class="footer-links">
+                    <a href="policy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/mental-home.js"></script>
+</body>
+</html>

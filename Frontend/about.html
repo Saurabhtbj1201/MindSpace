@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - MindSpace</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/ico.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/ico.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Add notification container -->
+    <div class="notifications-container" id="notifications-container"></div>
+    
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MindSpace</h1>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <!-- Navigation links will be updated by updateNavigation() -->
+                </ul>
+            </nav>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <button class="mood-tracker-btn">
+                    <i class="fas fa-chart-line"></i> Track Your Mood
+                </button>
+
+                <!-- Auth buttons container - will be hidden when logged in -->
+                <div class="auth-buttons-container" style="display: none;">
+                    <div class="auth-buttons">
+                        <button class="btn-secondary">Login</button>
+                        <button class="btn-primary">Register</button>
+                    </div>
+                </div>
+
+                <!-- User profile dropdown - initially hidden, shown when logged in -->
+                <div class="user-profile-dropdown" style="display: none;">
+                    <div class="profile-trigger" id="profile-trigger">
+                        <div class="avatar-circle" id="header-avatar">U</div>
+                        <span id="header-username">User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                        <a href="settings.html" class="dropdown-item">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" id="logout-btn" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>About MindSpace</h1>
+                <p>Empowering students across India with comprehensive mental health support through innovative technology, personalized care, and accessible resources designed specifically for the unique challenges of student life.</p>
+            </div>
+            <div class="hero-image">
+                <img src="images/about-hero.jpg" alt="About MindSpace" style="border-radius: 10px;">
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-content">
+                    <h2 class="section-title">Our Mission & Vision</h2>
+                    <div class="about-text">
+                        <h3>Transforming Student Mental Health</h3>
+                        <p>MindSpace is dedicated to revolutionizing mental health support for students across India. We understand that student life comes with unique pressures, challenges, and transitions that can significantly impact mental wellbeing.</p>
+                        
+                        <p>Our platform combines cutting-edge technology with evidence-based mental health practices to provide personalized, accessible, and effective support to every student who needs it.</p>
+                        
+                        <h3>Why MindSpace Matters</h3>
+                        <p>With rising mental health challenges among students and limited access to professional support, MindSpace bridges the gap by offering:</p>
+                        
+                        <ul style="margin: 20px 0; padding-left: 20px;">
+                            <li>24/7 AI-powered mental health support</li>
+                            <li>Comprehensive mood tracking and analysis</li>
+                            <li>Evidence-based assessment tools</li>
+                            <li>Personalized resource recommendations</li>
+                            <li>Easy access to professional counseling</li>
+                            <li>Privacy-focused and secure platform</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="about-image">
+                    <div class="image-container">
+                        <img src="images/mission.jpg" alt="Our Mission">
+                        <div class="image-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="data-visualization">
+        <div class="container">
+            <h2 class="section-title">Impact & Reach</h2>
+            <div class="key-points">
+                <div class="key-point">
+                    <div class="key-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="key-info">
+                        <h4>50,000+</h4>
+                        <p>Students Supported</p>
+                    </div>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="key-info">
+                        <h4>200+</h4>
+                        <p>Educational Institutions</p>
+                    </div>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="key-info">
+                        <h4>95%</h4>
+                        <p>User Satisfaction Rate</p>
+                    </div>
+                </div>
+                
+                <div class="key-point">
+                    <div class="key-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="key-info">
+                        <h4>24/7</h4>
+                        <p>Support Available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Preview Section -->
+    <section class="quick-links">
+        <div class="container">
+            <h2 class="section-title">Meet Our Team</h2>
+            <p style="text-align: center; margin-bottom: 40px;">Get to know the passionate individuals working to transform student mental health support.</p>
+            <div style="text-align: center;">
+                <a href="team.html" class="btn-primary">
+                    <i class="fas fa-users"></i> View Our Team
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-column">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <h2>MindSpace</h2>
+                    </div>
+                    <p>Supporting student mental health and wellbeing across higher education institutions in India.</p>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#" onclick="checkLoginAndRedirect('resources.html')">Resources</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#" onclick="checkLoginAndRedirect('mood.html')">Track Mood</a></li>
+                        <li><a href="#" onclick="checkLoginAndRedirect('mental-home.html')">Check Mental Health</a></li>
+                        <li><a href="#" onclick="checkLoginAndRedirect('AI-support.html')">AI Support</a></li>
+                        <li><a href="#" onclick="checkLoginAndRedirect('appointment.html')">Book Appointments</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h3>Connect With Us</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@mindspace.edu</li>
+                        <li><i class="fas fa-phone"></i> Helpline: 9152987821</li>
+                        <li><i class="fas fa-ambulance"></i> Emergency: 100</li>
+                        <li><i class="fas fa-map-marker-alt"></i> India</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by Team <a href="team.html">MindSpace Warriors</a></p>
+                <div class="footer-links">
+                    <a href="policy.html">Privacy Policy</a>
+                    <a href="terms.html">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update navigation based on authentication state
+            updateNavigation();
+            
+            // Authentication check
+            const authToken = localStorage.getItem('authToken');
+            if (authToken) {
+                // User is logged in
+                const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+
+                // Hide auth buttons, show profile dropdown
+                document.querySelector('.auth-buttons-container').style.display = 'none';
+                document.querySelector('.user-profile-dropdown').style.display = 'block';
+
+                // Update user info
+                const initials = ((userData.firstName || '').charAt(0) + (userData.lastName || '').charAt(0)).toUpperCase();
+                document.getElementById('header-username').textContent = userData.firstName || 'User';
+                document.getElementById('header-avatar').textContent = initials || 'U';
+
+                // Set up profile dropdown toggle
+                const profileTrigger = document.getElementById('profile-trigger');
+                const profileDropdown = document.getElementById('profile-dropdown');
+
+                profileTrigger.addEventListener('click', function() {
+                    profileDropdown.classList.toggle('active');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    if (!profileTrigger.contains(event.target) && !profileDropdown.contains(event.target)) {
+                        profileDropdown.classList.remove('active');
+                    }
+                });
+
+                // Handle logout
+                document.getElementById('logout-btn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('authToken');
+                    localStorage.removeItem('userData');
+                    showSuccess('Logged out successfully!');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                });
+            } else {
+                // User is not logged in
+                document.querySelector('.auth-buttons-container').style.display = 'flex';
+                document.querySelector('.user-profile-dropdown').style.display = 'none';
+
+                // Set up login/register button clicks
+                const loginBtn = document.querySelector('.auth-buttons .btn-secondary');
+                const registerBtn = document.querySelector('.auth-buttons .btn-primary');
+
+                if (loginBtn) {
+                    loginBtn.addEventListener('click', () => {
+                        window.location.href = 'index.html#login';
+                    });
+                }
+
+                if (registerBtn) {
+                    registerBtn.addEventListener('click', () => {
+                        window.location.href = 'index.html#register';
+                    });
+                }
+            }
+
+            // Mood tracker button functionality
+            const moodTrackerBtn = document.querySelector('.mood-tracker-btn');
+            if (moodTrackerBtn) {
+                moodTrackerBtn.addEventListener('click', function() {
+                    const authToken = localStorage.getItem('authToken');
+                    if (authToken) {
+                        window.location.href = 'mood.html';
+                    } else {
+                        showInfo('Please sign up or log in to track your mood');
+                        window.location.href = 'index.html#login';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
