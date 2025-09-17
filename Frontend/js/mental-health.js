@@ -17,6 +17,14 @@ document.addEventListener('DOMContentLoaded', function() {
         phq9: {}
     };
 
+    // Add module progress state
+    let moduleProgress = {
+        vitals: null,
+        dass21: null,
+        gad7: null,
+        phq9: null
+    };
+
     // DOM elements
     const prerequisitesCheck = document.getElementById('prerequisites-check');
     const analysisForm = document.getElementById('analysis-form');
@@ -43,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateUserProfile();
         setupEventListeners();
         await checkPrerequisites();
+        await loadModuleProgress();
         loadQuestionnaires();
     }
 
@@ -436,9 +445,145 @@ document.addEventListener('DOMContentLoaded', function() {
         `).join('');
     }
 
+    // Load saved progress for each module
+    async function loadModuleProgress() {
+        try {
+            const response = await fetch(`${apiConfig.backendApiUrl}/api/mental-health/progress`, {
+                method: 'GET',
+                headers
+            });
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.progress) {
+                    moduleProgress = data.progress;
+                    // Optionally pre-fill forms with saved data
+                    prefillModuleForms();
+                }
+            }
+        } catch (error) {
+            console.error('Error loading module progress:', error);
+        }
+    }
+
+    // Prefill forms with saved progress (if any)
+    function prefillModuleForms() {
+        // Prefill vitals
+        if (moduleProgress.vitals) {
+            document.getElementById('systolic').value = moduleProgress.vitals.systolic || '';
+            document.getElementById('diastolic').value = moduleProgress.vitals.diastolic || '';
+            document.getElementById('heart-rate').value = moduleProgress.vitals.heartRate || '';
+            document.getElementById('sleep-duration').value = moduleProgress.vitals.sleepDuration || '';
+            document.getElementById('temperature').value = moduleProgress.vitals.temperature || '';
+            document.getElementById('exercise-frequency').value = moduleProgress.lifestyle?.exerciseFrequency || '';
+            document.getElementById('smoking-status').value = moduleProgress.lifestyle?.smokingStatus || '';
+            document.getElementById('alcohol-consumption').value = moduleProgress.lifestyle?.alcoholConsumption || '';
+            document.getElementById('screen-time').value = moduleProgress.lifestyle?.screenTime || '';
+            document.getElementById('chronic-conditions').value = moduleProgress.lifestyle?.chronicConditions || '';
+            document.getElementById('medications').value = moduleProgress.lifestyle?.medications || '';
+        }
+        // Prefill DASS-21
+        if (moduleProgress.dass21) {
+            for (let i = 0; i < 21; i++) {
+                const val = moduleProgress.dass21[i];
+                if (typeof val !== 'undefined') {
+                    document.getElementById(`dass21_${i}_${val}`).checked = true;
+                }
+            }
+        }
+        // Prefill GAD-7
+        if (moduleProgress.gad7) {
+            for (let i = 0; i < 7; i++) {
+                const val = moduleProgress.gad7[i];
+                if (typeof val !== 'undefined') {
+                    document.getElementById(`gad7_${i}_${val}`).checked = true;
+                }
+            }
+        }
+        // Prefill PHQ-9
+        if (moduleProgress.phq9) {
+            for (let i = 0; i < 9; i++) {
+                const val = moduleProgress.phq9[i];
+                if (typeof val !== 'undefined') {
+                    document.getElementById(`phq9_${i}_${val}`).checked = true;
+                }
+            }
+        }
+    }
+
+    // Save progress for a module
+    async function saveModuleProgress(moduleName, data) {
+        try {
+            const response = await fetch(`${apiConfig.backendApiUrl}/api/mental-health/progress`, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify({ module: moduleName, data })
+            });
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    showSuccess(`${moduleName} progress saved!`);
+                }
+            }
+        } catch (error) {
+            console.error(`Error saving ${moduleName} progress:`, error);
+        }
+    }
+
     function navigateStep(direction) {
         if (direction === 1 && !validateCurrentStep()) {
             return;
+        }
+
+        // Save progress for the current module before moving forward
+        if (direction === 1) {
+            switch (currentStep) {
+                case 1:
+                    // Save vitals and lifestyle
+                    const vitalsData = {
+                        systolic: document.getElementById('systolic').value,
+                        diastolic: document.getElementById('diastolic').value,
+                        heartRate: document.getElementById('heart-rate').value,
+                        sleepDuration: document.getElementById('sleep-duration').value,
+                        temperature: document.getElementById('temperature').value
+                    };
+                    const lifestyleData = {
+                        exerciseFrequency: document.getElementById('exercise-frequency').value,
+                        smokingStatus: document.getElementById('smoking-status').value,
+                        alcoholConsumption: document.getElementById('alcohol-consumption').value,
+                        screenTime: document.getElementById('screen-time').value,
+                        chronicConditions: document.getElementById('chronic-conditions').value,
+                        medications: document.getElementById('medications').value
+                    };
+                    saveModuleProgress('vitals', { vitals: vitalsData, lifestyle: lifestyleData });
+                    break;
+                case 2:
+                    // Save DASS-21 answers
+                    const dass21Answers = [];
+                    for (let i = 0; i < 21; i++) {
+                        const checked = document.querySelector(`input[name="dass21_${i}"]:checked`);
+                        dass21Answers.push(checked ? parseInt(checked.value) : null);
+                    }
+                    saveModuleProgress('dass21', dass21Answers);
+                    break;
+                case 3:
+                    // Save GAD-7 answers
+                    const gad7Answers = [];
+                    for (let i = 0; i < 7; i++) {
+                        const checked = document.querySelector(`input[name="gad7_${i}"]:checked`);
+                        gad7Answers.push(checked ? parseInt(checked.value) : null);
+                    }
+                    saveModuleProgress('gad7', gad7Answers);
+                    break;
+                case 4:
+                    // Save PHQ-9 answers
+                    const phq9Answers = [];
+                    for (let i = 0; i < 9; i++) {
+                        const checked = document.querySelector(`input[name="phq9_${i}"]:checked`);
+                        phq9Answers.push(checked ? parseInt(checked.value) : null);
+                    }
+                    saveModuleProgress('phq9', phq9Answers);
+                    break;
+            }
         }
 
         // Hide current step

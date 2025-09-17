@@ -56,31 +56,48 @@ const corsOptions = {
 // Use the CORS middleware with options
 app.use(cors(corsOptions));
 
-// Configure MongoDB connection options
-const mongoOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  ssl: true,
-  tlsAllowInvalidCertificates: false,
-  retryWrites: true,
-  w: 'majority',
-  connectTimeoutMS: 30000,
-  socketTimeoutMS: 45000
-};
+// MongoDB connection with improved error handling
+const connectDB = async () => {
+  try {
+    console.log('Attempting to connect to MongoDB...');
+    console.log('Connection URI:', process.env.MONGODB_URI ? process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@') : 'No URI found');
+    
+    const conn = await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 30000, // 30 seconds
+      socketTimeoutMS: 45000, // 45 seconds
+      maxPoolSize: 10, // Maintain up to 10 socket connections
+      retryWrites: true,
+      w: 'majority'
+    });
 
-// Connect to MongoDB with improved error handling
-mongoose.connect(process.env.MONGODB_URI, mongoOptions)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => {
-    console.error('❌ MongoDB connection error:', err);
-    console.error('Connection details:', {
-      uri: process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@'), // Log URI with hidden credentials
-      options: mongoOptions
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    return conn;
+  } catch (error) {
+    console.error('❌ MongoDB connection error:', error);
+    console.log('Connection details:', {
+      uri: process.env.MONGODB_URI ? process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@') : 'No URI found',
+      options: {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        ssl: true,
+        tlsAllowInvalidCertificates: false,
+        retryWrites: true,
+        w: 'majority',
+        connectTimeoutMS: 30000,
+        socketTimeoutMS: 45000
+      }
     });
     
-    // Don't crash the server, but notify about the connection issue
-    console.error('Server will continue running, but MongoDB operations will fail');
-  });
+    // Don't exit process, let server continue without DB
+    console.log('Server will continue running, but MongoDB operations will fail');
+    return null;
+  }
+};
+
+// Connect to MongoDB
+connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);

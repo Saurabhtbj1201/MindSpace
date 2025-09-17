@@ -4,7 +4,10 @@ const {
   analyzeMentalHealth,
   getMentalHealthReports,
   getMentalHealthReport,
-  emailMentalHealthReport
+  emailMentalHealthReport,
+  saveModuleProgress,
+  getModuleProgress,
+  clearModuleProgress
 } = require('../controllers/mentalHealthController');
 
 const router = express.Router();
@@ -31,5 +34,20 @@ router.get('/reports/:id', getMentalHealthReport);
 // @desc    Email mental health report to user
 // @access  Private
 router.post('/email-report', emailMentalHealthReport);
+
+// @route   GET /api/mental-health/progress
+// @desc    Get module progress for user
+// @access  Private
+router.get('/progress', getModuleProgress);
+
+// @route   POST /api/mental-health/progress
+// @desc    Save module progress for user
+// @access  Private
+router.post('/progress', saveModuleProgress);
+
+// @route   DELETE /api/mental-health/progress/clear
+// @desc    Clear all module progress for user
+// @access  Private
+router.delete('/progress/clear', clearModuleProgress);
 
 module.exports = router;

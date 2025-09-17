@@ -79,8 +79,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Start new assessment button
         const startAssessmentBtn = document.getElementById('start-new-assessment');
         if (startAssessmentBtn) {
-            startAssessmentBtn.addEventListener('click', () => {
-                window.location.href = 'mental-health.html';
+            startAssessmentBtn.addEventListener('click', async () => {
+                // Clear all previous module progress before starting new assessment
+                try {
+                    const response = await fetch(`${apiConfig.backendApiUrl}/api/mental-health/progress/clear`, {
+                        method: 'DELETE',
+                        headers
+                    });
+                    
+                    if (response.ok) {
+                        showSuccess('Starting fresh assessment...');
+                        setTimeout(() => {
+                            window.location.href = 'mental-health.html';
+                        }, 1000);
+                    } else {
+                        // Even if clearing fails, still redirect to start new assessment
+                        console.warn('Could not clear previous progress, but starting new assessment');
+                        window.location.href = 'mental-health.html';
+                    }
+                } catch (error) {
+                    console.error('Error clearing progress:', error);
+                    // Still redirect even if there's an error
+                    window.location.href = 'mental-health.html';
+                }
             });
         }
     }
@@ -308,6 +329,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Global functions for report actions
     window.viewReport = function(reportId) {
+        if (!reportId) {
+            showError('No report ID provided');
+            return;
+        }
         // Store report ID and redirect to view page
         sessionStorage.setItem('viewReportId', reportId);
         window.location.href = 'mental-report.html';

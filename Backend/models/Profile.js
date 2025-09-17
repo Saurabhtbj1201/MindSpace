@@ -94,6 +94,12 @@ const ProfileSchema = new mongoose.Schema({
     enum: ['anxiety', 'depression', 'none', 'prefer-not-to-say']
   },
   currentMedication: String,
+
+  // Module Progress
+  moduleProgress: {
+    type: Object,
+    default: {}
+  },
   
   // Timestamps
   createdAt: {

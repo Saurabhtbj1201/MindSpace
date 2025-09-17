@@ -239,6 +239,110 @@ const emailMentalHealthReport = async (req, res) => {
   }
 };
 
+// @desc    Save module progress for a user
+// @route   POST /api/mental-health/progress
+// @access  Private
+const saveModuleProgress = async (req, res) => {
+  try {
+    const { module, data } = req.body;
+    
+    if (!module || typeof data === 'undefined') {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Module and data required' 
+      });
+    }
+    
+    // Find or create profile document for user
+    let profile = await Profile.findOne({ user: req.user.id });
+    if (!profile) {
+      profile = new Profile({ 
+        user: req.user.id, 
+        moduleProgress: {} 
+      });
+    }
+    
+    // Initialize moduleProgress if it doesn't exist
+    if (!profile.moduleProgress) {
+      profile.moduleProgress = {};
+    }
+    
+    // Save the module data
+    profile.moduleProgress[module] = data;
+    
+    // Mark the field as modified (important for nested objects in Mongoose)
+    profile.markModified('moduleProgress');
+    
+    await profile.save();
+    
+    res.json({ 
+      success: true, 
+      message: `${module} progress saved successfully`, 
+      progress: profile.moduleProgress 
+    });
+    
+  } catch (error) {
+    console.error('Error saving module progress:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error while saving progress',
+      error: error.message 
+    });
+  }
+};
+
+// @desc    Get module progress for a user
+// @route   GET /api/mental-health/progress
+// @access  Private
+const getModuleProgress = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    
+    const progress = profile?.moduleProgress || {};
+    
+    res.json({ 
+      success: true, 
+      progress: progress 
+    });
+    
+  } catch (error) {
+    console.error('Error getting module progress:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error while fetching progress',
+      error: error.message 
+    });
+  }
+};
+
+// @desc    Clear all module progress for a user
+// @route   DELETE /api/mental-health/progress/clear
+// @access  Private
+const clearModuleProgress = async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+    
+    if (profile) {
+      profile.moduleProgress = {};
+      profile.markModified('moduleProgress');
+      await profile.save();
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Module progress cleared successfully'
+    });
+    
+  } catch (error) {
+    console.error('Error clearing module progress:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Server error while clearing progress',
+      error: error.message 
+    });
+  }
+};
+
 // Helper function to calculate overall risk
 function calculateOverallRisk(dass21, gad7, phq9) {
   const severeCount = [
@@ -429,5 +533,8 @@ module.exports = {
   analyzeMentalHealth,
   getMentalHealthReports,
   getMentalHealthReport,
-  emailMentalHealthReport
+  emailMentalHealthReport,
+  saveModuleProgress,
+  getModuleProgress,
+  clearModuleProgress
 };
