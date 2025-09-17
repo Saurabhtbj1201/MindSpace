@@ -631,15 +631,16 @@ function generateReportEmailContent(report) {
         }
         
         .scores-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          display: flex;
           gap: 20px;
+          flex-wrap: wrap;
           margin-bottom: 25px;
         }
         
         .score-card {
           text-align: center;
           padding: 20px;
+          margin-bottom: 15px;
           border-radius: 8px;
           color: white;
           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -692,6 +693,7 @@ function generateReportEmailContent(report) {
           padding: 15px;
           border-radius: 8px;
           border-left: 3px solid #4073c0;
+          margin-bottom: 15px;
         }
         
         .vital-label {
@@ -807,6 +809,7 @@ function generateReportEmailContent(report) {
         .lifestyle-item {
           background: #f8fafc;
           padding: 15px;
+          margin-bottom: 15px;
           border-radius: 8px;
           border-left: 3px solid #4073c0;
         }
