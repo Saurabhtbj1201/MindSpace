@@ -5,6 +5,7 @@ const {
   getMentalHealthReports,
   getMentalHealthReport,
   emailMentalHealthReport,
+  downloadReportPDF,
   saveModuleProgress,
   getModuleProgress,
   clearModuleProgress
@@ -34,6 +35,11 @@ router.get('/reports/:id', getMentalHealthReport);
 // @desc    Email mental health report to user
 // @access  Private
 router.post('/email-report', emailMentalHealthReport);
+
+// @route   GET /api/mental-health/reports/:id/pdf
+// @desc    Download mental health report as PDF
+// @access  Private
+router.get('/reports/:id/pdf', downloadReportPDF);
 
 // @route   GET /api/mental-health/progress
 // @desc    Get module progress for user

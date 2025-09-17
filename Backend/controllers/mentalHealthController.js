@@ -472,68 +472,704 @@ function generateRecommendations(dass21, gad7, phq9, vitals, lifestyle) {
   return recommendations;
 }
 
-// Helper function to generate email content
+// Helper function to generate comprehensive email content
 function generateReportEmailContent(report) {
-  const date = new Date(report.createdAt).toLocaleDateString();
+  const date = new Date(report.createdAt).toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  
+  const isEmergency = report.overallRisk === 'severe' || report.overallRisk === 'high';
   
   return `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-      <div style="text-align: center; margin-bottom: 30px;">
-        <h1 style="color: #4073c0;">MindSpace</h1>
-        <h2 style="color: #333;">Mental Health Report</h2>
-        <p style="color: #666;">Generated on ${date}</p>
-      </div>
-      
-      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-        <h3 style="color: #333; margin-top: 0;">Assessment Results</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Depression (DASS-21):</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${report.dass21.depression.score} (${report.dass21.depression.severity})</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Anxiety (DASS-21):</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${report.dass21.anxiety.score} (${report.dass21.anxiety.severity})</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Stress (DASS-21):</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${report.dass21.stress.score} (${report.dass21.stress.severity})</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>GAD-7:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${report.gad7.score} (${report.gad7.severity})</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>PHQ-9:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${report.phq9.score} (${report.phq9.severity})</td>
-          </tr>
-        </table>
-      </div>
-      
-      <div style="background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px;">
-        <h3 style="color: #333; margin-top: 0;">Recommendations</h3>
-        ${report.recommendations.map(rec => `
-          <div style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 5px;">
-            <strong style="color: #4073c0;">${rec.title}</strong>
-            <p style="margin: 5px 0 0 0; color: #666;">${rec.description}</p>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>MindSpace Mental Health Report</title>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          background-color: #f8fafc;
+        }
+        
+        .email-container {
+          max-width: 800px;
+          margin: 0 auto;
+          background: white;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+          background: linear-gradient(135deg, #4073c0, #5a84d4);
+          color: white;
+          padding: 30px;
+          text-align: center;
+        }
+        
+        .header h1 {
+          font-size: 28px;
+          margin-bottom: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+        
+        .header .logo {
+          font-size: 32px;
+        }
+        
+        .header p {
+          font-size: 16px;
+          opacity: 0.9;
+        }
+        
+        .content {
+          padding: 30px;
+        }
+        
+        .report-meta {
+          background: #f8fafc;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 30px;
+          border-left: 4px solid #4073c0;
+        }
+        
+        .report-meta h3 {
+          color: #4073c0;
+          margin-bottom: 15px;
+          font-size: 18px;
+        }
+        
+        .meta-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
+        }
+        
+        .meta-item {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .meta-label {
+          font-weight: 600;
+          color: #4073c0;
+          font-size: 14px;
+          margin-bottom: 5px;
+        }
+        
+        .meta-value {
+          color: #333;
+          font-size: 16px;
+        }
+        
+        .emergency-alert {
+          background: linear-gradient(135deg, #ef4444, #dc2626);
+          color: white;
+          padding: 25px;
+          border-radius: 8px;
+          margin-bottom: 30px;
+          text-align: center;
+        }
+        
+        .emergency-alert h3 {
+          font-size: 20px;
+          margin-bottom: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+        
+        .emergency-contacts {
+          display: flex;
+          gap: 15px;
+          justify-content: center;
+          margin-top: 20px;
+          flex-wrap: wrap;
+        }
+        
+        .emergency-btn {
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          padding: 10px 20px;
+          text-decoration: none;
+          border-radius: 6px;
+          font-weight: 600;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .section {
+          margin-bottom: 35px;
+        }
+        
+        .section-title {
+          color: #4073c0;
+          font-size: 20px;
+          margin-bottom: 20px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          border-bottom: 2px solid #e2e8f0;
+          padding-bottom: 10px;
+        }
+        
+        .scores-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+          gap: 20px;
+          margin-bottom: 25px;
+        }
+        
+        .score-card {
+          text-align: center;
+          padding: 20px;
+          border-radius: 8px;
+          color: white;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .score-card.normal {
+          background: linear-gradient(135deg, #10b981, #059669);
+        }
+        
+        .score-card.mild, .score-card.minimal {
+          background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+        
+        .score-card.moderate {
+          background: linear-gradient(135deg, #f97316, #ea580c);
+        }
+        
+        .score-card.severe {
+          background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        .score-value {
+          font-size: 32px;
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+        
+        .score-label {
+          font-size: 14px;
+          margin-bottom: 5px;
+          opacity: 0.9;
+        }
+        
+        .score-severity {
+          font-size: 12px;
+          text-transform: uppercase;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+        }
+        
+        .vitals-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 15px;
+          margin-bottom: 25px;
+        }
+        
+        .vital-item {
+          background: #f8fafc;
+          padding: 15px;
+          border-radius: 8px;
+          border-left: 3px solid #4073c0;
+        }
+        
+        .vital-label {
+          font-weight: 600;
+          color: #4073c0;
+          font-size: 14px;
+          margin-bottom: 5px;
+        }
+        
+        .vital-value {
+          font-size: 18px;
+          font-weight: 700;
+          color: #333;
+          margin-bottom: 5px;
+        }
+        
+        .vital-status {
+          font-size: 12px;
+          padding: 3px 8px;
+          border-radius: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+        }
+        
+        .vital-status.normal {
+          background: #dcfce7;
+          color: #166534;
+        }
+        
+        .vital-status.elevated {
+          background: #fef3c7;
+          color: #92400e;
+        }
+        
+        .vital-status.high {
+          background: #fecaca;
+          color: #991b1b;
+        }
+        
+        .recommendations {
+          margin-bottom: 25px;
+        }
+        
+        .recommendation-item {
+          background: #f8fafc;
+          padding: 20px;
+          border-radius: 8px;
+          margin-bottom: 15px;
+          border-left: 4px solid #4073c0;
+        }
+        
+        .recommendation-item.high {
+          border-left-color: #ef4444;
+          background: #fef2f2;
+        }
+        
+        .recommendation-item.medium {
+          border-left-color: #f59e0b;
+          background: #fffbeb;
+        }
+        
+        .recommendation-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+        
+        .recommendation-title {
+          color: #4073c0;
+          font-weight: 600;
+          font-size: 16px;
+        }
+        
+        .priority-badge {
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 11px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        
+        .priority-badge.high {
+          background: #ef4444;
+          color: white;
+        }
+        
+        .priority-badge.medium {
+          background: #f59e0b;
+          color: white;
+        }
+        
+        .priority-badge.low {
+          background: #10b981;
+          color: white;
+        }
+        
+        .recommendation-category {
+          font-size: 12px;
+          color: #64748b;
+          margin-bottom: 8px;
+          text-transform: uppercase;
+          font-weight: 500;
+        }
+        
+        .lifestyle-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 15px;
+        }
+        
+        .lifestyle-item {
+          background: #f8fafc;
+          padding: 15px;
+          border-radius: 8px;
+          border-left: 3px solid #4073c0;
+        }
+        
+        .lifestyle-label {
+          font-weight: 600;
+          color: #4073c0;
+          display: block;
+          margin-bottom: 5px;
+          font-size: 14px;
+        }
+        
+        .lifestyle-value {
+          color: #333;
+          font-size: 14px;
+        }
+        
+        .footer {
+          background: #f8fafc;
+          padding: 30px;
+          text-align: center;
+          border-top: 1px solid #e2e8f0;
+        }
+        
+        .footer-content {
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        
+        .disclaimer {
+          background: #fff3cd;
+          border: 1px solid #ffeaa7;
+          color: #856404;
+          padding: 15px;
+          border-radius: 6px;
+          margin-bottom: 20px;
+          font-size: 14px;
+        }
+        
+        .contact-info {
+          color: #64748b;
+          font-size: 14px;
+          margin-bottom: 15px;
+        }
+        
+        .social-links {
+          margin-top: 15px;
+        }
+        
+        .social-links a {
+          color: #4073c0;
+          text-decoration: none;
+          margin: 0 10px;
+        }
+        
+        @media (max-width: 600px) {
+          .meta-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .scores-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .vitals-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .lifestyle-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .emergency-contacts {
+            flex-direction: column;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="email-container">
+        <div class="header">
+          <h1>
+            <span class="logo">🧠</span>
+            MindSpace Mental Health Report
+          </h1>
+          <p>Comprehensive Mental Wellness Assessment</p>
+        </div>
+        
+        <div class="content">
+          <div class="report-meta">
+            <h3>📋 Report Information</h3>
+            <div class="meta-grid">
+              <div class="meta-item">
+                <span class="meta-label">Patient Name</span>
+                <span class="meta-value">${report.user.firstName} ${report.user.lastName}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Generated On</span>
+                <span class="meta-value">${date}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Report ID</span>
+                <span class="meta-value">${report._id}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Overall Risk Level</span>
+                <span class="meta-value" style="color: ${getRiskColor(report.overallRisk)}; font-weight: 600; text-transform: uppercase;">${report.overallRisk}</span>
+              </div>
+            </div>
           </div>
-        `).join('')}
+          
+          ${isEmergency ? `
+          <div class="emergency-alert">
+            <h3>⚠️ Immediate Professional Support Recommended</h3>
+            <p>Your assessment indicates significant mental health concerns that require immediate attention. Please consider reaching out to a mental health professional or crisis support service.</p>
+            <div class="emergency-contacts">
+              <a href="tel:9152987821" class="emergency-btn">📞 Crisis Helpline: 9152987821</a>
+              <a href="tel:112" class="emergency-btn">🚨 Emergency: 112</a>
+            </div>
+          </div>
+          ` : ''}
+          
+          <div class="section">
+            <h2 class="section-title">
+              🧠 Mental Health Assessment Results
+            </h2>
+            <div class="scores-grid">
+              <div class="score-card ${report.dass21.depression.severity}">
+                <div class="score-value">${report.dass21.depression.score}</div>
+                <div class="score-label">Depression (DASS-21)</div>
+                <div class="score-severity">${report.dass21.depression.severity}</div>
+              </div>
+              <div class="score-card ${report.dass21.anxiety.severity}">
+                <div class="score-value">${report.dass21.anxiety.score}</div>
+                <div class="score-label">Anxiety (DASS-21)</div>
+                <div class="score-severity">${report.dass21.anxiety.severity}</div>
+              </div>
+              <div class="score-card ${report.dass21.stress.severity}">
+                <div class="score-value">${report.dass21.stress.score}</div>
+                <div class="score-label">Stress (DASS-21)</div>
+                <div class="score-severity">${report.dass21.stress.severity}</div>
+              </div>
+              <div class="score-card ${report.gad7.severity}">
+                <div class="score-value">${report.gad7.score}</div>
+                <div class="score-label">GAD-7 Assessment</div>
+                <div class="score-severity">${report.gad7.severity}</div>
+              </div>
+              <div class="score-card ${report.phq9.severity}">
+                <div class="score-value">${report.phq9.score}</div>
+                <div class="score-label">PHQ-9 Assessment</div>
+                <div class="score-severity">${report.phq9.severity}</div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="section">
+            <h2 class="section-title">
+              ❤️ Health Vitals Analysis
+            </h2>
+            <div class="vitals-grid">
+              <div class="vital-item">
+                <div class="vital-label">Blood Pressure</div>
+                <div class="vital-value">${report.vitals.systolic}/${report.vitals.diastolic} mmHg</div>
+                <span class="vital-status ${getVitalStatusClass('bp', report.vitals.systolic, report.vitals.diastolic)}">
+                  ${getVitalStatusText('bp', report.vitals.systolic, report.vitals.diastolic)}
+                </span>
+              </div>
+              <div class="vital-item">
+                <div class="vital-label">Heart Rate</div>
+                <div class="vital-value">${report.vitals.heartRate} BPM</div>
+                <span class="vital-status ${getVitalStatusClass('hr', report.vitals.heartRate)}">
+                  ${getVitalStatusText('hr', report.vitals.heartRate)}
+                </span>
+              </div>
+              <div class="vital-item">
+                <div class="vital-label">Sleep Duration</div>
+                <div class="vital-value">${report.vitals.sleepDuration} hours</div>
+                <span class="vital-status ${getVitalStatusClass('sleep', report.vitals.sleepDuration)}">
+                  ${getVitalStatusText('sleep', report.vitals.sleepDuration)}
+                </span>
+              </div>
+              ${report.vitals.temperature ? `
+              <div class="vital-item">
+                <div class="vital-label">Body Temperature</div>
+                <div class="vital-value">${report.vitals.temperature}°F</div>
+                <span class="vital-status normal">Normal</span>
+              </div>
+              ` : ''}
+            </div>
+          </div>
+          
+          ${report.lifestyle ? `
+          <div class="section">
+            <h2 class="section-title">
+              🏃 Lifestyle Summary
+            </h2>
+            <div class="lifestyle-grid">
+              <div class="lifestyle-item">
+                <span class="lifestyle-label">Exercise Frequency</span>
+                <span class="lifestyle-value">${formatLifestyleValue(report.lifestyle.exerciseFrequency)}</span>
+              </div>
+              <div class="lifestyle-item">
+                <span class="lifestyle-label">Smoking Status</span>
+                <span class="lifestyle-value">${formatLifestyleValue(report.lifestyle.smokingStatus)}</span>
+              </div>
+              <div class="lifestyle-item">
+                <span class="lifestyle-label">Alcohol Consumption</span>
+                <span class="lifestyle-value">${formatLifestyleValue(report.lifestyle.alcoholConsumption)}</span>
+              </div>
+              ${report.lifestyle.screenTime ? `
+              <div class="lifestyle-item">
+                <span class="lifestyle-label">Daily Screen Time</span>
+                <span class="lifestyle-value">${report.lifestyle.screenTime} hours</span>
+              </div>
+              ` : ''}
+            </div>
+          </div>
+          ` : ''}
+          
+          <div class="section">
+            <h2 class="section-title">
+              💡 Personalized Recommendations
+            </h2>
+            <div class="recommendations">
+              ${report.recommendations && report.recommendations.length > 0 ? 
+                report.recommendations.map(rec => `
+                  <div class="recommendation-item ${rec.priority}">
+                    <div class="recommendation-header">
+                      <span class="recommendation-title">${rec.title}</span>
+                      <span class="priority-badge ${rec.priority}">${rec.priority} priority</span>
+                    </div>
+                    <div class="recommendation-category">${rec.category}</div>
+                    <p>${rec.description}</p>
+                  </div>
+                `).join('') : 
+                '<p style="text-align: center; color: #64748b; font-style: italic;">No specific recommendations at this time. Continue monitoring your mental health regularly.</p>'
+              }
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer">
+          <div class="footer-content">
+            <div class="disclaimer">
+              <strong>⚠️ Important Disclaimer:</strong> This report is generated by MindSpace AI system and is for informational purposes only. It should not be considered as a substitute for professional medical advice, diagnosis, or treatment. Please consult with a qualified healthcare professional for proper evaluation and treatment.
+            </div>
+            
+            <div class="contact-info">
+              <p><strong>Need Support?</strong></p>
+              <p>📧 Email: support@mindspace.edu</p>
+              <p>📞 Helpline: 9152987821 (24/7)</p>
+              <p>🚨 Emergency: 112</p>
+            </div>
+            
+            <p style="color: #64748b; font-size: 12px; margin-top: 20px;">
+              © ${new Date().getFullYear()} MindSpace. All rights reserved.<br>
+              This email was sent to ${report.user.email} as part of your mental health assessment.
+            </p>
+            
+            <div class="social-links">
+              <a href="#">Privacy Policy</a> | 
+              <a href="#">Terms of Service</a> | 
+              <a href="#">Unsubscribe</a>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div style="text-align: center; color: #666; font-size: 12px; border-top: 1px solid #ddd; padding-top: 20px;">
-        <p>This report is generated by MindSpace and is for informational purposes only.</p>
-        <p>Please consult with a healthcare professional for proper diagnosis and treatment.</p>
-        <p>© ${new Date().getFullYear()} MindSpace. All rights reserved.</p>
-      </div>
-    </div>
+    </body>
+    </html>
   `;
 }
+
+// Helper functions for email styling
+function getRiskColor(risk) {
+  const colors = {
+    low: '#10b981',
+    moderate: '#f59e0b',
+    high: '#f97316',
+    severe: '#ef4444'
+  };
+  return colors[risk] || '#64748b';
+}
+
+function getVitalStatusClass(type, value1, value2) {
+  switch (type) {
+    case 'bp':
+      if (value1 < 120 && value2 < 80) return 'normal';
+      if (value1 < 140 && value2 < 90) return 'elevated';
+      return 'high';
+    case 'hr':
+      if (value1 >= 60 && value1 <= 100) return 'normal';
+      return 'elevated';
+    case 'sleep':
+      if (value1 >= 7 && value1 <= 9) return 'normal';
+      return 'elevated';
+    default:
+      return 'normal';
+  }
+}
+
+function getVitalStatusText(type, value1, value2) {
+  switch (type) {
+    case 'bp':
+      if (value1 < 120 && value2 < 80) return 'Normal';
+      if (value1 < 140 && value2 < 90) return 'Elevated';
+      return 'High';
+    case 'hr':
+      if (value1 >= 60 && value1 <= 100) return 'Normal';
+      return 'Abnormal';
+    case 'sleep':
+      if (value1 >= 7 && value1 <= 9) return 'Optimal';
+      return 'Poor';
+    default:
+      return 'Normal';
+  }
+}
+
+function formatLifestyleValue(value) {
+  if (!value) return 'Not specified';
+  return value.charAt(0).toUpperCase() + value.slice(1).replace(/([A-Z])/g, ' $1');
+}
+
+// @desc    Download mental health report as PDF
+// @route   GET /api/mental-health/reports/:id/pdf
+// @access  Private
+const downloadReportPDF = async (req, res) => {
+  try {
+    // This endpoint is deprecated - PDF generation is now handled client-side
+    // Redirect to get the report data instead
+    const report = await MentalHealthReport.findOne({
+      _id: req.params.id,
+      user: req.user.id
+    }).populate('user', 'firstName lastName email');
+    
+    if (!report) {
+      return res.status(404).json({
+        success: false,
+        message: 'Report not found'
+      });
+    }
+
+    // Return the report data for client-side PDF generation
+    res.status(200).json({
+      success: true,
+      data: report,
+      message: 'Report data retrieved for PDF generation'
+    });
+    
+  } catch (error) {
+    console.error('Error retrieving report for PDF:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve report data'
+    });
+  }
+};
 
 module.exports = {
   analyzeMentalHealth,
   getMentalHealthReports,
   getMentalHealthReport,
   emailMentalHealthReport,
+  downloadReportPDF,
   saveModuleProgress,
   getModuleProgress,
   clearModuleProgress

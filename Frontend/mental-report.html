@@ -16,7 +16,7 @@
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/mental-health.css">
+    <link rel="stylesheet" href="css/mental-report.css">
 </head>
 <body>
     <div class="notifications-container" id="notifications-container"></div>
@@ -59,119 +59,74 @@
     </header>
 
     <main class="analysis-container">
-        <div class="page-header">
-            <h1><i class="fas fa-file-medical"></i> Mental Health Report</h1>
-            <p>View your detailed mental health assessment results and recommendations.</p>
-        </div>
-        
         <div class="container">
-            <!-- Loading State -->
-            <div id="loading-container" class="section-card">
-                <div class="loading-spinner">
-                    <i class="fas fa-spinner fa-spin"></i> Loading your report...
-                </div>
-            </div>
-
-            <!-- Error State -->
-            <div id="error-container" class="section-card" style="display: none;">
-                <div class="error-message">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Report Not Found</h3>
-                    <p id="error-message">Unable to load the requested report.</p>
-                    <div class="error-actions">
-                        <a href="mental-home.html" class="btn-primary">
-                            <i class="fas fa-arrow-left"></i> Back to Mental Health
-                        </a>
+            <!-- Report Generation Section -->
+            <div id="report-generation-section" style="display: none;">
+                <div class="report-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-line"></i> Generate New Report</h2>
+                        <p>Complete assessment analysis and generate detailed mental health report</p>
+                    </div>
+                    <div class="card-content">
+                        <div id="analysis-progress">
+                            <div class="progress-step">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <span>Analyzing assessment data...</span>
+                            </div>
+                        </div>
+                        <div id="analysis-results" style="display: none;">
+                            <!-- Results will be populated here -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Report Container -->
-            <div id="report-container" style="display: none;">
-                <div class="report-header">
-                    <div class="report-info">
-                        <h2><i class="fas fa-file-medical"></i> Mental Health Assessment Report</h2>
-                        <p class="report-date">Generated on <span id="report-date"></span></p>
+            <!-- Current Report Display -->
+            <div id="current-report-section" style="display: none;">
+                <div class="report-card">
+                    <div class="report-header">
+                        <h2><i class="fas fa-file-medical"></i> Your Latest Mental Health Report</h2>
+                        <div class="report-actions">
+                            <button id="download-pdf" class="btn-secondary">
+                                <i class="fas fa-download"></i> Download PDF
+                            </button>
+                            <button id="email-current-report" class="btn-primary">
+                                <i class="fas fa-envelope"></i> Email Report
+                            </button>
+                        </div>
                     </div>
-                    <div class="report-actions">
-                        <button id="download-pdf" class="btn-secondary">
-                            <i class="fas fa-download"></i> Download PDF
-                        </button>
-                        <button id="email-report" class="btn-primary">
-                            <i class="fas fa-envelope"></i> Email Report
-                        </button>
-                        <a href="mental-home.html" class="btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Back
-                        </a>
+                    <div id="current-report-content">
+                        <!-- Current report will be displayed here -->
                     </div>
-                </div>
-                <div id="report-content">
-                    <!-- Report content will be loaded here -->
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-top">
-                <div class="footer-column">
-                    <div class="logo">
-                        <i class="fas fa-brain"></i>
-                        <h2>MindSpace</h2>
-                    </div>
-                    <p>Supporting student mental health and wellbeing across higher education institutions in India.</p>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="resources.html">Resources</a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Services</h3>
-                    <ul>
-                        <li><a href="mood.html">Track Mood</a></li>
-                        <li><a href="mental-home.html">Check Mental Health</a></li>
-                        <li><a href="AI-support.html">AI Support</a></li>
-                        <li><a href="appointment.html">Book Appointments</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Connect With Us</h3>
-                    <ul>
-                        <li><i class="fas fa-envelope"></i> support@mindspace.edu</li>
-                        <li><i class="fas fa-phone"></i> Helpline: 9152987821</li>
-                        <li><i class="fas fa-ambulance"></i> Emergency: 100</li>
-                        <li><i class="fas fa-map-marker-alt"></i> India</li>
-                    </ul>
                 </div>
             </div>
 
-            <div class="footer-bottom">
-                <p>&copy; 2025 MindSpace. All rights reserved. | A SIH project by Team <a href="team.html">MindSpace Warriors</a></p>
-                <div class="footer-links">
-                    <a href="policy.html">Privacy Policy</a>
-                    <a href="terms.html">Terms of Service</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/config.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/mental-report.js"></script>
-</body>
-</html>
-                        please contact emergency services immediately.
-                    </p>
+            <!-- Assessment History -->
+            <div id="assessment-history-section">
+                <div class="history-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-history"></i> Assessment History</h2>
+                        <p>View and manage your previous mental health assessments</p>
+                    </div>
+                    <div class="card-content">
+                        <div id="history-loading" class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Loading assessment history...</span>
+                        </div>
+                        <div id="history-content" style="display: none;">
+                            <!-- History will be loaded here -->
+                        </div>
+                        <div id="no-history" style="display: none;">
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list"></i>
+                                <h3>No Assessment History</h3>
+                                <p>You haven't completed any mental health assessments yet.</p>
+                                <button id="start-first-assessment" class="btn-primary">
+                                    <i class="fas fa-play"></i> Start Your First Assessment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
