@@ -133,7 +133,7 @@
     color: white;
     width: 36px;
     height: 36px;
-    border-radius: 8px;
+    border-radius: 50px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -145,6 +145,10 @@
 .chat-control-btn:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
+}
+
+.chat-control-btn.active {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* Chat Messages - Improved scrolling */
@@ -387,6 +391,8 @@
     border: 2px solid #e2e8f0;
     transition: all 0.3s ease;
     overflow: hidden;
+    display: flex; /* Added for voice button alignment */
+    align-items: center; /* Added for voice button alignment */
 }
 
 .chat-input-wrapper:focus-within {
@@ -406,10 +412,337 @@
     min-height: 24px;
     max-height: 120px;
     background: transparent;
+    flex: 1; /* Allow textarea to grow */
 }
 
 #chat-input::placeholder {
     color: #9ca3af;
+}
+
+/* Voice Input Button */
+.voice-input-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 15px;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.voice-input-btn:hover {
+    color: #6366f1;
+}
+
+.voice-input-btn.listening {
+    color: #ef4444;
+    animation: pulse-red 1.5s infinite;
+}
+
+.voice-input-btn.listening::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 2px solid #ef4444;
+    border-radius: 50%;
+    animation: mic-ring-pulse 1.5s infinite;
+}
+
+.voice-input-btn.listening::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    z-index: 1;
+    border: 1px solid rgba(239, 68, 68, 0.6);
+    border-radius: 50%;
+    animation: mic-ring-pulse-outer 2s infinite;
+}
+
+@keyframes pulse-red {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes mic-ring-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+}
+
+@keyframes mic-ring-pulse-outer {
+    0% {
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0.3;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.9);
+        opacity: 0.8;
+    }
+}
+
+/* Alternative ripple effect for microphone */
+.voice-input-btn.listening.ripple-effect::before {
+    animation: mic-ripple 1.2s infinite;
+}
+
+.voice-input-btn.listening.ripple-effect::after {
+    animation: mic-ripple-outer 1.8s infinite;
+}
+
+@keyframes mic-ripple {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+        border-width: 3px;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        border-width: 1px;
+    }
+}
+
+@keyframes mic-ripple-outer {
+    0% {
+        transform: translate(-50%, -50%) scale(0.7);
+        opacity: 0.8;
+        border-width: 2px;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+        border-width: 0.5px;
+    }
+}
+
+/* Speech button animation when speaking */
+@keyframes pulse-speech {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Enhanced speaking animation for speech toggle button */
+.chat-control-btn.speaking {
+    animation: pulse-speech 1.5s infinite;
+    color: #fff702 !important;
+    box-shadow: 0 0 0 2px rgba(19, 255, 2, 0.3);
+}
+
+.chat-control-btn.speaking::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    height: 45px;
+    border: 2px solid #dfff02;
+    border-radius: 50%;
+    animation: speech-ring-pulse 1.5s infinite;
+}
+
+@keyframes speech-ring-pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+}
+
+/* Permission Dialog Styles */
+.permission-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+}
+
+.permission-dialog-content {
+    background: white;
+    border-radius: 16px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+.permission-dialog-header {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.permission-dialog-header i {
+    font-size: 32px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.permission-dialog-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.permission-dialog-body {
+    padding: 30px;
+}
+
+.permission-dialog-body p {
+    margin: 0 0 15px 0;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.permission-dialog-body ol {
+    margin: 15px 0;
+    padding-left: 20px;
+    color: #374151;
+}
+
+.permission-dialog-body li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.permission-dialog-actions {
+    padding: 0 30px 30px 30px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.permission-btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 14px;
+}
+
+.permission-btn.primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.permission-btn.primary:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+}
+
+.permission-btn.secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.permission-btn.secondary:hover {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+}
+
+/* Voice input disabled state */
+.voice-input-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    color: #9ca3af;
+}
+
+.voice-input-btn:disabled:hover {
+    color: #9ca3af;
+}
+
+/* Responsive adjustments for permission dialog */
+@media (max-width: 768px) {
+    .permission-dialog-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .permission-dialog-header {
+        padding: 15px;
+    }
+    
+    .permission-dialog-header i {
+        font-size: 24px;
+    }
+    
+    .permission-dialog-header h3 {
+        font-size: 16px;
+    }
+    
+    .permission-dialog-body {
+        padding: 20px;
+    }
+    
+    .permission-dialog-actions {
+        padding: 0 20px 20px 20px;
+        flex-direction: column;
+    }
+    
+    .permission-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* Input Actions */
@@ -436,7 +769,7 @@
 
 .quick-action-btn {
     background: linear-gradient(135deg, #ffe9ed 0%, #efdaff 100%);
-    border: 1px solid #e2e8f0;
+    border: 1px solid #7d7d7d;
     color: #374151;
     padding: 8px 12px;
     border-radius: 20px;

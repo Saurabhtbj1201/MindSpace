@@ -36,12 +36,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearChatBtn = document.getElementById('clear-chat-btn');
     const toggleChatBtn = document.getElementById('toggle-chat-btn');
     const welcomeTime = document.getElementById('welcome-time');
+    const voiceInputBtn = document.getElementById('voice-input-btn');
+    const toggleSpeechBtn = document.getElementById('toggle-speech-btn');
     
     // Variables
     let currentMood = null;
     let conversationHistory = [];
     let isTyping = false;
     let resourcesData = null;
+    let isSpeechEnabled = true; // Enable by default
+    let recognition;
+    let isListening = false;
+    let autoSendTimer = null;
     
     // Initialize the page
     initializePage();
@@ -70,6 +76,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Setup resource tabs
         setupResourceTabs();
+
+        // Setup speech features
+        setupSpeechFeatures();
     }
     
     // Function to update profile information
@@ -210,6 +219,289 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
+    // Function to set up speech recognition and synthesis
+    function setupSpeechFeatures() {
+        // Check for Speech Recognition support
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const speechSynthesis = window.speechSynthesis;
+
+        // Setup Text-to-Speech Toggle - Enable by default
+        if (toggleSpeechBtn && speechSynthesis) {
+            // Set initial state to enabled
+            isSpeechEnabled = true;
+            toggleSpeechBtn.classList.add('active');
+            
+            // Update button icon to show it's enabled
+            const icon = toggleSpeechBtn.querySelector('i');
+            if (icon) {
+                icon.className = 'fas fa-volume-up';
+            }
+            
+            toggleSpeechBtn.addEventListener('click', () => {
+                isSpeechEnabled = !isSpeechEnabled;
+                toggleSpeechBtn.classList.toggle('active', isSpeechEnabled);
+                
+                if (!isSpeechEnabled) {
+                    speechSynthesis.cancel(); // Stop any ongoing speech
+                    showInfo('Text-to-speech disabled');
+                } else {
+                    showInfo('Text-to-speech enabled - AI responses will be read aloud');
+                }
+                
+                // Update button icon
+                const icon = toggleSpeechBtn.querySelector('i');
+                if (icon) {
+                    icon.className = isSpeechEnabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+                }
+            });
+            
+            // Show initial status
+            showInfo('Text-to-speech enabled by default');
+        }
+
+        // Setup Voice Input - Don't test permission on load
+        if (SpeechRecognition && voiceInputBtn) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            voiceInputBtn.addEventListener('click', () => {
+                if (isListening) {
+                    stopListening();
+                } else {
+                    requestMicrophoneAndStartListening();
+                }
+            });
+
+            recognition.onstart = () => {
+                isListening = true;
+                voiceInputBtn.classList.add('listening');
+                voiceInputBtn.title = 'Stop listening';
+                showInfo('Listening... Speak now');
+                
+                // Clear any existing auto-send timer
+                if (autoSendTimer) {
+                    clearTimeout(autoSendTimer);
+                    autoSendTimer = null;
+                }
+                
+                // Update AI status
+                const aiStatus = document.getElementById('ai-status');
+                if (aiStatus) {
+                    aiStatus.textContent = 'Listening for your voice...';
+                }
+            };
+
+            recognition.onend = () => {
+                isListening = false;
+                voiceInputBtn.classList.remove('listening');
+                voiceInputBtn.title = 'Use voice input';
+                
+                // Restore AI status
+                const aiStatus = document.getElementById('ai-status');
+                if (aiStatus) {
+                    if (currentMood) {
+                        aiStatus.textContent = `Ready to help with your ${currentMood.label.toLowerCase()} mood`;
+                    } else {
+                        aiStatus.textContent = 'Ready to help you';
+                    }
+                }
+                
+                // Start auto-send timer if there's text in the input
+                if (chatInput.value.trim().length > 0) {
+                    startAutoSendTimer();
+                }
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                const confidence = event.results[0][0].confidence;
+                
+                // Add transcript to input field
+                if (chatInput.value.trim()) {
+                    chatInput.value += ' ' + transcript;
+                } else {
+                    chatInput.value = transcript;
+                }
+                
+                updateCharCount();
+                updateSendButton();
+                autoResizeTextarea();
+                
+                showSuccess(`Voice captured: "${transcript}" (${Math.round(confidence * 100)}% confidence)`);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                isListening = false;
+                voiceInputBtn.classList.remove('listening');
+                
+                let errorMessage = 'Speech recognition error occurred.';
+                
+                switch (event.error) {
+                    case 'not-allowed':
+                    case 'service-not-allowed':
+                        errorMessage = 'Microphone access denied. Please allow microphone access and try again.';
+                        showMicrophonePermissionDialog();
+                        break;
+                    case 'no-speech':
+                        errorMessage = 'No speech detected. Please speak clearly and try again.';
+                        break;
+                    case 'audio-capture':
+                        errorMessage = 'No microphone found. Please check your microphone connection.';
+                        break;
+                    case 'network':
+                        errorMessage = 'Network error occurred during speech recognition.';
+                        break;
+                    case 'aborted':
+                        errorMessage = 'Speech recognition was aborted.';
+                        break;
+                    default:
+                        errorMessage = `Speech recognition error: ${event.error}`;
+                }
+                
+                showError(errorMessage);
+            };
+
+            // Don't test microphone permission on page load
+        } else {
+            // Hide voice input button if not supported
+            if (voiceInputBtn) {
+                voiceInputBtn.style.display = 'none';
+                console.warn('Speech Recognition not supported in this browser.');
+            }
+        }
+
+        // Hide speech toggle if not supported
+        if (!speechSynthesis && toggleSpeechBtn) {
+            toggleSpeechBtn.style.display = 'none';
+            console.warn('Speech Synthesis not supported in this browser.');
+        }
+    }
+
+    // Function to request microphone permission and start listening
+    async function requestMicrophoneAndStartListening() {
+        try {
+            // Request microphone permission
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            
+            // Permission granted, stop the stream and start speech recognition
+            stream.getTracks().forEach(track => track.stop());
+            
+            // Update button appearance to show permission granted
+            voiceInputBtn.style.opacity = '1';
+            voiceInputBtn.title = 'Use voice input';
+            
+            // Start listening
+            startListening();
+            
+        } catch (error) {
+            console.error('Microphone permission denied:', error);
+            showMicrophonePermissionDialog();
+            
+            // Update button to show permission needed
+            voiceInputBtn.style.opacity = '0.5';
+            voiceInputBtn.title = 'Microphone access required - click to grant permission';
+        }
+    }
+
+    // Function to start auto-send timer
+    function startAutoSendTimer() {
+        // Clear any existing timer
+        if (autoSendTimer) {
+            clearTimeout(autoSendTimer);
+        }
+        
+        // Show countdown
+        showInfo('Message will auto-send in 3 seconds... Click send to send now');
+        
+        // Set 3-second timer
+        autoSendTimer = setTimeout(() => {
+            if (chatInput.value.trim().length > 0) {
+                showInfo('Auto-sending message...');
+                sendMessage();
+            }
+            autoSendTimer = null;
+        }, 2000);
+    }
+
+    // Function to cancel auto-send timer
+    function cancelAutoSendTimer() {
+        if (autoSendTimer) {
+            clearTimeout(autoSendTimer);
+            autoSendTimer = null;
+        }
+    }
+
+    // Function to start listening
+    function startListening() {
+        if (!recognition) {
+            showError('Speech recognition not available');
+            return;
+        }
+
+        try {
+            recognition.start();
+        } catch (error) {
+            console.error('Error starting recognition:', error);
+            showError('Failed to start voice recognition. Please try again.');
+        }
+    }
+
+    // Function to stop listening
+    function stopListening() {
+        if (recognition && isListening) {
+            recognition.stop();
+        }
+        
+        // Cancel auto-send timer when manually stopping
+        cancelAutoSendTimer();
+    }
+
+    // Remove the testMicrophonePermission function call and update the dialog
+    // Function to show microphone permission dialog
+    function showMicrophonePermissionDialog() {
+        const dialog = document.createElement('div');
+        dialog.className = 'permission-dialog';
+        dialog.innerHTML = `
+            <div class="permission-dialog-content">
+                <div class="permission-dialog-header">
+                    <i class="fas fa-microphone-slash"></i>
+                    <h3>Microphone Access Required</h3>
+                </div>
+                <div class="permission-dialog-body">
+                    <p>To use voice input, please allow microphone access:</p>
+                    <ol>
+                        <li>Click "Allow" when your browser asks for microphone permission</li>
+                        <li>Or click the microphone icon in your browser's address bar</li>
+                        <li>Select "Allow" for microphone access</li>
+                        <li>Try the voice input button again</li>
+                    </ol>
+                    <p><strong>Your voice data is processed locally and not stored.</strong></p>
+                </div>
+                <div class="permission-dialog-actions">
+                    <button class="permission-btn primary" onclick="this.closest('.permission-dialog').remove()">
+                        Got it
+                    </button>
+                    <button class="permission-btn secondary" onclick="window.location.reload()">
+                        Refresh Page
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(dialog);
+        
+        // Auto-remove after 15 seconds
+        setTimeout(() => {
+            if (dialog.parentNode) {
+                dialog.remove();
+            }
+        }, 15000);
+    }
+    
     // Function to update character count
     function updateCharCount() {
         const count = chatInput.value.length;
@@ -240,6 +532,9 @@ document.addEventListener('DOMContentLoaded', function() {
     async function sendMessage() {
         const message = chatInput.value.trim();
         if (!message || isTyping) return;
+        
+        // Cancel auto-send timer since we're manually sending
+        cancelAutoSendTimer();
         
         // Add user message to chat
         addMessage(message, 'user');
@@ -289,6 +584,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let formattedText = text;
         if (sender === 'ai') {
             formattedText = formatAIResponse(text);
+            // Speak the AI response if TTS is enabled (now enabled by default)
+            if (isSpeechEnabled && window.speechSynthesis) {
+                speakText(text);
+            }
         } else {
             // Escape HTML for user messages
             formattedText = escapeHtml(text);
@@ -318,6 +617,76 @@ document.addEventListener('DOMContentLoaded', function() {
         saveConversationHistory();
     }
     
+    // Function to speak text using SpeechSynthesis
+    function speakText(text) {
+        if (!window.speechSynthesis || !isSpeechEnabled) return;
+        
+        // Clean the text for better speech
+        let cleanText = text
+            .replace(/[*#\[\](){}]/g, '') // Remove markdown symbols
+            .replace(/\n+/g, '. ') // Replace line breaks with periods
+            .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+            .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold markdown
+            .replace(/\*(.*?)\*/g, '$1') // Remove italic markdown
+            .replace(/`(.*?)`/g, '$1') // Remove code markdown
+            .trim();
+        
+        // Don't speak if text is too short or just punctuation
+        if (cleanText.length < 3 || /^[^\w\s]*$/.test(cleanText)) {
+            return;
+        }
+        
+        // Cancel any previous speech
+        window.speechSynthesis.cancel();
+        
+        // Create speech utterance
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9; // Slightly slower for better comprehension
+        utterance.pitch = 1;
+        utterance.volume = 0.8;
+        
+        // Find a good voice (prefer female voice for mental health context)
+        const voices = window.speechSynthesis.getVoices();
+        const preferredVoice = voices.find(voice => 
+            voice.lang.startsWith('en') && 
+            (voice.name.includes('Female') || voice.name.includes('Woman') || voice.name.includes('Google'))
+        ) || voices.find(voice => voice.lang.startsWith('en'));
+        
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+        }
+        
+        // Add event listeners
+        utterance.onstart = () => {
+            console.log('Started speaking:', cleanText.substring(0, 50) + '...');
+            // Enhanced visual feedback that speech is active
+            if (toggleSpeechBtn) {
+                toggleSpeechBtn.classList.add('speaking');
+                toggleSpeechBtn.style.animation = 'pulse-speech 1.5s infinite';
+            }
+        };
+        
+        utterance.onend = () => {
+            console.log('Finished speaking');
+            if (toggleSpeechBtn) {
+                toggleSpeechBtn.classList.remove('speaking');
+                toggleSpeechBtn.style.animation = '';
+            }
+        };
+        
+        utterance.onerror = (event) => {
+            console.error('Speech synthesis error:', event);
+            if (toggleSpeechBtn) {
+                toggleSpeechBtn.classList.remove('speaking');
+                toggleSpeechBtn.style.animation = '';
+            }
+        };
+        
+        // Speak the text
+        window.speechSynthesis.speak(utterance);
+    }
+
     // Function to format AI responses with proper styling
     function formatAIResponse(text) {
         // First escape any existing HTML

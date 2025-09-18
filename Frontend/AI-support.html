@@ -11,8 +11,6 @@
     <meta name="theme-color" content="#6A0DAD">
     
     <!-- Security Meta Tags -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     
     <!-- Favicon -->
@@ -111,6 +109,9 @@
                             <button class="chat-control-btn" id="clear-chat-btn" title="Clear Chat">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
+                            <button class="chat-control-btn" id="toggle-speech-btn" title="Read responses aloud">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
                             <button class="chat-control-btn" id="toggle-chat-btn" title="Minimize Chat">
                                 <i class="fas fa-compress"></i>
                             </button>
@@ -156,6 +157,9 @@
                                 rows="1"
                                 maxlength="500"
                             ></textarea>
+                            <button class="voice-input-btn" id="voice-input-btn" title="Use voice input">
+                                <i class="fas fa-microphone"></i>
+                            </button>
                         </div>
                         
                         <div class="input-actions">
